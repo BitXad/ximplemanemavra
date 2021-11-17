@@ -74,4 +74,21 @@ class Control_inventario_model extends CI_Model
     function delete_inventario($controli_id){
         return $this->db->delete('control_inventario',array('controli_id'=>$controli_id));
     }
+
+    function get_platabanda_area($area_id = 1){
+        return $this->db->query(
+            "SELECT ci.*,e.*
+            from control_inventario ci 
+            left join area a on ci.area_id = a.area_id
+            left join estado e on ci.estado_id = e.estado_id 
+            where 1=1
+            and a.area_id = $area_id"
+        )->result_array();
+    }
+
+    function add_platabanda($params)
+    {
+        $this->db->insert('control_inventario',$params);
+        return $this->db->insert_id();
+    }
 }

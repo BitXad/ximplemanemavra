@@ -26,7 +26,6 @@
 							<select name="estado" id="estado" class="form-control">
 								<?php foreach($estados as $estado){
 									$selected = ($estado['estado_id'] == $area['estado_id']) ? ' selected="selected"' : "";
-
 									echo '<option value="'.$estado['estado_id'].'" '.$selected.'>'.$estado['estado_descripcion'].'</option>';
 								} 
 								?>

@@ -7,7 +7,7 @@ class Control_inventario extends CI_Controller{
         $this->load->model('Control_inventario_model');
         $this->load->model('Control_ubicacion_model');
         $this->load->model('Ubicacion_model');
-        $this->load->model('Estado_model');
+        $this->load->model('Area_model');
         $this->load->model('Usuario_model');
         $this->load->model('Ubicacion_producto_model');
         $this->load->model('Compra_model');
@@ -34,8 +34,8 @@ class Control_inventario extends CI_Controller{
     {
         if($this->acceso(136)){
             $estado_tipo = 7;
-            $data['control_inventarios'] = $this->Control_inventario_model->get_all_control_inventario();
-            $data['estados'] = $this->Estado_model->get_tipo_estado($estado_tipo);
+            $data['platabandas'] = $this->Control_inventario_model->get_platabanda_area();
+            $data['areas'] = $this->Area_model->get_all_area();
             $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
             $data['page_title'] = "Control inventario";
             $data['_view'] = 'control_inventario/index';
@@ -307,5 +307,28 @@ class Control_inventario extends CI_Controller{
             $this->Venta_model->add_detalle_venta_aux($params);
         }
         /*****************************ADD DETALLE VENTA AUX***************************** */
+    }
+    function get_platabanda_area(){
+        if($this->input->is_ajax_request()){
+            $area_id = $this->input->post("area_id");
+            $respuesta = $this->Control_inventario_model->get_platabanda_area($area_id);
+            echo json_encode($respuesta);
+        }
+    }
+
+    function agregar_platabanda(){
+        if($this->input->is_ajax_request()){
+            $area_id = $this->input->post("area_id");
+            $params = array(
+                "area_id" => $area_id,
+                "estado_id" => 1,
+            );
+            $respuesta = $this->Control_inventario_model->add_platabanda($params);
+            echo json_encode($respuesta);
+        }
+    }
+
+    function get_items_platabanda(){
+        echo json_encode("ok");
     }
 }
