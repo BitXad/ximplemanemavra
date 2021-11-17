@@ -2,22 +2,22 @@
     <div class="col-md-12">
       	<div class="box box-info">
             <div class="box-header with-border">
-              	<h3 class="box-title">Editar Ubicaci&oacute;n</h3>
+              	<h3 class="box-title">Editar &Aacute;rea</h3>
             </div>
-			<?php echo form_open('ubicacion/edit/'.$ubicacion['ubicacion_id']); ?>
+			<?php echo form_open('area/edit/'.$area['area_id']); ?>
 			<div class="box-body">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<label for="ubicacion_nombre" class="control-label"><span class="text-danger">*</span>Nombre</label>
+						<label for="area_nombre" class="control-label"><span class="text-danger">*</span>Nombre</label>
 						<div class="form-group">
-							<input type="text" name="ubicacion_nombre" value="<?php echo ($this->input->post('ubicacion_nombre') ? $this->input->post('ubicacion_nombre') : $ubicacion['ubicacion_nombre']); ?>" class="form-control" id="ubicacion_nombre" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
-							<span class="text-danger"><?php echo form_error('ubicacion_nombre');?></span>
+							<input type="text" name="area_nombre" value="<?php echo ($this->input->post('area_nombre') ? $this->input->post('area_nombre') : $area['area_nombre']); ?>" class="form-control" id="area_nombre" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
+							<span class="text-danger"><?php echo form_error('area_nombre');?></span>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<label for="ubicacion_descripcion" class="control-label">Descripci&oacute;n</label>
+						<label for="area_descripcion" class="control-label">Descripci&oacute;n</label>
 						<div class="form-group">
-							<input type="text" name="ubicacion_descripcion" value="<?php echo ($this->input->post('ubicacion_descripcion') ? $this->input->post('ubicacion_descripcion') : $ubicacion['ubicacion_descripcion']); ?>" class="form-control" id="ubicacion_descripcion" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
+							<input type="text" name="area_descripcion" value="<?php echo ($this->input->post('area_descripcion') ? $this->input->post('area_descripcion') : $area['area_descripcion']); ?>" class="form-control" id="area_descripcion" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -25,7 +25,7 @@
 						<div class="form-group">
 							<select name="estado" id="estado" class="form-control">
 								<?php foreach($estados as $estado){
-									$selected = ($estado['estado_id'] == $ubicacion['estado_id']) ? ' selected="selected"' : "";
+									$selected = ($estado['estado_id'] == $area['estado_id']) ? ' selected="selected"' : "";
 
 									echo '<option value="'.$estado['estado_id'].'" '.$selected.'>'.$estado['estado_descripcion'].'</option>';
 								} 
@@ -39,7 +39,7 @@
             	<button type="submit" class="btn btn-success">
 					<i class="fa fa-check"></i> Guardar
 				</button>
-				<a href="<?php echo site_url('ubicacion'); ?>" class="btn btn-danger">
+				<a href="<?php echo site_url('area'); ?>" class="btn btn-danger">
 					<i class="fa fa-times"></i> Cancelar
 				</a>
 	        </div>				

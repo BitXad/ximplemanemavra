@@ -19,9 +19,9 @@
 <!-------------------------------------------------------->
 <div class="box-header">
     <font size='4' face='Arial'><b>Areas</b></font>
-    <br><font size='2' face='Arial'>Registros Encontrados: <?php echo sizeof($ubicacion); ?></font>
+    <br><font size='2' face='Arial'>Registros Encontrados: <?php echo sizeof($areas); ?></font>
     <div class="box-tools no-print">
-        <a href="<?php echo site_url('ubicacion/add'); ?>" class="btn btn-success btn-sm"><fa class='fa fa-pencil-square-o'></fa> Registrar Ubicacion</a> 
+        <a href="<?php echo site_url('area/add'); ?>" class="btn btn-success btn-sm"><fa class='fa fa-pencil-square-o'></fa> Registrar area</a> 
     </div>
 </div>
 <div class="row">
@@ -47,15 +47,15 @@
                     <tbody class="buscar">
                         <?php
                             $i = 0;
-                            foreach($ubicacion as $u){
+                            foreach($areas as $a){
                         ?>
                         <tr>
                             <td><?= $i+1; ?></td>
-                            <td><?= $u['ubicacion_nombre']; ?></td>
-                            <td><?= $u['ubicacion_descripcion']; ?></td>
-                            <td><?= $u['estado_descripcion']; ?></td>
+                            <td><?= $a['area_nombre']; ?></td>
+                            <td><?= $a['area_descripcion']; ?></td>
+                            <td><?= $a['estado_descripcion']; ?></td>
                             <td class="no-print">
-                                <a href="<?php echo site_url('ubicacion/edit/'.$u['ubicacion_id']); ?>" class="btn btn-info btn-xs" title="Editar Ubicacion"><span class="fa fa-pencil"></span></a>
+                                <a href="<?php echo site_url('area/edit/'.$a['area_id']); ?>" class="btn btn-info btn-xs" title="Editar area"><span class="fa fa-pencil"></span></a>
                             </td>
                         </tr>
                         <?php $i++; } ?>
