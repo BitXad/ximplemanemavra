@@ -41,6 +41,7 @@
                         <th>Descripción</th>
                         <th>Costo</th>
                         <th>usuario</th>
+                        <th>Estado</th>
                         <th class="no-print"></th>
                     </tr>
                     <tbody class="buscar">
@@ -50,9 +51,10 @@
                     <tr>
                         <td><?php echo $i ?></td>
                         <td><?php echo $c['produccion_id']; ?></td>
-                        <td><?php echo $c['produccion_id']; ?></td>
-                        <td><?php echo $c['produccion_id']; ?></td>
-                        <td><?php echo $c['produccion_id']; ?></td>
+                        <td><?php echo $c['costodesc_descripcion']; ?></td>
+                        <td><?php echo $c['costoop_costo']; ?></td>
+                        <td><?php echo $c['usuario_nombre']; ?></td>
+                        <td><?php echo $c['estado_descripcion']; ?></td>
                         <td>
                             <a href="<?php echo site_url('costo_operativo/edit/'.$c['costoop_id']); ?>" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span></a> 
                         </td>

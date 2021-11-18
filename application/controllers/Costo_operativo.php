@@ -52,10 +52,12 @@ class Costo_operativo extends CI_Controller{
             $this->form_validation->set_rules('costoop_costo','Costo Operativo','trim|required', array('required' => 'Este Campo no debe ser vacio'));
             if($this->form_validation->run())     
             {
+                $estado_id = 1;
                 $params = array(
                     'produccion_id' => $this->input->post('produccion_id'),
                     'usuario_id' => $this->input->post('usuario_id'),
-                    'costoop_descripcion' => $this->input->post('costoop_descripcion'),
+                    'estado_id' => $estado_id,
+                    'costodesc_id' => $this->input->post('costodesc_id'),
                     'costoop_costo' => $this->input->post('costoop_costo'),
                 );
 
@@ -97,7 +99,8 @@ class Costo_operativo extends CI_Controller{
                     $params = array(
                         'produccion_id' => $this->input->post('produccion_id'),
                         'usuario_id' => $this->input->post('usuario_id'),
-                        'costoop_descripcion' => $this->input->post('costoop_descripcion'),
+                        'estado_id' => $this->input->post('estado_id'),
+                        'costodesc_id' => $this->input->post('costodesc_id'),
                         'costoop_costo' => $this->input->post('costoop_costo'),
                     );
                     $this->Costo_operativo_model->update_costo_operativo($costoop_id,$params);            
@@ -105,6 +108,15 @@ class Costo_operativo extends CI_Controller{
                 }
                 else
                 {
+                    $this->load->model('Produccion_model');
+                    $data['all_produccion'] = $this->Produccion_model->get_all_produccion();
+                    
+                    $this->load->model('Usuario_model');
+                    $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
+                    
+                    $this->load->model('Costo_descripcion_model');
+                    $data['all_costo_descripcion'] = $this->Costo_descripcion_model->get_all_costo_descripcion();
+                    
                     $data['_view'] = 'costo_operativo/edit';
                     $this->load->view('layouts/main',$data);
                 }
