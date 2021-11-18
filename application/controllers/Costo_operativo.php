@@ -63,7 +63,16 @@ class Costo_operativo extends CI_Controller{
                 redirect('costo_operativo/index');
             }
             else
-            {            
+            {
+                $this->load->model('Produccion_model');
+                $data['all_produccion'] = $this->Produccion_model->get_all_produccion();
+                
+                $this->load->model('Usuario_model');
+                $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
+                
+                $this->load->model('Costo_descripcion_model');
+                $data['all_costo_descripcion'] = $this->Costo_descripcion_model->get_all_costo_descripcion();
+                
                 $data['_view'] = 'costo_operativo/add';
                 $this->load->view('layouts/main',$data);
             }
