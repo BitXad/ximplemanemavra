@@ -93,7 +93,7 @@ class Costo_operativo extends CI_Controller{
             if(isset($data['costo_operativo']['costoop_id']))
             {
                 $this->load->library('form_validation');
-                $this->form_validation->set_rules('categoria_nombre','Categoria Categoria','trim|required', array('required' => 'Este Campo no debe ser vacio'));
+                $this->form_validation->set_rules('costoop_costo','Costo','trim|required', array('required' => 'Este Campo no debe ser vacio'));
                 if($this->form_validation->run())     
                 {
                     $params = array(
@@ -113,6 +113,10 @@ class Costo_operativo extends CI_Controller{
                     
                     $this->load->model('Usuario_model');
                     $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
+                    
+                    $this->load->model('Estado_model');
+                    $tipo = 1;
+                    $data['all_estado'] = $this->Estado_model->get_estado_tipo($tipo);
                     
                     $this->load->model('Costo_descripcion_model');
                     $data['all_costo_descripcion'] = $this->Costo_descripcion_model->get_all_costo_descripcion();

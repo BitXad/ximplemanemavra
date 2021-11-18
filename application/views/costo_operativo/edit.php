@@ -61,6 +61,20 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <label for="estado_id" class="control-label"><span class="text-danger">*</span>Estado</label>
+                        <div class="form-group">
+                            <select name="estado_id" class="form-control" id="estado_id" required>
+                                <?php 
+                                foreach($all_estado as $estado)
+                                {
+                                    $selected = ($estado['estado_id'] == $costo_operativo['estado_id']) ? ' selected="selected"' : "";
+                                    echo '<option value="'.$estado['estado_id'].'" '.$selected.'>'.$estado['estado_descripcion'].'</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="box-footer">
