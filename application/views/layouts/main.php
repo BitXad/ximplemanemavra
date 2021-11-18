@@ -261,7 +261,7 @@
                         if($rolusuario[181-1]['rolusuario_asignado'] == 1){
                         ?>
                         <li>
-                            <a href="<?php echo site_url('ubicacion/index');?>"><i class="fa fa-cubes" aria-hidden="true"></i> Ubicaciones</a>
+                            <a href="<?php echo site_url('ubicacion/index');?>"><i class="fa fa-cubes" aria-hidden="true"></i> Ubicaciones/Direcciones</a>
                         </li>
                         <?php
                         } ?>
