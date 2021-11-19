@@ -28,7 +28,7 @@ function registrarnuevadescripcion(){
         });
     }
 }
-/* funcion que pone el cursor a un input coando se abre el modal */
+/* funcion que pone el cursor a un input cuando se abre el modal */
 function ponercursor(){
     $('#nueva_descripcion').val("");
     $("#mensajemodal").html("");

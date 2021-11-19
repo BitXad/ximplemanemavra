@@ -36,12 +36,11 @@ class Produccion_model extends CI_Model
     {
         $produccion = $this->db->query("
             SELECT
-                pr.*, f.formula_nombre, p.producto_nombre, u.usuario_nombre
+                pr.*, u.usuario_nombre, e.estado_color, e.estado_descripcion
             FROM
                 `produccion` pr
-            left join formula f on pr.formula_id = f.formula_id
-            left join producto p on f.producto_id = p.producto_id
             left join usuario u on pr.usuario_id = u.usuario_id
+            left join estado e on pr.estado_id = e.estado_id
             ORDER BY `produccion_id` DESC
         ")->result_array();
 

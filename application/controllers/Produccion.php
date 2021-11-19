@@ -31,29 +31,30 @@ class Produccion extends CI_Controller{
         if(isset($_POST) && count($_POST) > 0)     
         {   
             $params = array(
-				'produccion_numeroorden' => $this->input->post('produccion_numeroorden'),
-				'formula_id' => $this->input->post('formula_id'),
-				'usuario_id' => $this->input->post('usuario_id'),
-				'produccion_fecha' => $this->input->post('produccion_fecha'),
-				'produccion_hora' => $this->input->post('produccion_hora'),
-				'produccion_unidad' => $this->input->post('produccion_unidad'),
-				'produccion_cantidad' => $this->input->post('produccion_cantidad'),
-				'produccion_total' => $this->input->post('produccion_total'),
-				'produccion_costounidad' => $this->input->post('produccion_costounidad'),
-				'produccion_preciounidad' => $this->input->post('produccion_preciounidad'),
+                'produccion_numeroorden' => $this->input->post('produccion_numeroorden'),
+                'formula_id' => $this->input->post('formula_id'),
+                'usuario_id' => $this->input->post('usuario_id'),
+                'produccion_fecha' => $this->input->post('produccion_fecha'),
+                'produccion_hora' => $this->input->post('produccion_hora'),
+                'produccion_unidad' => $this->input->post('produccion_unidad'),
+                'produccion_cantidad' => $this->input->post('produccion_cantidad'),
+                'produccion_total' => $this->input->post('produccion_total'),
+                'produccion_costounidad' => $this->input->post('produccion_costounidad'),
+                'produccion_preciounidad' => $this->input->post('produccion_preciounidad'),
             );
             
             $produccion_id = $this->Produccion_model->add_produccion($params);
             redirect('produccion/index');
         }
         else
-        {			$data['all_produccion'] = $this->Produccion_model->get_all_produccion();
+        {	
+            $data['all_produccion'] = $this->Produccion_model->get_all_produccion();
 
-			$this->load->model('Formula_model');
-			$data['all_formula'] = $this->Formula_model->get_all_formula();
+            $this->load->model('Formula_model');
+            $data['all_formula'] = $this->Formula_model->get_all_formula();
 
-			$this->load->model('Usuario_model');
-			$data['all_usuario'] = $this->Usuario_model->get_all_usuario();
+            $this->load->model('Usuario_model');
+            $data['all_usuario'] = $this->Usuario_model->get_all_usuario();
             
             $data['_view'] = 'produccion/add';
             $this->load->view('layouts/main',$data);
@@ -73,29 +74,30 @@ class Produccion extends CI_Controller{
             if(isset($_POST) && count($_POST) > 0)     
             {   
                 $params = array(
-					'produccion_numeroorden' => $this->input->post('produccion_numeroorden'),
-					'formula_id' => $this->input->post('formula_id'),
-					'usuario_id' => $this->input->post('usuario_id'),
-					'produccion_fecha' => $this->input->post('produccion_fecha'),
-					'produccion_hora' => $this->input->post('produccion_hora'),
-					'produccion_unidad' => $this->input->post('produccion_unidad'),
-					'produccion_cantidad' => $this->input->post('produccion_cantidad'),
-					'produccion_total' => $this->input->post('produccion_total'),
-					'produccion_costounidad' => $this->input->post('produccion_costounidad'),
-					'produccion_preciounidad' => $this->input->post('produccion_preciounidad'),
+                    'produccion_numeroorden' => $this->input->post('produccion_numeroorden'),
+                    'formula_id' => $this->input->post('formula_id'),
+                    'usuario_id' => $this->input->post('usuario_id'),
+                    'produccion_fecha' => $this->input->post('produccion_fecha'),
+                    'produccion_hora' => $this->input->post('produccion_hora'),
+                    'produccion_unidad' => $this->input->post('produccion_unidad'),
+                    'produccion_cantidad' => $this->input->post('produccion_cantidad'),
+                    'produccion_total' => $this->input->post('produccion_total'),
+                    'produccion_costounidad' => $this->input->post('produccion_costounidad'),
+                    'produccion_preciounidad' => $this->input->post('produccion_preciounidad'),
                 );
 
                 $this->Produccion_model->update_produccion($produccion_id,$params);            
                 redirect('produccion/index');
             }
             else
-            {				$data['all_produccion'] = $this->Produccion_model->get_all_produccion();
+            {
+                $data['all_produccion'] = $this->Produccion_model->get_all_produccion();
 
-				$this->load->model('Formula_model');
-				$data['all_formula'] = $this->Formula_model->get_all_formula();
+                $this->load->model('Formula_model');
+                $data['all_formula'] = $this->Formula_model->get_all_formula();
 
-				$this->load->model('Usuario_model');
-				$data['all_usuario'] = $this->Usuario_model->get_all_usuario();
+                $this->load->model('Usuario_model');
+                $data['all_usuario'] = $this->Usuario_model->get_all_usuario();
 
                 $data['_view'] = 'produccion/edit';
                 $this->load->view('layouts/main',$data);
@@ -121,6 +123,65 @@ class Produccion extends CI_Controller{
         else
             show_error('The produccion you are trying to delete does not exist.');
     }
+    /* busca las producciones */
+    function mostrarproduccion()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()) {
+                //$usuario_id = $this->session_data['usuario_id'];
+                
+                $datos = $this->Produccion_model->get_all_produccion(); 
+                echo json_encode($datos);
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    /* registra una nueva producción */
+    function nuevaproduccion()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()) {
+                $usuario_id = $this->session_data['usuario_id'];
+                
+                $produccion_descripcion = $this->input->post('produccion_descripcion');
+                $produccion_inicio = $this->input->post('produccion_inicio');
+                
+                //$detalle_formaux = $this->Detalle_formula_aux_model->get_all_detalles_porusuario($usuario_id);
+                //foreach ($detalle_formaux as $detalle){
+                    //$lacantidad = $detalle["detalleven_cantidad"]*$formula_cantidad;
+                $estado_id = 1;
+                $params = array(
+                    'usuario_id' => $usuario_id,
+                    'estado_id' => $estado_id,
+                    'produccion_inicio' => $this->input->post('produccion_inicio'),
+                    'produccion_descripcion' => $this->input->post('produccion_descripcion'),
+                );
+                $this->Produccion_model->add_produccion($params); 
+                echo json_encode("ok");
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* ***************Revisas si SsIRVEN!.********* */
     
     function producir()
     {
@@ -130,31 +191,6 @@ class Produccion extends CI_Controller{
         $data['_view'] = 'produccion/producir';
         $this->load->view('layouts/main',$data);
     }
-    /* carga los detalles de la formula en detalleformula_aux */
-    /*function cargar_detalleformula_aux()
-    {
-        //if($this->acceso(118)){
-            if ($this->input->is_ajax_request()) {
-                $usuario_id = $this->session_data['usuario_id'];
-                $this->load->model('Detalle_formula_aux_model');
-                $this->Detalle_formula_aux_model->delete_detalle_formula_aux($usuario_id);
-                
-                $this->load->model('Moneda_model');
-                $moneda = $this->Moneda_model->get_moneda(2); //Obtener moneda extragera
-                $tipo_cambio = $moneda["moneda_tc"];
-                $formula_id = $this->input->post('formula_id');
-                //$this->load->model('Detalle_formula_model');
-                $this->Detalle_formula_aux_model->insertar_detalle_formula_aux($formula_id, $usuario_id, $tipo_cambio);
-                //$detalle_formula = $this->Detalle_formula_model->get_all_detalles_deuna_formula($formula_id);
-                
-                echo json_encode("ok");
-            }   
-            else
-            {                 
-                show_404();
-            }
-        //}
-    }*/
     /* busca insumos de una formula */
     function buscardetalleformula()
     {
