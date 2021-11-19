@@ -450,7 +450,7 @@ class Produccion extends CI_Controller{
     /* nota de entrega en hojas preimpresas.... */
     function notapreimpreso_carta($produccion_id)
     {
-        if($this->acceso(21)){
+        // if($this->acceso(21)){
         $usuario_id = $this->session_data['usuario_id'];
         
         $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
@@ -465,6 +465,6 @@ class Produccion extends CI_Controller{
   
         $data['_view'] = 'factura/notapreimpreso_carta';
         $this->load->view('layouts/main',$data);
-        }
+        // }
     }
 }

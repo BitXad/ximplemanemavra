@@ -311,8 +311,9 @@ class Control_inventario extends CI_Controller{
     function get_platabanda_area(){
         if($this->input->is_ajax_request()){
             $area_id = $this->input->post("area_id");
-            $respuesta = $this->Control_inventario_model->get_platabanda_area($area_id);
-            echo json_encode($respuesta);
+            $data['respuesta'] = $this->Control_inventario_model->get_platabanda($area_id);
+            $data['plantas'] = $this->Control_inventario_model->get_platabanda_area($area_id);
+            echo json_encode($data);
         }
     }
 
@@ -321,7 +322,7 @@ class Control_inventario extends CI_Controller{
             $area_id = $this->input->post("area_id");
             $params = array(
                 "area_id" => $area_id,
-                "estado_id" => 1,
+                "estado_id" => 36,
             );
             $respuesta = $this->Control_inventario_model->add_platabanda($params);
             echo json_encode($respuesta);
@@ -329,6 +330,23 @@ class Control_inventario extends CI_Controller{
     }
 
     function get_items_platabanda(){
-        echo json_encode("ok");
+        if($this->input->is_ajax_request()){
+            $controli_id = $this->input->post("platabanda_id");
+            $result = $this->Control_inventario_model->get_items_platabanda($controli_id);
+            echo json_encode($result);
+        }else{
+            show_404();
+        }
+    }
+
+    function cambiar_estado(){
+        if($this->input->is_ajax_request()){
+            $control_id = $this->input->post("controli_id");
+            $estado_id = $this->input->post("estado_id");
+            $params = array(
+                "estado_id" => $estado_id,
+            );
+            $this->Control_inventario_model->update_control_inventario($control_id,$params);
+        }
     }
 }
