@@ -175,16 +175,16 @@
                         }
                         if($rolusuario[69-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('servicio');?>"><i class="fa fa-wrench"></i> Servicios</a>
-                        </li>      
+                        </li>      -->
                         <?php
                         }
                         if($rolusuario[69-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('formula');?>"><i class="fa fa-list-ol"></i> Formula</a>
-                        </li>      
+                        </li>      -->
                         <?php
                         }
                         if($rolusuario[69-1]['rolusuario_asignado'] == 1){
@@ -217,34 +217,34 @@
                         }
                         if($rolusuario[36-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('orden_trabajo');?>"><i class="fa fa-text-height"></i> Órdenes de Trabajo</a>
-                        </li>
+                        </li>-->
                         <?php
                         }
                         if($rolusuario[158-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="javascript:window.open('<?php echo site_url('detalle_venta/venta_proceso');?>','','toolbar=yes');"><i class="fa fa-television"></i> Monitor de Venta</a>
-                        </li>
+                        </li>-->
                         <?php
                         }
                         
                         if($rolusuario[166-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('proceso_orden');?>"><i class="fa fa-check-square-o"></i> Terminar Proceso</a>
                         </li>
                         <li>
                             <a href="<?php echo site_url('proceso_orden/terminados');?>"><i class="fa fa-indent"></i> Recepcionar Proceso</a>
-                        </li>
+                        </li>-->
                         <?php
                         }
                         if($rolusuario[174-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('detalle_venta/recepcion');?>"><i class="fa fa-cutlery"></i> Despacho</a>
-                        </li>
+                        </li>-->
                         <?php
                         }
                         ?>
@@ -252,9 +252,9 @@
                         <?php
                         if($rolusuario[181-1]['rolusuario_asignado'] == 1){
                         ?>
-                        <li>
+<!--                        <li>
                             <a href="<?php echo site_url('pedido_diario/index');?>"><i class="fa fa-calendar"></i> Pedidos Diarios</a>
-                        </li>
+                        </li>-->
                         <?php
                         } ?>
                         <?php
