@@ -51,12 +51,17 @@ class Costo_operativo_model extends CI_Model
     {
         $costo_operativo = $this->db->query("
             SELECT
-                *
+                op.*, cd.costodesc_descripcion, /*p.produccion_descripcion,*/
+                u.usuario_nombre, e.estado_color, e.estado_descripcion
             FROM
-                `costo_operativo`
+                `costo_operativo` op
+            left join costo_descripcion cd on op.costodesc_id = cd.costodesc_id
+            left join produccion p on op.produccion_id = p.produccion_id
+            left join usuario u on op.usuario_id = u.usuario_id
+            left join estado e on op.estado_id = e.estado_id
             WHERE
                 1 = 1
-            ORDER BY `costoop_descripcion`
+            ORDER BY `costoop_costo`
         ")->result_array();
 
         return $costo_operativo;

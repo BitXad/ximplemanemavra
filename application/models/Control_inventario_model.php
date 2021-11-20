@@ -49,6 +49,7 @@ class Control_inventario_model extends CI_Model
      * function to update control invetario
      */
     function update_control_inventario($controli_id,$params)
+    
     {
         $this->db->where('controli_id',$controli_id);
         return $this->db->update('control_inventario',$params);
@@ -75,14 +76,29 @@ class Control_inventario_model extends CI_Model
         return $this->db->delete('control_inventario',array('controli_id'=>$controli_id));
     }
 
-    function get_platabanda_area($area_id = 1){
+    function get_platabanda($area_id){
         return $this->db->query(
             "SELECT ci.*,e.*
-            from control_inventario ci 
-            left join area a on ci.area_id = a.area_id
-            left join estado e on ci.estado_id = e.estado_id 
+            from control_inventario ci
+            left join estado e on ci.estado_id = e.estado_id
             where 1=1
-            and a.area_id = $area_id"
+            and ci.area_id = $area_id
+            and e.estado_tipo = 9
+            order by ci.controli_id desc"
+        )->result_array();
+    }
+
+    function get_platabanda_area($area_id = 1){
+        return $this->db->query(
+            "SELECT ci.*, p.producto_nombre, dp.*,e.* 
+            from control_inventario ci
+            left join detalle_produccion dp on ci.controli_id = dp.controli_id 
+            left join estado e on dp.estado_id = e.estado_id
+            left join producto p on dp.producto_id = p.producto_id
+            where 1=1
+            and ci.area_id = $area_id
+            and e.estado_tipo = 9
+            order by ci.controli_id desc"
         )->result_array();
     }
 
@@ -90,5 +106,18 @@ class Control_inventario_model extends CI_Model
     {
         $this->db->insert('control_inventario',$params);
         return $this->db->insert_id();
+    }
+
+    function get_items_platabanda($controli_id){
+        return $this->db->query(
+            "SELECT dp.*,p.producto_nombre, e.*,p2.*
+            from detalle_produccion dp 
+            left join producto p on p.producto_id = dp.producto_id 
+            left join control_inventario ci on ci.controli_id = dp.controli_id 
+            left join estado e on e.estado_id = dp.estado_id 
+            left join produccion p2 on p2.produccion_id = dp.produccion_id 
+            where 1=1
+            and ci.controli_id = $controli_id"
+        )->result_array();
     }
 }
