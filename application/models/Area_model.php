@@ -62,9 +62,9 @@ class Area_model extends CI_Model
             "SELECT u.*
             from area u 
             left join (select cu.*
-                        from control_area cu
+                        from control_inventario cu
                         where cu.controli_id = $controli_id) as cu2 on u.area_id = cu2.area_id
-            where cu2.controlu_id is null"
+            where cu2.controli_id is null"
         )->result_array();
     }
 }
