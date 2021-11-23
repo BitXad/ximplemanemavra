@@ -19,6 +19,12 @@ class Produccion extends CI_Controller{
     {
         $data['produccion'] = $this->Produccion_model->get_all_produccion();
         
+        $this->load->model('Inventario_model');
+        $data['all_producto'] = $this->Inventario_model->get_inventario();
+        
+        $this->load->model('Area_model');
+        $data['all_area'] = $this->Area_model->get_areas_habilitas();
+        
         $data['_view'] = 'produccion/index';
         $this->load->view('layouts/main',$data);
     }
@@ -165,6 +171,62 @@ class Produccion extends CI_Controller{
             }
         //}
     }
+    /* buscar nueva platabanda */
+    function buscar_platabanda()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()) {
+                $area_id = $this->input->post('area_id');
+                $this->load->model('Control_inventario_model');
+                $datos = $this->Control_inventario_model->get_platabanda($area_id);
+                echo json_encode($datos);
+            }else{
+                show_404();
+            }
+        //}
+    }
+    /* registra un nuevo detalle de una producción */
+    function nuevodetalle()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                $produccion_descripcion = $this->input->post('produccion_descripcion');
+                $produccion_inicio = $this->input->post('produccion_inicio');
+                
+                //$detalle_formaux = $this->Detalle_formula_aux_model->get_all_detalles_porusuario($usuario_id);
+                //foreach ($detalle_formaux as $detalle){
+                    //$lacantidad = $detalle["detalleven_cantidad"]*$formula_cantidad;
+                $estado_id = 33;
+                $params = array(
+                    'estado_id' => $estado_id,
+                    'produccion_id' => $this->input->post('produccion_id'),
+                    'producto_id' => $this->input->post('producto_id'),
+                    'controli_id' => $this->input->post('controli_id'),
+                    'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
+                    'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
+                );
+                $this->load->model('Detalle_produccion_model');
+                $this->Detalle_produccion_model->add_detalle_produccion($params); 
+                echo json_encode("ok");
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    /* muestra los detalles de una producción */
+    function mostrardetalleproduccion()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                $produccion_id = $this->input->post('produccion_id');
+                $this->load->model('Detalle_produccion_model');
+                $datos = $this->Detalle_produccion_model->get_all_detalleproduccion($produccion_id); 
+                echo json_encode($datos);
+            }else{                 
+                show_404();
+            }
+        //}
+    }
     
     
     
@@ -172,9 +234,14 @@ class Produccion extends CI_Controller{
     
     
     
-    
-    
-    
+
+
+
+
+
+
+
+
     
     
     

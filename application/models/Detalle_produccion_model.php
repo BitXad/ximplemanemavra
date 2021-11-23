@@ -11,6 +11,15 @@ class Detalle_produccion_model extends CI_Model
         parent::__construct();
     }
     
+    /*
+     * function to add new area
+     */
+    function add_detalle_produccion($params)
+    {
+        $this->db->insert('detalle_produccion',$params);
+        return $this->db->insert_id();
+    }
+    
     function get_all_produccion($area_id){
         return $this->db->query(
             "SELECT ci.*, p.producto_nombre, dp.* 
@@ -26,5 +35,18 @@ class Detalle_produccion_model extends CI_Model
     function update_detalle($id, $params){
         $this->db->where('detproduccion_id',$id);
         return $this->db->update('detalle_produccion',$params);
+    }
+    /* obtiene todos los detalles de una producción */
+    function get_all_detalleproduccion($produccion_id){
+        return $this->db->query(
+            "SELECT dp.*, p.producto_nombre, a.area_nombre, e.estado_color, e.estado_descripcion
+            from detalle_produccion dp
+            left join producto p on dp.producto_id = p.producto_id
+            left join control_inventario ci on dp.controli_id = ci.controli_id 
+            left join estado e on dp.estado_id = e.estado_id
+            left join area a on ci.area_id = a.area_id
+            where
+                dp.produccion_id = $produccion_id
+        ")->result_array();
     }
 }

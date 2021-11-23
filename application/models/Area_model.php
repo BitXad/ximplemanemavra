@@ -12,7 +12,7 @@ class Area_model extends CI_Model
     }
     
     // /*
-    //  * Get unidad by unidad_id
+    //  * Get unidad by $area_id
     //  */
     function get_area($area_id)
     {
@@ -20,7 +20,7 @@ class Area_model extends CI_Model
     }
         
     /*
-     * Get all unidad
+     * Get all arera
      */
     function get_all_area(){
         $area = $this->db->query(
@@ -38,7 +38,7 @@ class Area_model extends CI_Model
     }
 
     /*
-     * function to add new unidad
+     * function to add new area
      */
     function add_area($params)
     {
@@ -55,7 +55,7 @@ class Area_model extends CI_Model
         return $this->db->update('area',$params);
     }
     /**
-     * get ubicaiones disponibles
+     * get ubicaciones disponibles
      */
     function get_disponibles($controli_id){
         return $this->db->query(
@@ -66,5 +66,22 @@ class Area_model extends CI_Model
                         where cu.controli_id = $controli_id) as cu2 on u.area_id = cu2.area_id
             where cu2.controli_id is null"
         )->result_array();
+    }
+    /*
+     * Get areas disponibles
+     */
+    function get_areas_habilitas(){
+        $area = $this->db->query(
+            "SELECT
+               a.*, e.estado_descripcion
+            FROM
+                area a
+            left join estado e on a.estado_id = e.estado_id
+            WHERE
+                a.estado_id = 1
+                ORDER BY a.area_id ASC
+        ")->result_array();
+
+        return $area;
     }
 }

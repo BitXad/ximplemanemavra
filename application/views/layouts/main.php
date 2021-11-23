@@ -190,7 +190,7 @@
                         if($rolusuario[69-1]['rolusuario_asignado'] == 1){
                         ?>
                         <li>
-                            <a href="<?php echo site_url('produccion/producir');?>"><i class="fa fa-certificate"></i> Producción</a>
+                            <a href="<?php echo site_url('produccion');?>"><i class="fa fa-certificate"></i> Producción</a>
                         </li>      
                         <?php
                         }

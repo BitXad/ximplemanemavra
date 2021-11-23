@@ -1,5 +1,6 @@
 <script src="<?php echo base_url('resources/js/funciones_produccion.js'); ?>" type="text/javascript"></script>
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
+<input type="hidden" id="produccion_id" />
 <!----------------------------- script buscador --------------------------------------->
 <!--<script src="<?php //echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript"></script>-->
 <script type="text/javascript">
@@ -79,7 +80,7 @@
         </div>
     </div>
 </div>
-<!------------------------ INICIO modal para Registrar nueva Descripción ------------------->
+<!------------------------ INICIO modal para Registrar nueva Producción ------------------->
 <div class="modal fade" id="modalnuevaproduccion" tabindex="-1" role="dialog" aria-labelledby="modalnuevaproduccionlabel">
     <div class="modal-dialog" role="document">
         <br><br>
@@ -114,4 +115,192 @@
         </div>
     </div>
 </div>
-<!------------------------ FIN modal para Registrar nueva Descripción ------------------->
+<!------------------------ FIN modal para Registrar nueva Producción ------------------->
+<!------------------------ INICIO modal para Registrar un nuevo detalle ------------------->
+<div class="modal fade" id="modalnuevodetalle" tabindex="-1" role="dialog" aria-labelledby="modalnuevodetallelabel">
+    <div class="modal-dialog" role="document">
+        <br><br>
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold" style="font-size: 16px" id="titulodetalle"></span>
+                <span class="text-bold" style="font-size: 16px">Nuevo Detalle</span>
+            </div>
+            <div class="modal-body">
+               <!------------------------------------------------------------------->
+               <span class="text-danger" id="mensajenuevodetalle"></span>
+               <div class="col-md-6">
+                    <label for="detproduccion_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+                    <div class="form-group">
+                        <input type="number" step="any" min="0"  name="detproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_cantidad" />
+                    </div>
+                </div>
+               <div class="col-md-6">
+                    <label for="detproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="producto_id" class="control-label">Producto</label>
+                    <div class="form-group">
+                        <select name="producto_id" class="form-control" id="producto_id">
+                            <!--<option value="">select produccion</option>-->
+                            <?php 
+                            foreach($all_producto as $producto)
+                            {
+                                //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                                echo '<option value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="area_id" class="control-label">Area</label>
+                    <div class="form-group">
+                        <select name="area_id" class="form-control" id="area_id" onchange="buscar_platabanda()">
+                            <option value="">-- Elegir Area --</option>
+                            <?php
+                            foreach ($all_area as $area) {
+                                //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                                echo '<option value="' . $area['area_id'] . '">' . $area['area_nombre'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+               <div class="col-md-12">
+                   <label for="controli_id" class="control-label">Platabanda</label>
+                   <div class="form-group">
+                       <span id="paraplatabanda"></span>
+                    </div>
+                </div>
+                
+               <!------------------------------------------------------------------->
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 text-center">
+                    <a onclick="registrarnuevodetalle()" class="btn btn-success"><span class="fa fa-check"></span> Registrar </a>
+                    <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cancelar </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------ FIN modal para Registrar un nuevo detalle ------------------->
+<!------------------------ INICIO modal para ver los detalles de producción ------------------->
+<div class="modal fade" id="modaldetallesproduccion" tabindex="-1" role="dialog" aria-labelledby="modaldetallesproduccionlabel">
+    <div class="modal-dialog" role="document">
+        <br><br>
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold" style="font-size: 16px" id="titulomostrardetalle"></span>
+                    <span class="text-bold" style="font-size: 16px">Detalle de Producción</span>
+            </div>
+            <div class="modal-body">
+                <div id='loader3' style='display:none; text-align: center !important'>
+                    <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >
+                </div>
+               <!------------------------------------------------------------------->
+               <!--<span class="text-danger" id="mensajenuevodetalle"></span>-->
+               <div class="box-body">
+                    <table class="table table-striped" id="mitabla">
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Observación</th>
+                            <th>Area</th>
+                            <th>Platabanda</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                        <tbody class="buscardetalle" id="tabladetalleproduccion"></tbody>
+                    </table>
+                </div>
+               <!------------------------------------------------------------------->
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 text-center">
+                    <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cerrar </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------ FIN modal para ver los detalles de producción ------------------->
+<!------------------------ INICIO modal para modificar detalles de una Producción ------------------->
+<div class="modal fade" id="modalmodificardetalle" tabindex="-1" role="dialog" aria-labelledby="modalmodificardetallelabel">
+    <div class="modal-dialog" role="document">
+        <br><br>
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold" style="font-size: 16px">Modificar Detalle de</span><br>
+                <span class="text-bold" style="font-size: 16px" id="titulomodificardetalle"></span>
+            </div>
+            <div class="modal-body">
+               <!------------------------------------------------------------------->
+               <span class="text-danger" id="mensajemodifcardetalle"></span>
+               <div class="col-md-6">
+                    <label for="ladetproduccion_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+                    <div class="form-group">
+                        <input type="number" step="any" min="0"  name="ladetproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_cantidad" />
+                    </div>
+                </div>
+               <div class="col-md-6">
+                    <label for="ladetproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="ladetproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_observacion" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="producto_id" class="control-label">Producto</label>
+                    <div class="form-group">
+                        <select name="laproducto_id" class="form-control" id="laproducto_id">
+                            <!--<option value="">select produccion</option>-->
+                            <?php 
+                            foreach($all_producto as $producto)
+                            {
+                                $selected = ($producto['producto_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                                echo '<option value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
+                            } 
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="area_id" class="control-label">Area</label>
+                    <div class="form-group">
+                        <select name="area_id" class="form-control" id="area_id" onchange="buscar_platabanda()">
+                            <option value="">-- Elegir Area --</option>
+                            <?php
+                            foreach ($all_area as $area) {
+                                //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                                echo '<option value="' . $area['area_id'] . '">' . $area['area_nombre'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+               <div class="col-md-12">
+                   <label for="controli_id" class="control-label">Platabanda</label>
+                   <div class="form-group">
+                       <span id="paraplatabanda"></span>
+                    </div>
+                </div>
+                
+               <!------------------------------------------------------------------->
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12 text-center">
+                    <a onclick="registrarnuevodetalle()" class="btn btn-success"><span class="fa fa-check"></span> Registrar </a>
+                    <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cancelar </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------ F I N  modal para modificar detalles de una Producción ------------------->
