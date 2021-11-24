@@ -49,4 +49,13 @@ class Detalle_produccion_model extends CI_Model
                 dp.produccion_id = $produccion_id
         ")->result_array();
     }
+
+    function get_detproduccion($detproduccion_id){
+        return $this->db->query(
+            "SELECT dp.*
+            from detalle_produccion dp
+            where 1 = 1
+            and dp.detproduccion_id = $detproduccion_id"
+        )->result_array();
+    }
 }
