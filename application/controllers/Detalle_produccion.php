@@ -11,6 +11,7 @@ class Detalle_produccion extends CI_Controller{
         $this->load->model('Detalle_produccion_model');
         $this->load->model('Estado_model');
         $this->load->model('Producto_model');
+        $this->load->model('Inventario_model');
         $this->load->model('Produccion_model');
     } 
     
@@ -37,6 +38,36 @@ class Detalle_produccion extends CI_Controller{
                 'estado_id'=>$estado_id,
             );
             $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
+        }else{
+            show_404();
+        }
+    }
+    function update_detproduccion(){
+        if($this->input->is_ajax_request()){
+            $detproduccion_id = $this->input->post("detproduccion_id");
+            $perdida = $this->input->post("perdida");
+            $observacion = $this->input->post("observacion");
+            $detproduccion = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
+            $params = array(
+                'detproduccion_perdida' => $detproduccion[0]['detproduccion_perdida'] + $perdida,
+                'detproduccion_observacion' => $observacion,
+            );
+            $this->Detalle_produccion_model->update_detalle($detproduccion_id, $params);
+        }else{
+            show_404();
+        }
+    }
+
+    function incrementar_inventario(){
+        if ($this->input->is_ajax_request()) {
+            $cantidad = $this->input->post('cantidad');
+            $producto = $this->input->post('producto_id');
+            $detproduccion_id = $this->input->post("detproduccion_id");
+            $params = array(
+                "estado_id"=>38
+            );
+            $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
+            $this->Inventario_model->incrementar_inventario($cantidad,$producto);
         }else{
             show_404();
         }

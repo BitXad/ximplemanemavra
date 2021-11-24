@@ -10,6 +10,7 @@ class Costo_operativo extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Costo_operativo_model');
+        $this->load->model('Detalle_produccion_model');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
         }else {
@@ -145,6 +146,26 @@ class Costo_operativo extends CI_Controller{
         }
         else
             show_error('The costo_operativo you are trying to delete does not exist.');
+        }
+    }
+
+    function save_costo(){
+        if($this->input->is_ajax_request()){
+            $detproduccion_id = $this->input->post("detproduccion_id");
+            $costo = $this->input->post("costo");
+            $detcosto = $this->input->post("detcosto");
+            $produccion = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
+            $estado_id = 1;
+            $params = array(
+                'produccion_id' => $produccion[0]['produccion_id'],
+                'usuario_id' => $this->session_data['usuario_id'],
+                'estado_id' => $estado_id,
+                'costodesc_id' => $detcosto,
+                'costoop_costo' => $costo,
+            );
+            $this->Costo_operativo_model->add_costo_operativo($params);
+        }else{
+            show_404();
         }
     }
     

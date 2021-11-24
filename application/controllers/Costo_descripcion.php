@@ -141,4 +141,11 @@ class Costo_descripcion extends CI_Controller{
             }
         }
     }
+
+    function get_costo_descripcion(){
+        if($this->input->is_ajax_request()){
+            $result = $this->Costo_descripcion_model->get_all_costo_descripcion();
+            echo json_encode($result);
+        }
+    }
 }
