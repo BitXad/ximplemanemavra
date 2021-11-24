@@ -255,7 +255,10 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
     var base_url = document.getElementById('base_url').value;
     $('#titulomodificardetalle').html(produccion_descripcion+"<br>");
     $('#modaldetallesproduccion').modal('hide');
+    
     $('#produccion_id').val(masproduccion["produccion_id"]);
+    $('#ladetproduccion_cantidad').val(masproduccion["detproduccion_cantidad"]);
+    $('#ladetproduccion_observacion').val(masproduccion["detproduccion_observacion"]);
     
     $('#modalmodificardetalle').modal('show');
     
