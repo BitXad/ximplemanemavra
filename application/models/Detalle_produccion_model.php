@@ -58,4 +58,26 @@ class Detalle_produccion_model extends CI_Model
             and dp.detproduccion_id = $detproduccion_id"
         )->result_array();
     }
+    
+    /*
+     * funccion para agregar a detalle aux
+     */
+    function add_detalle_produccion_aux($params)
+    {
+        $this->db->insert('detalle_produccion_aux',$params);
+        return $this->db->insert_id();
+    }
+    /* obtiene todos los detalles de aux */
+    function get_all_detalleproduccion_aux($usuario_id){
+        return $this->db->query(
+            "SELECT dp.*, p.producto_nombre, a.area_nombre, e.estado_color, e.estado_descripcion
+            from detalle_produccion_aux dp
+            left join producto p on dp.producto_id = p.producto_id
+            left join control_inventario ci on dp.controli_id = ci.controli_id 
+            left join estado e on dp.estado_id = e.estado_id
+            left join area a on ci.area_id = a.area_id
+            where
+                dp.usuario_id = $usuario_id
+        ")->result_array();
+    }
 }

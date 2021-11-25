@@ -213,22 +213,22 @@ function ponercursordetalleproducion(produccion){
             data:{produccion_id:produccion_id},
             success:function(respuesta){
                 //$("#encontrados").val("- 0 -");
-                var registros =  JSON.parse(respuesta);
-                if (registros != null){
-                    var n = registros.length; //tamaño del arreglo de la consulta
+                var registrosa =  JSON.parse(respuesta);
+                if (registrosa != null){
+                    var n = registrosa.length; //tamaño del arreglo de la consulta
                     //$("#encontrados").html("Registros Encontrados: "+n+" ");
                     html = "";
                     for (var i = 0; i < n ; i++){
                         html += "<tr>";
                         html += "<td>"+(i+1)+"</td>";
-                        html += "<td>"+registros[i]["producto_nombre"]+"</td>";
-                        html += "<td>"+registros[i]["detproduccion_cantidad"]+"</td>";
-                        html += "<td>"+registros[i]["detproduccion_observacion"]+"</td>";
-                        html += "<td>"+registros[i]["area_nombre"]+"</td>";
-                        html += "<td>"+registros[i]["controli_id"]+"</td>";
-                        html += "<td class='no-print' style='background-color: #"+registros[i]["estado_color"]+"'>"+registros[i]["estado_descripcion"]+"</td>";
+                        html += "<td>"+registrosa[i]["producto_nombre"]+"</td>";
+                        html += "<td>"+registrosa[i]["detproduccion_cantidad"]+"</td>";
+                        html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
+                        html += "<td>"+registrosa[i]["area_nombre"]+"</td>";
+                        html += "<td>"+registrosa[i]["controli_id"]+"</td>";
+                        html += "<td class='no-print' style='background-color: #"+registrosa[i]["estado_color"]+"'>"+registrosa[i]["estado_descripcion"]+"</td>";
                         html += "<td>";
-                        html += "<a onclick='modificardetalleproduccion("+JSON.stringify(registros[i])+", "+JSON.stringify(produccion["produccion_descripcion"])+")' class='btn btn-info btn-xs' title='Modificar este detalle de producción'><span class='fa fa-pencil'></span></a>";
+                            html += "<a onclick='modificardetalleproduccion("+JSON.stringify(registrosa[i])+", "+JSON.stringify(produccion["produccion_descripcion"])+")' class='btn btn-info btn-xs' title='Modificar este detalle de producción'><span class='fa fa-pencil'></span></a>";
                         html += "</td>";
                         html += "</tr>";
 
@@ -259,6 +259,23 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
     $('#produccion_id').val(masproduccion["produccion_id"]);
     $('#ladetproduccion_cantidad').val(masproduccion["detproduccion_cantidad"]);
     $('#ladetproduccion_observacion').val(masproduccion["detproduccion_observacion"]);
+    var losproductos = JSON.parse(document.getElementById('losproductos').value);
+    if (losproductos != null){
+        var n = losproductos.length; //tamaño del arreglo de la consulta
+        var html = "";
+        html += "<select name='elproducto_id' class='form-control' id='elproducto_id'>";
+        for (var i = 0; i < n; i++) {
+            if(losproductos[i]['producto_id'] == masproduccion['producto_id']){
+                selected = "selected='selected'";
+            }else{
+                selected = "";
+            }
+            html += "<option value='"+losproductos[i]['producto_id']+"'"+selected+">"+losproductos[i]['producto_nombre']+"</option>";
+        }
+        html += "</select>";
+        
+        $('#estosproductos').html(html);
+    }
     
     $('#modalmodificardetalle').modal('show');
     

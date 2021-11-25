@@ -9,122 +9,160 @@
 </style>
 <link href="<?php echo base_url('resources/css/mitabla.css'); ?>" rel="stylesheet">
 
-<input type="hidden" name="laformula" id="laformula" value='<?php echo json_encode($all_formula); ?>' />
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
-
-<div class="panel-group contorno">
-    <div class="panel panel-default contorno">
-        <div class="panel-heading col-md-12 contorno">
-            <div class="col-md-3 contorno">
-                <label for="formula_id" class="control-label" style="margin-bottom: 0;">FORMULA</label>           
-                <div class="form-group contorno">
-                    <select  class="form-control btn btn-warning btn-sm" style='color: black; background: #1221; text-align: left; font-size: 18px; font-family: Arial;' id="formula_id" name="formula_id" onchange="elegirformula()">
-                        <option value="">- Elija una formula -</option>
-                        <?php
-                        foreach($all_formula as $formula){                          
-                        ?>                    
-                        <option value="<?php echo $formula["formula_id"] ?>"><?php echo $formula['formula_nombre'];?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-2 contorno">
-                <label for="formula_unidad" class="control-label" style="margin-bottom: 0;">UNIDAD</label>
-                <div class="form-group contorno">
-                    <input type="text" name="formula_unidad" class="form-control  btn btn-warning btn-sm" style='color: black; background: #1221; text-align: left; font-size: 18px; font-family: Arial;' id="formula_unidad" />
-                </div>
-            </div>
-            <div class="col-md-2 contorno">
-                <label for="formula_cantidad" class="control-label" style="margin-bottom: 0;">CANTIDAD</label>
-                <div class="form-group contorno">
-                    <input type="number" step="any" min="0" name="formula_cantidad" class="form-control  btn btn-warning btn-sm" style='color: black; background: #1221; text-align: left; font-size: 18px; font-family: Arial;' id="formula_cantidad" onkeypress="calcularsiesenter(event)" />
-                </div>
-            </div>
-            <div class="col-md-2 contorno">
-                <label for="formula_costounidad" class="control-label" style="margin-bottom: 0;">COSTO UNITARIO</label>
-                <div class="form-group contorno">
-                    <input type="number" step="any" min="0" name="formula_costounidad" class="form-control  btn btn-warning btn-sm" style='color: black; background: #1221; text-align: left; font-size: 18px; font-family: Arial;' id="formula_costounidad" />
-                </div>
-            </div>
-            <div class="col-md-2 contorno">
-                <label for="formula_preciounidad" class="control-label" style="margin-bottom: 0;">PRECIO</label>
-                <div class="form-group contorno">
-                    <input type="number" step="any" min="0" name="formula_preciounidad" class="form-control  btn btn-warning btn-sm" style='color: black; background: #1221; text-align: left; font-size: 18px; font-family: Arial;' id="formula_preciounidad" />
-                </div>
-            </div>
-            <div class="col-md-1 contorno">
-                <label for="calcularformula" class="control-label" style="margin-bottom: 0;">&nbsp;</label>
-                <div class="form-group contorno">
-                    <a class="form-control btn btn-soundcloud btn-block" onclick="calcularformula()"><span></span> Calcular</a>
-                </div>
-            </div>
-        </div>
-        <span id="laexistencia"></span>
-    </div>
+<!--<input type="hidden" name="laformula" id="laformula" value='<?php //echo json_encode($all_formula); ?>' />-->
+<div class="box-header">
+    <font size='4' face='Arial'><b>PRODUCCION</b></font>
 </div>
-<div class="row col-md-12" id='loader'  style='display:none; text-align: center'>
-    <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >
+<div class="col-md-6">
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 15%" class="text-right"><label for="fecha_inicio"><span class="text-danger">*</span>Fecha Inicio:</label></td>
+            <td style="width: 85%">
+                <input type="date" name="fecha_inicio" value="<?php echo ($this->input->post('fecha_inicio') ? $this->input->post('fecha_inicio') : date("Y-m-d")); ?>" class="form-control" id="fecha_inicio" required />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 15%" class="text-right"><label for="fecha_fin">Fecha Fin:</label></td>
+            <td style="width: 85%">
+                <input type="date" name="fecha_fin" value="<?php echo ($this->input->post('fecha_fin') ? $this->input->post('fecha_fin') : ""); ?>" class="form-control" id="fecha_fin" />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 15%" class="text-right"><label for="descripcion">Descripción:</label></td>
+            <td style="width: 85%">
+                <input type="text" width="100%" name="descripcion" value="<?php echo ($this->input->post('descripcion') ? $this->input->post('descripcion') : ""); ?>" class="form-control" id="descripcion" />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 15%" class="text-right"><label for="producto_id">Producto:</label></td>
+            <td style="width: 85%">
+                <select name="producto_id" class="form-control" id="producto_id">
+                    <!--<option value="">select produccion</option>-->
+                    <?php 
+                    foreach($all_producto as $producto)
+                    {
+                        //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                        echo '<option value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
+                    } 
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 15%" class="text-right"><label for="descripcion">Ing. a Cargo:</label></td>
+            <td style="width: 85%">
+                <select name="acargode_id" class="form-control" id="acargode_id">
+                    <!--<option value="">select produccion</option>-->
+                    <?php 
+                    foreach($all_usuario as $usuario)
+                    {
+                        //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                        echo '<option value="'.$usuario['usuario_id'].'">'.$usuario['usuario_nombre'].'</option>';
+                    } 
+                    ?>
+                </select>
+            </td>
+        </tr>
+        <!--<tr style="padding-top: 5px">
+            <td style="width: 100%" class="text-center" colspan="2">
+                <a class="form-control btn btn-soundcloud btn-block" onclick="calcularformula()"><span></span> Calcular</a>
+            </td>
+        </tr>-->
+    </table>
+</div>
+<div class="col-md-2">
+    <a class="form-control btn btn-success btn-block" onclick="ponercursornuevaplatabanda()" data-toggle="modal" data-target="#modalparaplatabanda"><span></span> Añadir</a>
 </div>
 <div class="row">
     <div class="col-md-12">
+        <!--------------------- parametro de buscador --------------------->
+        <div class="input-group"> <span class="input-group-addon">Buscar</span>
+            <input id="filtrar" type="text" class="form-control" placeholder="Ingrese producto, formula,..">
+        </div>
+        <div id='loader' style='display:none; text-align: center !important'>
+            <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >
+        </div>
+        <!--------------------- fin parametro de buscador --------------------->
         <div class="box">
             <div class="box-body">
                 <table class="table table-striped" id="mitabla">
                     <tr>
-                        <th>Producto</th>
-                        <th>Costo</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
+                        <th>#</th>
+                        <th>Descripción</th>
+                        <th>Fecha<br>Inicio</th>
+                        <th>Usuario</th>
+                        <th>Estado</th>
+                        <th></th>
                     </tr>
-                    <tbody id="detalle_deformula"></tbody>
+                    <tbody class="buscar" id="tabladetalleproduccion_aux"></tbody>
                 </table>
                                 
             </div>
         </div>
     </div>
 </div>
-<div class="col-md-12 text-center">
-    <!--<label for="producir" class="control-label">&nbsp;</label>-->
-    <div class="form-group">
-        <a class="btn btn-success disabled" onclick="producir()" id="paraproducir"><span class="fa fa-cogs"></span> Producir</a>
-        <a href="<?php echo site_url('produccion'); ?>" class="btn btn-danger">
-            <i class="fa fa-times"></i> Cancelar</a>
-    </div>
-</div>
-
-<!------------------------ INICIO modal para mostrar mensaje ------------------->
-<div class="modal fade" id="modalmensaje" tabindex="-1" role="dialog" aria-labelledby="modalmensajelabel">
+<!------------------------ INICIO modal para Registrar a auxiliar la paltabanda ------------------->
+<div class="modal fade" id="modalparaplatabanda" tabindex="-1" role="dialog" aria-labelledby="modalparaplatabandalabel">
     <div class="modal-dialog" role="document">
         <br><br>
         <div class="modal-content">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
-                <span class="text-danger"><span class="text-bold fa fa-exclamation-triangle" style="font-size: 15pt"> ADVERTENCIA </span><br>
-                    <span class="text-bold">PRODUCTOS INSUFICIENTES EN INVENTARIO</span>
-                </span>
+                <span class="text-bold" style="font-size: 16px" id="titulodetalle"></span>
+                <!--<span class="text-bold" style="font-size: 16px">Nuevo Detalle</span>-->
             </div>
             <div class="modal-body">
-                <!------------------------------------------------------------------->
-                <div class="box-body table-responsive">
-                    <table class="table table-striped" id="mitabla">
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad<br>Requerida</th>
-                            <th>Existencia</th>
-                            <th>Falta</th>
-                        </tr>
-                        <tbody class="buscar" id="tablamensaje" >
-                        </tbody>
-                    </table>
+               <!------------------------------------------------------------------->
+               <span class="text-danger" id="mensajenuevodetalle"></span>
+               <div class="col-md-6">
+                    <label for="detproduccion_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+                    <div class="form-group">
+                        <input type="number" step="any" min="0"  name="detproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_cantidad" />
+                    </div>
                 </div>
-                <!------------------------------------------------------------------->
+               <div class="col-md-6">
+                    <label for="detproduccion_costo" class="control-label"><span class="text-danger">*</span>Costo</label>
+                    <div class="form-group">
+                        <input type="number" step="any" min="0"  name="detproduccion_costo"  class="form-control" id="detproduccion_costo" />
+                    </div>
+                </div>
+               <div class="col-md-12">
+                    <label for="detproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="area_id" class="control-label">Area</label>
+                    <div class="form-group">
+                        <select name="area_id" class="form-control" id="area_id" onchange="buscar_platabanda()">
+                            <option value="">-- Elegir Area --</option>
+                            <?php
+                            foreach ($all_area as $area) {
+                                //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
+                                echo '<option value="' . $area['area_id'] . '">' . $area['area_nombre'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+               <div class="col-md-12">
+                   <label for="controli_id" class="control-label">Platabanda</label>
+                   <div class="form-group">
+                       <span id="paraplatabanda"></span>
+                    </div>
+                </div>
+                
+               <!------------------------------------------------------------------->
             </div>
-            <div class="modal-footer" style="text-align: center">
-                <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cerrar</a>
+            <div class="modal-footer">
+                <div class="col-md-12 text-center">
+                    <a onclick="registrarnuevodetalleaux()" class="btn btn-success"><span class="fa fa-check"></span> Ingresar </a>
+                    <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cancelar </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<!------------------------ FIN modal para mostrar mensaje ------------------->
+<!------------------------ F I N  modal para Registrar a auxiliar la paltabanda ------------------->

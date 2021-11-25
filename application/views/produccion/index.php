@@ -1,5 +1,6 @@
 <script src="<?php echo base_url('resources/js/funciones_produccion.js'); ?>" type="text/javascript"></script>
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
+<input type="hidden" name="losproductos" id="losproductos" value='<?php echo json_encode($all_producto); ?>' />
 <input type="hidden" id="produccion_id" />
 <!----------------------------- script buscador --------------------------------------->
 <!--<script src="<?php //echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript"></script>-->
@@ -259,16 +260,16 @@
                 <div class="col-md-12">
                     <label for="producto_id" class="control-label">Producto</label>
                     <div class="form-group">
-                        <select name="laproducto_id" class="form-control" id="laproducto_id">
-                            <!--<option value="">select produccion</option>-->
+                        <span id="estosproductos"></span>
+                        <!--<select name="laproducto_id" class="form-control" id="laproducto_id">
                             <?php 
-                            foreach($all_producto as $producto)
+                            /*foreach($all_producto as $producto)
                             {
                                 $selected = ($producto['producto_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
                                 echo '<option value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
-                            } 
+                            }*/
                             ?>
-                        </select>
+                        </select>-->
                     </div>
                 </div>
                 <div class="col-md-12">
