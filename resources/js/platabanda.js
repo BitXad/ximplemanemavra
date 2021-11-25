@@ -98,7 +98,7 @@ function agregar_platabanda(){
     });
 }
 
-function show_modal_info(platabanda_id = 0){
+function show_modal_info(platabanda_id){
     let controlador = `${base_url}control_inventario/get_items_platabanda`;
     $("#modal_info_platabanda").modal('show');
     $.ajax({
@@ -116,7 +116,7 @@ function show_modal_info(platabanda_id = 0){
                             </div>
                             <div class="form-inline">
                                 <label for="planta_nombre">Fecha de producción: </label>
-                                <span id="fecha${item['detproduccion_id']}">${item['produccion_fecha'].replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')} - ${item['produccion_hora']}</span>
+                                <span id="fecha${item['detproduccion_id']}">${item['produccion_registro']}</span>
                             </div>
                             <div class="form-inline">
                                 <div class="form-group mb-2">
@@ -150,6 +150,7 @@ function show_modal_info(platabanda_id = 0){
                                 <button class="btn btn-success btn-sm" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
                                 <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']})" title="Agregar costo operativo"><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                                 <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a siguiente etapa` : `Mandar a ventas` }">${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i>` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i>`}</button>
+                                <button class="btn btn-primary btn-sm" onclick="liberar_platabanda(${item['detproduccion_id']})" title="Agregar costo operativo"><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                             </div>
                         </div>
                         <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>`;

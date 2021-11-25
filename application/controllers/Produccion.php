@@ -192,21 +192,28 @@ class Produccion extends CI_Controller{
             if ($this->input->is_ajax_request()){
                 $produccion_descripcion = $this->input->post('produccion_descripcion');
                 $produccion_inicio = $this->input->post('produccion_inicio');
-                
+                $controli_id = $this->input->post('controli_id');
                 //$detalle_formaux = $this->Detalle_formula_aux_model->get_all_detalles_porusuario($usuario_id);
                 //foreach ($detalle_formaux as $detalle){
                     //$lacantidad = $detalle["detalleven_cantidad"]*$formula_cantidad;
                 $estado_id = 33;
+                $estado_id_platabanda = 37;
                 $params = array(
                     'estado_id' => $estado_id,
                     'produccion_id' => $this->input->post('produccion_id'),
                     'producto_id' => $this->input->post('producto_id'),
-                    'controli_id' => $this->input->post('controli_id'),
+                    'controli_id' => $controli_id,
                     'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
                     'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
+                    'detproduccion_perdida' => 0,
                 );
                 $this->load->model('Detalle_produccion_model');
-                $this->Detalle_produccion_model->add_detalle_produccion($params); 
+                $this->Detalle_produccion_model->add_detalle_produccion($params);
+                $this->load->model('Control_inventario_model');
+                $params2 = array(
+                    'estado_id' => $estado_id_platabanda,
+                );
+                $this->Control_inventario_model->update_control_inventario($controli_id, $params2);
                 echo json_encode("ok");
             }else{                 
                 show_404();

@@ -35,7 +35,7 @@ class Detalle_produccion extends CI_Controller{
                 $estado_id = 33;
             }
             $params = array(
-                'estado_id'=>$estado_id,
+                'estado_id' => $estado_id,
             );
             $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
         }else{
@@ -64,7 +64,7 @@ class Detalle_produccion extends CI_Controller{
             $producto = $this->input->post('producto_id');
             $detproduccion_id = $this->input->post("detproduccion_id");
             $params = array(
-                "estado_id"=>38
+                "estado_id"=>39
             );
             $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
             $this->Inventario_model->incrementar_inventario($cantidad,$producto);
