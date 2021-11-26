@@ -1,7 +1,9 @@
 <script src="<?php echo base_url('resources/js/funciones_produccion.js'); ?>" type="text/javascript"></script>
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
 <input type="hidden" name="losproductos" id="losproductos" value='<?php echo json_encode($all_producto); ?>' />
+<input type="hidden" name="lasareas" id="lasareas" value='<?php echo json_encode($all_area); ?>' />
 <input type="hidden" id="produccion_id" />
+<input type="hidden" id="detproduccion_id" />
 <!----------------------------- script buscador --------------------------------------->
 <!--<script src="<?php //echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript"></script>-->
 <script type="text/javascript">
@@ -25,7 +27,8 @@
     <font size='4' face='Arial'><b>Producción</b></font>
     <br><font size='2' face='Arial'>Registros Encontrados: <?php echo sizeof($produccion); ?></font>
     <div class="box-tools no-print">
-        <a data-toggle="modal" data-target="#modalnuevaproduccion" onclick="ponercursor()" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>
+        <!--<a data-toggle="modal" data-target="#modalnuevaproduccion" onclick="ponercursor()" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>-->
+        <a href="<?php echo site_url('produccion/producir'); ?>" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>
     </div>
 </div>
 <div class="row">
@@ -273,23 +276,24 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <label for="area_id" class="control-label">Area</label>
+                    <span id="estasareas"></span>
+                    <!--<label for="area_id" class="control-label">Area</label>
                     <div class="form-group">
                         <select name="area_id" class="form-control" id="area_id" onchange="buscar_platabanda()">
                             <option value="">-- Elegir Area --</option>
                             <?php
-                            foreach ($all_area as $area) {
+                            /*foreach ($all_area as $area) {
                                 //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
                                 echo '<option value="' . $area['area_id'] . '">' . $area['area_nombre'] . '</option>';
-                            }
+                            }*/
                             ?>
                         </select>
-                    </div>
+                    </div>-->
                 </div>
                <div class="col-md-12">
                    <label for="controli_id" class="control-label">Platabanda</label>
                    <div class="form-group">
-                       <span id="paraplatabanda"></span>
+                       <span id="paraplatabandam"></span>
                     </div>
                 </div>
                 
@@ -297,7 +301,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-md-12 text-center">
-                    <a onclick="registrarnuevodetalle()" class="btn btn-success"><span class="fa fa-check"></span> Registrar </a>
+                    <a onclick="guardar_detallemodificado()" class="btn btn-success"><span class="fa fa-check"></span> Modificar </a>
                     <a href="#" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> Cancelar </a>
                 </div>
             </div>

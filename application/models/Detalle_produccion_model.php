@@ -39,7 +39,7 @@ class Detalle_produccion_model extends CI_Model
     /* obtiene todos los detalles de una producción */
     function get_all_detalleproduccion($produccion_id){
         return $this->db->query(
-            "SELECT dp.*, p.producto_nombre, a.area_nombre, e.estado_color, e.estado_descripcion
+            "SELECT dp.*, p.producto_nombre, a.area_id, a.area_nombre, e.estado_color, e.estado_descripcion
             from detalle_produccion dp
             left join producto p on dp.producto_id = p.producto_id
             left join control_inventario ci on dp.controli_id = ci.controli_id 
@@ -103,11 +103,11 @@ class Detalle_produccion_model extends CI_Model
             insert into detalle_produccion
             (
             produccion_id, producto_id, controli_id, estado_id, detproduccion_cantidad,
-            detproduccion_costo, detproduccion_observacion
+            detproduccion_costo, detproduccion_perdida, detproduccion_observacion
             )
             (SELECT
                 $produccion_id, df.producto_id, df.controli_id, df.estado_id, df.detproduccion_cantidad,
-                df.detproduccion_costo, df.detproduccion_observacion
+                df.detproduccion_costo, 0, df.detproduccion_observacion
             FROM
               `detalle_produccion_aux` df
             WHERE 

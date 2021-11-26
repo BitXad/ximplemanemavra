@@ -49,7 +49,7 @@ function mostrarproduccion(){
                         html += "</td>";
                         */
                         html += "<td>";
-                        html += "<a onclick='ponercursornuevodetalle("+JSON.stringify(registros[i])+")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#modalnuevodetalle' title='Registrar detalle de producción'><span class='fa fa-sliders'></span></a>";
+                        //html += "<a onclick='ponercursornuevodetalle("+JSON.stringify(registros[i])+")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#modalnuevodetalle' title='Registrar detalle de producción'><span class='fa fa-sliders'></span></a>";
                         html += "<a onclick='ponercursordetalleproducion("+JSON.stringify(registros[i])+")' class='btn btn-info btn-xs' data-toggle='modal' data-target='#modaldetallesproduccion' title='Ver detalles de producción'><span class='fa fa-list'></span></a>";
                         html += "</td>";
                         html += "</tr>";
@@ -230,6 +230,7 @@ function ponercursordetalleproducion(produccion){
                         html += "<td>";
                             html += "<a onclick='modificardetalleproduccion("+JSON.stringify(registrosa[i])+", "+JSON.stringify(produccion["produccion_descripcion"])+")' class='btn btn-info btn-xs' title='Modificar este detalle de producción'><span class='fa fa-pencil'></span></a>";
                         html += "</td>";
+                        
                         html += "</tr>";
 
                    }
@@ -257,6 +258,7 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
     $('#modaldetallesproduccion').modal('hide');
     
     $('#produccion_id').val(masproduccion["produccion_id"]);
+    $('#detproduccion_id').val(masproduccion["detproduccion_id"]);
     $('#ladetproduccion_cantidad').val(masproduccion["detproduccion_cantidad"]);
     $('#ladetproduccion_observacion').val(masproduccion["detproduccion_observacion"]);
     var losproductos = JSON.parse(document.getElementById('losproductos').value);
@@ -276,8 +278,136 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
         
         $('#estosproductos').html(html);
     }
+    var lasareas = JSON.parse(document.getElementById('lasareas').value);
+    if (lasareas != null){
+        var m = lasareas.length; //tamaño del arreglo de la consulta
+        var htmla = "";
+        htmla += "<select name='elarea_id' class='form-control' id='elarea_id' onchange='buscar_platabandamodif2()'>";
+        for (var j = 0; j < m; j++) {
+            if(lasareas[j]['area_id'] == masproduccion['area_id']){
+                selecteda = "selected='selected'";
+            }else{
+                selecteda = "";
+            }
+            htmla += "<option value='"+lasareas[j]['area_id']+"'"+selecteda+">"+lasareas[j]['area_nombre']+"</option>";
+        }
+        htmla += "</select>";
+        
+        $('#estasareas').html(htmla);
+    }
     
     $('#modalmodificardetalle').modal('show');
+    buscar_platabandamodif(masproduccion['area_id'], masproduccion['controli_id']);
     
-    $("#modificartodo_eldetalle").html(html);
+    //$("#modificartodo_eldetalle").html(html);
+}
+/* buscar patabandas de un area especifica para modificar */
+function buscar_platabandamodif(area_id, controli_id){
+    var base_url  = document.getElementById('base_url').value;
+    //var area_id  = document.getElementById('elarea_id').value;
+    var controlador = base_url+'produccion/buscar_platabanda';
+    if(area_id == ""){
+        $("#paraplatabandam").html("");
+    }else{
+        //$('#modalnuevaproduccion').modal('hide');
+        $.ajax({url: controlador,
+                type:"POST",
+                data:{area_id:area_id},
+                success:function(respuesta){
+                    var registros =  JSON.parse(respuesta);
+                    if (registros != null){
+                        html = "";
+                        var n = registros.length; //tamaño del arreglo de la consulta
+                        html += "<select name='controlim_id' class='form-control' id='controlim_id'>";
+                        html += "<!--<option value=''>select produccion</option>-->";
+                        for (var i = 0; i < n ; i++){
+                            if(registros[i]['controli_id'] == controli_id){
+                                selected = "selected='selected'";
+                            }else{
+                                selected = "";
+                            }
+                            html += "<option value='"+registros[i]['controli_id']+"' "+selected+">"+registros[i]['controli_id']+"</option>";
+                        }
+                        html += "</select>";
+                        $("#paraplatabandam").html(html);
+                        //mostrarproduccion();
+                }
+            },
+            error:function(respuesta){
+               html = "";
+               $("#paraplatabandam").html(html);
+            }
+        });
+    }
+}
+/* buscar patabandas de un area especifica y mpodificar */
+function buscar_platabandamodif2(){
+    var base_url  = document.getElementById('base_url').value;
+    var area_id  = document.getElementById('elarea_id').value;
+    var controlador = base_url+'produccion/buscar_platabanda';
+    if(area_id == ""){
+        $("#paraplatabandam").html("");
+    }else{
+        //$('#modalnuevaproduccion').modal('hide');
+        $.ajax({url: controlador,
+                type:"POST",
+                data:{area_id:area_id},
+                success:function(respuesta){
+                    var registros =  JSON.parse(respuesta);
+                    if (registros != null){
+                        html = "";
+                        var n = registros.length; //tamaño del arreglo de la consulta
+                        html += "<select name='controlim_id' class='form-control' id='controlim_id'>";
+                        html += "<!--<option value=''>select produccion</option>-->";
+                        for (var i = 0; i < n ; i++){
+                            html += "<option value='"+registros[i]['controli_id']+"'>"+registros[i]['controli_id']+"</option>";
+                        }
+                        html += "</select>";
+                        $("#paraplatabandam").html(html);
+                        //mostrarproduccion();
+                }
+            },
+            error:function(respuesta){
+               html = "";
+               $("#paraplatabandam").html(html);
+            }
+        });
+    }
+}
+/* registra nuevodetalle a una producción!. */
+function guardar_detallemodificado(){
+    var base_url = document.getElementById('base_url').value;
+    var produccion_id = document.getElementById('produccion_id').value;
+    var detproduccion_id = document.getElementById('detproduccion_id').value;
+    var producto_id = document.getElementById('producto_id').value;
+    var area_id = document.getElementById('area_id').value;
+    var controli_id  = document.getElementById('controli_id').value;
+    let detproduccion_cantidad = document.getElementById('detproduccion_cantidad').value;
+    let detproduccion_observacion = document.getElementById('detproduccion_observacion').value;
+    var controlador = base_url+'produccion/nuevodetalle';
+    if(detproduccion_cantidad == ""){
+        $("#mensajenuevodetalle").html("Cantidad no debe estar vacio!.");
+        $("#detproduccion_cantidad").val("");
+    }else if(area_id == ""){
+        $("#mensajenuevodetalle").html("Debe elegir un area para despues elegir una Platabanda");
+        $("#detproduccion_cantidad").val("");
+    }else{
+        $('#modalnuevodetalle').modal('hide');
+        $.ajax({url: controlador,
+                type:"POST",
+                data:{produccion_id:produccion_id, producto_id:producto_id, controli_id:controli_id,
+                    detproduccion_cantidad:detproduccion_cantidad,
+                    detproduccion_observacion:detproduccion_observacion},
+                success:function(respuesta){
+                    var registros =  JSON.parse(respuesta);
+                    if (registros != null){
+                        //....
+                    }
+                },
+                error:function(respuesta){
+                    html = "";
+                    $("#costodesc_id").html(html);
+                }
+        });
+    }
 }
