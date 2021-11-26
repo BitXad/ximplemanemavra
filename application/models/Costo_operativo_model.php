@@ -195,4 +195,31 @@ class Costo_operativo_model extends CI_Model
 
         return $venta_porusuario;
     }
+    /**
+     * Get all costos of a produccion_id
+     */
+    function get_costos_produccion($produccion_id){
+        return $this->db->query(
+            "SELECT co.*, cd.costodesc_descripcion
+            from costo_operativo co 
+            left join costo_descripcion cd on co.costodesc_id = cd.costodesc_id
+            where 1=1
+            and co.produccion_id = $produccion_id"
+        )->result_array();
+    }
+    /**
+     * Get add costos for a detproduccion_id
+     */
+    function get_costos($detproduccion_id){
+        return $this->db->query(
+            "SELECT co.*, cd.costodesc_descripcion
+            from costo_operativo co 
+            left join costo_descripcion cd on co.costodesc_id = cd.costodesc_id
+            inner join detalle_produccion dp on dp.produccion_id = co.produccion_id 
+            where 1=1
+            and dp.detproduccion_id = $detproduccion_id
+            group by co.costoop_id"
+        )->result_array();
+
+    }
 }

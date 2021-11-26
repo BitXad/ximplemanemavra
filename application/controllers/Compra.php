@@ -1678,59 +1678,59 @@ function modificarproveedor()
 
 function ingreso_rapido($cantidad,$producto_id,$producto_costo){
         if($this->acceso(1)){
-            $usuario_id = $this->session_data['usuario_id'];
-        $compra_fecha = "now()";
-        $compra_hora = "'".date('H:i:s')."'";
-        $compra = array(
-                    'estado_id' => 1,
-                    'tipotrans_id' => 1,
-                    'usuario_id' => $usuario_id,
-                    'moneda_id' => 1,
-                    'proveedor_id' => 1,
-                    'forma_id' => 1,
-                    'compra_fecha' => $compra_fecha,
-                    'compra_hora' => $compra_hora,
-                    'compra_subtotal' => $producto_costo*$cantidad,
-                    'compra_descuento' => 0,
-                    'compra_descglobal' => 0,
-                    'compra_total' => $producto_costo*$cantidad,
-                    'compra_efectivo' => $producto_costo*$cantidad,
-                    'compra_cambio' => 0,
-                    
-                );
+        $usuario_id = $this->session_data['usuario_id'];
+    $compra_fecha = "now()";
+    $compra_hora = "'".date('H:i:s')."'";
+    $compra = array(
+                'estado_id' => 1,
+                'tipotrans_id' => 1,
+                'usuario_id' => $usuario_id,
+                'moneda_id' => 1,
+                'proveedor_id' => 1,
+                'forma_id' => 1,
+                'compra_fecha' => $compra_fecha,
+                'compra_hora' => $compra_hora,
+                'compra_subtotal' => $producto_costo*$cantidad,
+                'compra_descuento' => 0,
+                'compra_descglobal' => 0,
+                'compra_total' => $producto_costo*$cantidad,
+                'compra_efectivo' => $producto_costo*$cantidad,
+                'compra_cambio' => 0,
+                
+            );
 
-                $compra_id=$this->Compra_model->add_compra($compra);
+            $compra_id=$this->Compra_model->add_compra($compra);
 $detalle = "INSERT into detalle_compra(
-        compra_id,
-        producto_id,
-        detallecomp_codigo,
-        detallecomp_unidad,
-        detallecomp_costo,
-        detallecomp_cantidad,
-        detallecomp_precio,
-        detallecomp_descuento,
-        detallecomp_subtotal,
-        detallecomp_total              
-        )
-        (
-        SELECT
-        ".$compra_id.",
-        producto_id,
-        producto_codigo,
-        producto_unidad,
-        producto_costo,
-        ".$cantidad.",
-        producto_precio,
-        0,
-        ".$producto_costo." * ".$cantidad.",
-        ".$producto_costo." * ".$cantidad."
-        
-        from producto where producto_id = ".$producto_id."
-    )";  
-    $this->db->query($detalle);
-    $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
+    compra_id,
+    producto_id,
+    detallecomp_codigo,
+    detallecomp_unidad,
+    detallecomp_costo,
+    detallecomp_cantidad,
+    detallecomp_precio,
+    detallecomp_descuento,
+    detallecomp_subtotal,
+    detallecomp_total              
+    )
+    (
+    SELECT
+    ".$compra_id.",
+    producto_id,
+    producto_codigo,
+    producto_unidad,
+    producto_costo,
+    ".$cantidad.",
+    producto_precio,
+    0,
+    ".$producto_costo." * ".$cantidad.",
+    ".$producto_costo." * ".$cantidad."
+    
+    from producto where producto_id = ".$producto_id."
+)";  
+$this->db->query($detalle);
+$inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
 
-        $this->db->query($inventario);
+    $this->db->query($inventario);
     }
 }
 

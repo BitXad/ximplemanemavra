@@ -12,7 +12,13 @@ class Detalle_produccion extends CI_Controller{
         $this->load->model('Estado_model');
         $this->load->model('Producto_model');
         $this->load->model('Inventario_model');
+        $this->load->model('Compra_model');
         $this->load->model('Produccion_model');
+        if ($this->session->userdata('logged_in')) {
+            $this->session_data = $this->session->userdata('logged_in');
+        }else {
+            redirect('', 'refresh');
+        }
     } 
     
     function get_all_detalle(){
@@ -61,13 +67,71 @@ class Detalle_produccion extends CI_Controller{
     function incrementar_inventario(){
         if ($this->input->is_ajax_request()) {
             $cantidad = $this->input->post('cantidad');
-            $producto = $this->input->post('producto_id');
+            $producto_id = $this->input->post('producto_id');
+            $costo = $this->Detalle_produccion_model->get_precio_producto($producto_id);
+            $producto_costo = $costo['producto_costo'];
+            // $this->Compra->ingreso_rapido($cantidad, $producto,$costo);
+
+            $usuario_id = $this->session_data['usuario_id'];
+            $compra_fecha = "now()";
+            $compra_hora = "'".date('H:i:s')."'";
+            $compra = array(
+                        'estado_id' => 1,
+                        'tipotrans_id' => 1,
+                        'usuario_id' => $usuario_id,
+                        'moneda_id' => 1,
+                        'proveedor_id' => 1,
+                        'forma_id' => 1,
+                        'compra_fecha' => $compra_fecha,
+                        'compra_hora' => $compra_hora,
+                        'compra_subtotal' => $producto_costo*$cantidad,
+                        'compra_descuento' => 0,
+                        'compra_descglobal' => 0,
+                        'compra_total' => $producto_costo*$cantidad,
+                        'compra_efectivo' => $producto_costo*$cantidad,
+                        'compra_cambio' => 0,            
+                    );
+
+            $compra_id=$this->Compra_model->add_compra($compra);
+            $detalle = "INSERT into detalle_compra(
+                    compra_id,
+                    producto_id,
+                    detallecomp_codigo,
+                    detallecomp_unidad,
+                    detallecomp_costo,
+                    detallecomp_cantidad,
+                    detallecomp_precio,
+                    detallecomp_descuento,
+                    detallecomp_subtotal,
+                    detallecomp_total              
+                    )
+                    (
+                    SELECT
+                    ".$compra_id.",
+                    producto_id,
+                    producto_codigo,
+                    producto_unidad,
+                    producto_costo,
+                    ".$cantidad.",
+                    producto_precio,
+                    0,
+                    ".$producto_costo." * ".$cantidad.",
+                    ".$producto_costo." * ".$cantidad."
+                    
+                    from producto where producto_id = ".$producto_id."
+                )";  
+            $this->db->query($detalle);
+            $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
+
+                $this->db->query($inventario);
+
             $detproduccion_id = $this->input->post("detproduccion_id");
             $params = array(
                 "estado_id"=>39
             );
             $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
-            $this->Inventario_model->incrementar_inventario($cantidad,$producto);
+
+            // $this->Inventario_model->incrementar_inventario($cantidad,$producto);
         }else{
             show_404();
         }

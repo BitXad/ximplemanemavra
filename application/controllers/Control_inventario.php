@@ -6,6 +6,7 @@ class Control_inventario extends CI_Controller{
         
         $this->load->model('Control_inventario_model');
         $this->load->model('Control_ubicacion_model');
+        $this->load->model('Costo_operativo_model');
         $this->load->model('Ubicacion_model');
         $this->load->model('Area_model');
         $this->load->model('Usuario_model');
@@ -332,8 +333,12 @@ class Control_inventario extends CI_Controller{
     function get_items_platabanda(){
         if($this->input->is_ajax_request()){
             $controli_id = $this->input->post("platabanda_id");
-            $result = $this->Control_inventario_model->get_items_platabanda($controli_id);
-            echo json_encode($result);
+            $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id);
+            $data['costos'] = [];
+            foreach($data['plantas'] as $a){
+                array_push($data['costos'], $this->Costo_operativo_model->get_costos_produccion($a['produccion_id']));
+            }            
+            echo json_encode($data);
         }else{
             show_404();
         }
