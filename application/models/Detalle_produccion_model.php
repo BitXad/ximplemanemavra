@@ -116,4 +116,15 @@ class Detalle_produccion_model extends CI_Model
 
         return true;
     }
+    /**
+     * Get price for a producto
+     */
+    function get_precio_producto($producto_id) {
+        return $this->db->query(
+            "SELECT p.producto_costo 
+            from producto p 
+            where 1=1
+            and p.producto_id = $producto_id"
+            )->row_array();
+    }
 }

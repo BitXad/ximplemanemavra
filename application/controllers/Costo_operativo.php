@@ -153,6 +153,7 @@ class Costo_operativo extends CI_Controller{
         if($this->input->is_ajax_request()){
             $detproduccion_id = $this->input->post("detproduccion_id");
             $costo = $this->input->post("costo");
+            $platabanda = $this->input->post("platabanda");
             $detcosto = $this->input->post("detcosto");
             $produccion = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
             $estado_id = 1;
@@ -162,11 +163,21 @@ class Costo_operativo extends CI_Controller{
                 'estado_id' => $estado_id,
                 'costodesc_id' => $detcosto,
                 'costoop_costo' => $costo,
+                'costoop_fecha' => date('Y-m-d'),
+                'controli_id' => $platabanda,
             );
             $this->Costo_operativo_model->add_costo_operativo($params);
         }else{
             show_404();
         }
     }
+
+    function get_costos(){
+        if ($this->input->is_ajax_request()){
+            $detproduccion_id = $this->input->post('detproduccion_id');
+            $costos = $this->Costo_operativo_model->get_costos($detproduccion_id);
+            echo json_encode($costos);
+        }
+    } 
     
 }
