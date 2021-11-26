@@ -290,6 +290,92 @@ class Produccion extends CI_Controller{
             }
         //}
     }
+    /* elimina un detalle especifico de deetalle producción aux*/
+    function eliminardetalleproduccion_aux()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                $detproduccion_id = $this->input->post('detproduccion_id');
+                $this->load->model('Detalle_produccion_model');
+                $datos = $this->Detalle_produccion_model->delete_detalleproduccion_aux($detproduccion_id); 
+                echo json_encode($datos);
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    /* elimina todo el detalle de deetalle producción aux*/
+    function eliminar_tododetalleproduccion_aux()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                $usuario_id = $this->session_data['usuario_id'];
+                $this->load->model('Detalle_produccion_model');
+                $datos = $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
+                echo json_encode("ok");
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    /* Registra la produccion */
+    function registrar_produccion()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                //$fecha_inicio = $this->input->post('fecha_inicio');
+                //$descripcion = $this->input->post('descripcion');
+                //$acargode_id = $this->input->post('acargode_id');
+                $usuario_id = $this->session_data['usuario_id'];
+                /* ********** INICIO registrar produccion ********** */
+                $this->load->model('Parametro_model');
+                $parametro = $this->Parametro_model->get_parametro(1);
+                $produccion_numeroorden = $parametro['parametro_numordenproduccion']+1;
+                //$produccion_total = $this->input->post('formula_cantidad')*$this->input->post('formula_preciounidad');
+                $estado_id = 33;
+                $produccion_fechahora = date("Y-m-d H:i:s");
+                //$produccion_hora = date("H:i:s");
+                $params = array(
+                    'acargode_id' => $this->input->post('acargode_id'),
+                    'usuario_id' => $usuario_id,
+                    'estado_id' => $estado_id,
+                    'produccion_numeroorden' => $produccion_numeroorden,
+                    'produccion_inicio' => $this->input->post('fecha_inicio'),
+                    'produccion_descripcion' => $this->input->post('descripcion'),
+                    'produccion_registro' => $produccion_fechahora,                    
+                );
+                $produccion_id = $this->Produccion_model->add_produccion($params);
+                
+                $paramsp = array(
+                    'parametro_numordenproduccion' => $produccion_numeroorden,
+                );
+                $this->Parametro_model->update_parametro($parametro['parametro_id'],$paramsp);
+                /* ********** F I N  registrar produccion ********** */
+                /* ********** INICIO registrar en detalle venta ********** */
+                $this->load->model('Detalle_produccion_model');
+                $this->Detalle_produccion_model->insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id);
+                /* ********** F I N  registrar en detalle venta ********** */
+                $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
+                
+                echo json_encode("ok");
+            }
+            else
+            {
+                show_404();
+            }
+        //}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -374,7 +460,7 @@ class Produccion extends CI_Controller{
     
     /* Funcion que hace la salida(venta) de los insumos;
      * y el registro (en compras) del producto producido */
-    function registrar_produccion()
+    function registrar_produccion_ant()
     {
         //if($this->acceso(118)){
             if ($this->input->is_ajax_request()){

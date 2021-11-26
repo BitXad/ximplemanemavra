@@ -80,4 +80,40 @@ class Detalle_produccion_model extends CI_Model
                 dp.usuario_id = $usuario_id
         ")->result_array();
     }
+    /*
+     * function to delete one detalle produccion aux
+     */
+    function delete_detalleproduccion_aux($detproduccion_id)
+    {
+        return $this->db->delete('detalle_produccion_aux',array('detproduccion_id'=>$detproduccion_id));
+    }
+    /*
+     * function to delete one detalle produccion aux
+     */
+    function delete_alldetalleproduccion_aux($usuario_id)
+    {
+        return $this->db->delete('detalle_produccion_aux',array('usuario_id'=>$usuario_id));
+    }
+    /*
+     * inserta el detalle_formula_aux de una Formula en detalle_venta
+     */
+    function insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id)
+    {
+        $detalle_formula = $this->db->query("
+            insert into detalle_produccion
+            (
+            produccion_id, producto_id, controli_id, estado_id, detproduccion_cantidad,
+            detproduccion_costo, detproduccion_observacion
+            )
+            (SELECT
+                $produccion_id, df.producto_id, df.controli_id, df.estado_id, df.detproduccion_cantidad,
+                df.detproduccion_costo, df.detproduccion_observacion
+            FROM
+              `detalle_produccion_aux` df
+            WHERE 
+              df.usuario_id = $usuario_id)"
+            ); //->result_array();
+
+        return true;
+    }
 }
