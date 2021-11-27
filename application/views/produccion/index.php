@@ -32,15 +32,42 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
         <!--------------------- parametro de buscador --------------------->
+        &nbsp;
         <div class="input-group"> <span class="input-group-addon">Buscar</span>
-            <input id="filtrar" type="text" class="form-control" placeholder="Ingrese producto, formula,..">
+            <input id="filtrar" type="text" class="form-control" placeholder="Ingrese descripción,.." onkeypress="validar(event)">
         </div>
+        <!--------------------- fin parametro de buscador --------------------->
+    </div>
+    <div class="col-md-2">
+        Desde: <input type="date" class="btn btn-primary btn-sm form-control" value="<?php echo date('Y-m-d')?>" id="fecha_desde" name="fecha_desde" required="true">
+    </div>
+    <div class="col-md-2">
+        Hasta: <input type="date" class="btn btn-primary btn-sm form-control" value="<?php echo date('Y-m-d')?>" id="fecha_hasta" name="fecha_hasta" required="true">
+    </div>
+    <div class="col-md-2">
+        Estado:             
+        <select  class="btn btn-primary btn-sm form-control" id="buscarestado_id" name="buscarestado_id" required>
+            <option value="0">TODOS</option>
+            <?php foreach($all_estado as $estado){?>
+            <option value="<?php echo $estado['estado_id']; ?>"><?php echo $estado['estado_descripcion']; ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <br>
+    <div class="col-md-2">
+        <button class="btn btn-sm btn-soundcloud btn-sm btn-block form-control"  type="submit" onclick="buscar_por_fecha()" style="height: 34px;">
+            <span class="fa fa-search"></span> Buscar
+        </button>
+        <br>
+    </div>
+    <div class="col-md-12">
         <div id='loader' style='display:none; text-align: center !important'>
             <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >
         </div>
-        <!--------------------- fin parametro de buscador --------------------->
+    </div>
+    <div class="col-md-12">
         <div class="box">
             <div class="box-body">
                 <table class="table table-striped" id="mitabla">

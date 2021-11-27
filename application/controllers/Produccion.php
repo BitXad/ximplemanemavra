@@ -26,6 +26,10 @@ class Produccion extends CI_Controller{
         $this->load->model('Area_model');
         $data['all_area'] = $this->Area_model->get_areas_habilitas();
         
+        $tipo = 9;
+        $this->load->model('Estado_model');
+        $data['all_estado'] = $this->Estado_model->get_estado_tipo($tipo);
+        
         $data['_view'] = 'produccion/index';
         $this->load->view('layouts/main',$data);
     }

@@ -415,3 +415,10 @@ function guardar_detallemodificado(){
         });
     }
 }
+
+function validar(e) {
+  tecla = (document.all) ? e.keyCode : e.which;
+    if (tecla==13){
+        mostrarproduccion();
+    }
+}
