@@ -379,29 +379,33 @@ function guardar_detallemodificado(){
     var base_url = document.getElementById('base_url').value;
     var produccion_id = document.getElementById('produccion_id').value;
     var detproduccion_id = document.getElementById('detproduccion_id').value;
-    var producto_id = document.getElementById('producto_id').value;
-    var area_id = document.getElementById('area_id').value;
-    var controli_id  = document.getElementById('controli_id').value;
-    let detproduccion_cantidad = document.getElementById('detproduccion_cantidad').value;
-    let detproduccion_observacion = document.getElementById('detproduccion_observacion').value;
-    var controlador = base_url+'produccion/nuevodetalle';
+    let detproduccion_cantidad = document.getElementById('ladetproduccion_cantidad').value;
+    let detproduccion_observacion = document.getElementById('ladetproduccion_observacion').value;
+    var producto_id = document.getElementById('elproducto_id').value;
+    var area_id = document.getElementById('elarea_id').value;
+    var controli_id  = document.getElementById('controlim_id').value;
+    var controlador = base_url+'produccion/modificardetalle';
     if(detproduccion_cantidad == ""){
-        $("#mensajenuevodetalle").html("Cantidad no debe estar vacio!.");
-        $("#detproduccion_cantidad").val("");
+        $("#mensajemodifcardetalle").html("Cantidad no debe estar vacio!.");
+        $("#ladetproduccion_cantidad").val("");
+        $("#ladetproduccion_cantidad").focus();
     }else if(area_id == ""){
-        $("#mensajenuevodetalle").html("Debe elegir un area para despues elegir una Platabanda");
-        $("#detproduccion_cantidad").val("");
+        $("#mensajemodifcardetalle").html("Debe elegir un area para despues elegir una Platabanda");
+        //$("#detproduccion_cantidad").val("");
     }else{
-        $('#modalnuevodetalle').modal('hide');
+        $('#modalmodificardetalle').modal('hide');
         $.ajax({url: controlador,
                 type:"POST",
-                data:{produccion_id:produccion_id, producto_id:producto_id, controli_id:controli_id,
-                    detproduccion_cantidad:detproduccion_cantidad,
-                    detproduccion_observacion:detproduccion_observacion},
+                data:{produccion_id:produccion_id, detproduccion_id:detproduccion_id,
+                      producto_id:producto_id, controli_id:controli_id,
+                      detproduccion_cantidad:detproduccion_cantidad,
+                      detproduccion_observacion:detproduccion_observacion},
                 success:function(respuesta){
                     var registros =  JSON.parse(respuesta);
                     if (registros != null){
-                        //....
+                        //alert(JSON.stringify(registros[0]));
+                        ponercursordetalleproducion(registros[0]);
+                        $('#modaldetallesproduccion').modal('show');
                     }
                 },
                 error:function(respuesta){

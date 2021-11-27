@@ -136,7 +136,7 @@ class Produccion extends CI_Controller{
             if ($this->input->is_ajax_request()) {
                 //$usuario_id = $this->session_data['usuario_id'];
                 
-                $datos = $this->Produccion_model->get_all_produccion(); 
+                $datos = $this->Produccion_model->get_all_produccion();
                 echo json_encode($datos);
             }else{                 
                 show_404();
@@ -367,6 +367,52 @@ class Produccion extends CI_Controller{
             }
         //}
     }
+    /* modificar un determinado detalle de una producción */
+    function modificardetalle()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()){
+                //$produccion_descripcion = $this->input->post('produccion_descripcion');
+                //$produccion_inicio = $this->input->post('produccion_inicio');
+                $produccion_id = $this->input->post('produccion_id');
+                $detproduccion_id = $this->input->post('detproduccion_id');
+                //$controli_id = $this->input->post('controli_id');
+                //$detalle_formaux = $this->Detalle_formula_aux_model->get_all_detalles_porusuario($usuario_id);
+                //foreach ($detalle_formaux as $detalle){
+                    //$lacantidad = $detalle["detalleven_cantidad"]*$formula_cantidad;
+                //$estado_id = 33;
+                //$estado_id_platabanda = 37;
+                $params = array(
+                    //'estado_id' => $estado_id,
+                    'producto_id' => $this->input->post('producto_id'),
+                    'controli_id' => $this->input->post('controli_id'),
+                    'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
+                    //'detproduccion_costo' => $this->input->post('detproduccion_costo'),
+                    'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
+                    //'detproduccion_perdida' => 0,
+                );
+                $this->load->model('Detalle_produccion_model');
+                $this->Detalle_produccion_model->update_detalle($detproduccion_id, $params);
+                
+                $datos = $this->Produccion_model->get_this_produccion($produccion_id);
+                
+                echo json_encode($datos);
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

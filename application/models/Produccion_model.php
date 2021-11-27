@@ -115,4 +115,19 @@ class Produccion_model extends CI_Model
             )->row_array();
         return $producto_cantidad;
     }
+    function get_this_produccion($produccion_id)
+    {
+        $produccion = $this->db->query("
+            SELECT
+                pr.*, u.usuario_nombre, e.estado_color, e.estado_descripcion
+            FROM
+                `produccion` pr
+            left join usuario u on pr.usuario_id = u.usuario_id
+            left join estado e on pr.estado_id = e.estado_id
+            where pr.produccion_id = $produccion_id
+            ORDER BY `produccion_id` DESC
+        ")->result_array();
+
+        return $produccion;
+    }
 }
