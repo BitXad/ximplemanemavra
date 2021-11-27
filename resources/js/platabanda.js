@@ -13,10 +13,8 @@ function get_platabandas(){
         data:{area_id:area_id},
         success:(respuesta)=>{
             var resp = JSON.parse(respuesta);
-            let html = ``;
-            let i = resp['respuesta'].length;
             let color, boton, info, cant_fotos;
-            html += `<div class="col-xs-12 col-sm-6 col-md-3">
+            let html = `<div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="cuadro bg-default">
                             <button class="btn btn-default" style="width: 100%;" onclick="agregar_platabanda()">
                                 <div class="inner button_add">
@@ -25,7 +23,6 @@ function get_platabandas(){
                             </button>
                         </div>
                     </div>`;
-            console.log(resp['respuesta']);
             resp['respuesta'].forEach(e => {
                 color = "";
                 boton = "";
@@ -62,7 +59,6 @@ function get_platabandas(){
                         });
                         if(cambiar) {
                             cambiar_estado_platabanda(platabanda, 38);
-                            // console.log(platabanda);
                         }
                         break;
                     case '38':
@@ -84,7 +80,6 @@ function get_platabandas(){
                                 </div>
                             </div>
                         </div>`;
-                i--;
             });
             
             $("#platabandas").html(html);
@@ -207,7 +202,6 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     if (costos != "") {
         costos.forEach(costo => {
             costo.forEach(cost => {
-                console.log(cost['produccion_id']);
                 if(produccion == cost['produccion_id']){
                     html += `<tr>
                                 <td>${i}</td>
