@@ -9,6 +9,7 @@ class Produccion extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Produccion_model');
+        $this->load->model('Control_inventario_model');
         $this->session_data = $this->session->userdata('logged_in');
     } 
 
@@ -178,7 +179,8 @@ class Produccion extends CI_Controller{
             if ($this->input->is_ajax_request()) {
                 $area_id = $this->input->post('area_id');
                 $this->load->model('Control_inventario_model');
-                $datos = $this->Control_inventario_model->get_platabanda($area_id);
+                $activo = "AND ci.estado_id <> 38";
+                $datos = $this->Control_inventario_model->get_platabanda($area_id,$activo);
                 echo json_encode($datos);
             }else{
                 show_404();
@@ -256,20 +258,25 @@ class Produccion extends CI_Controller{
             if ($this->input->is_ajax_request()){
                 $produccion_descripcion = $this->input->post('produccion_descripcion');
                 $produccion_inicio = $this->input->post('produccion_inicio');
-                
+                $controli_id =  $this->input->post('controli_id');
                 $usuario_id = $this->session_data['usuario_id'];
                 $estado_id = 33;
                 $params = array(
                     'usuario_id' => $usuario_id,
                     'estado_id' => $estado_id,
                     'producto_id' => $this->input->post('producto_id'),
-                    'controli_id' => $this->input->post('controli_id'),
+                    'controli_id' => $controli_id,
                     'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
                     'detproduccion_costo' => $this->input->post('detproduccion_costo'),
                     'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
                 );
                 $this->load->model('Detalle_produccion_model');
-                $this->Detalle_produccion_model->add_detalle_produccion_aux($params); 
+                $this->Detalle_produccion_model->add_detalle_produccion_aux($params);
+                $params2 = array(
+                    // estado_id = 37 ->ACTIVO
+                    'estado_id' => 37, 
+                );
+                $this->Control_inventario_model->update_control_inventario($controli_id,$params2);
                 echo json_encode("ok");
             }else{                 
                 show_404();
@@ -358,7 +365,6 @@ class Produccion extends CI_Controller{
                 $this->Detalle_produccion_model->insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id);
                 /* ********** F I N  registrar en detalle venta ********** */
                 $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
-                
                 echo json_encode("ok");
             }
             else
