@@ -98,7 +98,7 @@ class Control_inventario_model extends CI_Model
             where 1=1
             and ci.area_id = $area_id
             and e.estado_tipo = 9
-            and dp.estado_id <> 39
+            
             order by ci.controli_id desc"
         )->result_array();
     }
@@ -118,7 +118,7 @@ class Control_inventario_model extends CI_Model
             left join estado e on e.estado_id = dp.estado_id 
             left join produccion p2 on p2.produccion_id = dp.produccion_id 
             where 1=1
-            and dp.estado_id <> 39
+            
             and ci.controli_id = $controli_id"
         )->result_array();
     }
