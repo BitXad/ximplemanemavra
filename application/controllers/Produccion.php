@@ -180,7 +180,7 @@ class Produccion extends CI_Controller{
                 $area_id = $this->input->post('area_id');
                 $this->load->model('Control_inventario_model');
                 $activo = "AND ci.estado_id <> 38";
-                $datos = $this->Control_inventario_model->get_platabanda($area_id,$activo);
+                $datos = $this->Control_inventario_model->get_platabanda($area_id,);
                 echo json_encode($datos);
             }else{
                 show_404();
@@ -365,6 +365,8 @@ class Produccion extends CI_Controller{
                 $this->Detalle_produccion_model->insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id);
                 /* ********** F I N  registrar en detalle venta ********** */
                 $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
+
+                $this->Control_inventario_model->update_control_inventario();
                 echo json_encode("ok");
             }
             else
