@@ -130,4 +130,23 @@ class Produccion_model extends CI_Model
 
         return $produccion;
     }
+    /*
+     * busca producciones
+     */
+    function buscar_producciones($masfiltro)
+    {
+        $produccion = $this->db->query("
+            SELECT
+                pr.*, u.usuario_nombre, e.estado_color, e.estado_descripcion
+            FROM
+                `produccion` pr
+            left join usuario u on pr.usuario_id = u.usuario_id
+            left join estado e on pr.estado_id = e.estado_id
+            where 1 = 1
+            $masfiltro
+            ORDER BY `produccion_id` DESC
+        ")->result_array();
+
+        return $produccion;
+    }
 }

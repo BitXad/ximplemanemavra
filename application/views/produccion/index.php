@@ -25,7 +25,7 @@
 <!-------------------------------------------------------->
 <div class="box-header">
     <font size='4' face='Arial'><b>Producción</b></font>
-    <br><font size='2' face='Arial'>Registros Encontrados: <?php echo sizeof($produccion); ?></font>
+    <br><font size='2' face='Arial'><span id="encontrados"></span></font>
     <div class="box-tools no-print">
         <!--<a data-toggle="modal" data-target="#modalnuevaproduccion" onclick="ponercursor()" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>-->
         <a href="<?php echo site_url('control_inventario'); ?>" class="btn btn-facebook btn-sm" title="Ver platabandas"><fa class='fa fa-eye'></fa> Platabandas</a>
@@ -58,7 +58,7 @@
     </div>
     <br>
     <div class="col-md-2">
-        <button class="btn btn-sm btn-soundcloud btn-sm btn-block form-control"  type="submit" onclick="buscar_por_fecha()" style="height: 34px;">
+        <button class="btn btn-sm btn-soundcloud btn-sm btn-block form-control"  type="submit" onclick="mostrarproduccion()" style="height: 34px;">
             <span class="fa fa-search"></span> Buscar
         </button>
         <br>

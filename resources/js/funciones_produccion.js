@@ -6,12 +6,16 @@ function inicio(){
 //muestra la tabla de producciones
 function mostrarproduccion(){
     var base_url = document.getElementById('base_url').value;
-    var controlador = base_url+'produccion/mostrarproduccion/';
-    var parametro = document.getElementById('filtrar').value;
+        var controlador = base_url+'produccion/mostrarproduccion/';
+    var parametro   = document.getElementById('filtrar').value;
+    var fecha_desde = document.getElementById('fecha_desde').value;
+    var fecha_hasta = document.getElementById('fecha_hasta').value;
+    var buscarestado_id = document.getElementById('buscarestado_id').value;
     document.getElementById('loader').style.display = 'block'; //muestra el bloque del loader
     $.ajax({url: controlador,
             type:"POST",
-            data:{parametro:parametro},
+            data:{parametro:parametro, fecha_desde:fecha_desde, fecha_hasta:fecha_hasta,
+                  buscarestado_id:buscarestado_id},
             success:function(respuesta){
                 $("#encontrados").val("- 0 -");
                 var registros =  JSON.parse(respuesta);
@@ -419,6 +423,9 @@ function guardar_detallemodificado(){
 function validar(e) {
   tecla = (document.all) ? e.keyCode : e.which;
     if (tecla==13){
-        mostrarproduccion();
+        let filtrar = document.getElementById('filtrar').value;
+        if(filtrar.trim != ""&& filtrar != null){
+            mostrarproduccion();
+        }
     }
 }

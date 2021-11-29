@@ -140,10 +140,22 @@ class Produccion extends CI_Controller{
         //if($this->acceso(118)){
             if ($this->input->is_ajax_request()) {
                 //$usuario_id = $this->session_data['usuario_id'];
-                
-                $datos = $this->Produccion_model->get_all_produccion();
+                $parametro = $this->input->post('parametro');
+                $fecha_desde = $this->input->post('fecha_desde');
+                $fecha_hasta = $this->input->post('fecha_hasta');
+                $buscarestado_id = $this->input->post('buscarestado_id');
+                $mas_filtro = "";
+                if($parametro != ""){
+                    $mas_filtro = " and(pr.produccion_descripcion like '%".$parametro."%')";
+                }
+                $mas_filtro .= " and date(pr.produccion_inicio) >= '".$fecha_desde."' "; 
+                $mas_filtro .= " and date(pr.produccion_inicio) <= '".$fecha_hasta."' "; 
+                if($buscarestado_id > 0){
+                    $mas_filtro = " and pr.estado_id = $buscarestado_id ";
+                }
+                $datos = $this->Produccion_model->buscar_producciones($mas_filtro);
                 echo json_encode($datos);
-            }else{                 
+            }else{
                 show_404();
             }
         //}
