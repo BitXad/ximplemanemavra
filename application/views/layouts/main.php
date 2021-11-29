@@ -269,7 +269,7 @@
                         if($rolusuario[181-1]['rolusuario_asignado'] == 1){
                         ?>
                         <li>
-                            <a href="<?php echo site_url('control_inventario/index');?>"><i class="fa fa-book" aria-hidden="true"></i> Control de Inventario</a>
+                            <a href="<?php echo site_url('control_inventario');?>"><i class="fa fa-book" aria-hidden="true"></i> Platabandas</a>
                         </li>
                         <?php
                         } ?>

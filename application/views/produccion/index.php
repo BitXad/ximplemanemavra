@@ -28,6 +28,7 @@
     <br><font size='2' face='Arial'>Registros Encontrados: <?php echo sizeof($produccion); ?></font>
     <div class="box-tools no-print">
         <!--<a data-toggle="modal" data-target="#modalnuevaproduccion" onclick="ponercursor()" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>-->
+        <a href="<?php echo site_url('control_inventario'); ?>" class="btn btn-facebook btn-sm" title="Ver platabandas"><fa class='fa fa-eye'></fa> Platabandas</a>
         <a href="<?php echo site_url('produccion/producir'); ?>" class="btn btn-success btn-sm" title="Registrar Nueva Producción"><fa class='fa fa-pencil-square-o'></fa> Nueva Producción</a>
     </div>
 </div>
