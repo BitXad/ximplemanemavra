@@ -84,7 +84,7 @@ class Control_inventario_model extends CI_Model
             and ci.area_id = $area_id
             and e.estado_tipo = 9
             $activo
-            order by ci.controli_id desc"
+            order by ci.controli_id asc"
         )->result_array();
     }
 
@@ -99,7 +99,7 @@ class Control_inventario_model extends CI_Model
             and ci.area_id = $area_id
             and e.estado_tipo = 9
             
-            order by ci.controli_id desc"
+            order by ci.controli_id,dp.estado_id asc"
         )->result_array();
     }
 
@@ -118,8 +118,8 @@ class Control_inventario_model extends CI_Model
             left join estado e on e.estado_id = dp.estado_id 
             left join produccion p2 on p2.produccion_id = dp.produccion_id 
             where 1=1
-            
-            and ci.controli_id = $controli_id"
+            and ci.controli_id = $controli_id
+            order by dp.estado_id asc"
         )->result_array();
     }
 }
