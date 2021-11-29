@@ -256,7 +256,7 @@ function valores_pordefecto(){
         mm = 0+mm;
     }
     $('#fecha_inicio').val(yyyy+"-"+mm+"-"+dd);
-    alert($('#fecha_inicio').val());
+    //alert($('#fecha_inicio').val());
     $('#descripcion').val("");
     $("#producto_id").val($("#producto_id option:first").val());
     $("#acargode_id").val($("#acargode_id option:first").val());

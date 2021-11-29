@@ -370,7 +370,7 @@ class Produccion extends CI_Controller{
                 /* ********** F I N  registrar en detalle venta ********** */
                 $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
 
-                $this->Control_inventario_model->update_control_inventario();
+                //$this->Control_inventario_model->update_control_inventario();
                 echo json_encode("ok");
             }
             else
