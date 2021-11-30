@@ -63,7 +63,7 @@
             </td>
         </tr>
         <tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="descripcion">Ing. a Cargo:</label></td>
+            <td style="width: 15%" class="text-right"><label for="descripcion">Responsable:</label></td>
             <td style="width: 85%">
                 <select style="width: 50%" name="acargode_id" class="form-control" id="acargode_id">
                     <!--<option value="">select produccion</option>-->
@@ -109,7 +109,7 @@
                         <th>Area</th>
                         <th>Platabanda</th>
                         <th>Estado</th>
-                        <th>
+                        <th class="no-print">
                             <a onclick='eliminar_tododetalleproduccion_aux()' class='btn btn-danger btn-xs' title='Eliminar todo el detalle de producción'><span class='fa fa-trash'></span></a>
                         </th>
                     </tr>
@@ -119,7 +119,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 text-center">
+    <div class="col-md-12 text-center no-print">
         <a class="btn btn-success" onclick="producir()">
             <i class="fa fa-check"></i> Producir
         </a>
