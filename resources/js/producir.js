@@ -127,8 +127,8 @@ function mostrardetalleproducion_aux(){
                         html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
                         html += "<td>"+registrosa[i]["area_nombre"]+"</td>";
                         html += "<td>"+registrosa[i]["controli_id"]+"</td>";
-                        html += "<td class='no-print' style='background-color: #"+registrosa[i]["estado_color"]+"'>"+registrosa[i]["estado_descripcion"]+"</td>";
-                        html += "<td>";
+                        html += "<td style='background-color: #"+registrosa[i]["estado_color"]+"'>"+registrosa[i]["estado_descripcion"]+"</td>";
+                        html += "<td class='no-print'>";
                             html += "<a onclick='eliminardetalleproduccion_aux("+registrosa[i]["detproduccion_id"]+")' class='btn btn-danger btn-xs' title='Eliminar este detalle de producción'><span class='fa fa-trash'></span></a>";
                         html += "</td>";
                         html += "</tr>";
