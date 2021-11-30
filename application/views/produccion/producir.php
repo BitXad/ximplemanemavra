@@ -105,7 +105,7 @@
                         <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Costo</th>
-                        <th>Observacion</th>
+                        <th>Observación</th>
                         <th>Area</th>
                         <th>Platabanda</th>
                         <th>Estado</th>
@@ -154,12 +154,6 @@
                         <input type="number" step="any" min="0"  name="detproduccion_costo" value="0" class="form-control" id="detproduccion_costo" />
                     </div>
                 </div>
-               <div class="col-md-12">
-                    <label for="detproduccion_observacion" class="control-label">Observación</label>
-                    <div class="form-group">
-                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
-                    </div>
-                </div>
                 <div class="col-md-12">
                     <label for="area_id" class="control-label">Area</label>
                     <div class="form-group">
@@ -180,7 +174,12 @@
                        <span id="paraplatabanda"></span>
                     </div>
                 </div>
-                
+                <div class="col-md-12">
+                    <label for="detproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
+                    </div>
+                </div>
                <!------------------------------------------------------------------->
             </div>
             <div class="modal-footer">
