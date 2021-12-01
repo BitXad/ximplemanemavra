@@ -76,6 +76,8 @@
                         <th>#</th>
                         <th>Descripción</th>
                         <th>Fecha<br>Inicio</th>
+                        <th>Fecha<br>Fin</th>
+                        <th>Costo</th>
                         <th>Usuario</th>
                         <th>Estado</th>
                         <th></th>

@@ -26,6 +26,7 @@
 <input type="hidden" name="lamoneda" id="lamoneda" value='<?php echo json_encode($lamoneda);*/ ?>' />
 <input type="hidden" name="resproducto" id="resproducto" />
 -->
+<div style="width: 18cm !important">
 <div class="cuerpo">
     <div class="columna_derecha">
         <center> 
@@ -63,7 +64,13 @@
         <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >        
     </center>
 </div>
+<br>
+<br>
+
 <div  class="col-md-12">
+    <div  class="col-md-12 text-bold text-center">
+        <?php echo $produccion['produccion_descripcion']; ?>
+    </div>
     <div  class="col-md-6">
         <table>
             <tr>
@@ -80,10 +87,10 @@
                     ?>
                 </td>
             </tr>
-            <tr>
+            <!--<tr>
                 <td style="width: 15%" class="text-right">Descripción:&nbsp;</td>
-                <td style="width: 85%" class="text-bold"><?php echo $produccion['produccion_descripcion']; ?></td>
-            </tr>
+                <td style="width: 85%" class="text-bold"><?php //echo $produccion['produccion_descripcion']; ?></td>
+            </tr>-->
             <tr>
                 <td style="width: 15%" class="text-right">Responsable:&nbsp;</td>
                 <td style="width: 85%"><?php echo $produccion['responsable']; ?></td>
@@ -164,6 +171,7 @@
             </tr>
         </table>
     </div>
+</div>
 </div>
 <!--
 <div class="box" style="padding: 0;">

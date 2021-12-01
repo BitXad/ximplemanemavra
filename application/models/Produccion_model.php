@@ -138,13 +138,16 @@ class Produccion_model extends CI_Model
     {
         $produccion = $this->db->query("
             SELECT
-                pr.*, u.usuario_nombre, e.estado_color, e.estado_descripcion
+                pr.*, u.usuario_nombre, e.estado_color, e.estado_descripcion,
+                sum(co.`costoop_costo`) as costo
             FROM
                 `produccion` pr
             left join usuario u on pr.usuario_id = u.usuario_id
             left join estado e on pr.estado_id = e.estado_id
+            left join costo_operativo co on pr.produccion_id = co.produccion_id
             where 1 = 1
             $masfiltro
+            GROUP BY  pr.produccion_id
             ORDER BY `produccion_id` DESC
         ")->result_array();
 

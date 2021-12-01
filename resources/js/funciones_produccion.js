@@ -23,6 +23,7 @@ function mostrarproduccion(){
                 if (registros != null){
                     var n = registros.length; //tamaño del arreglo de la consulta
                     $("#encontrados").html("Registros Encontrados: "+n+" ");
+                    var costototal = Number(0);
                     html = "";
                     for (var i = 0; i < n ; i++){
                         html += "<tr>";
@@ -40,7 +41,20 @@ function mostrarproduccion(){
                         html += "</div>";
                         html += "</div>";
                         html += "</td>";
-                        html += "<td>"+moment(registros[i]["produccion_inicio"]).format("DD/MM/YYYY")+"</td>";
+                        html += "<td class='text-center'>"+moment(registros[i]["produccion_inicio"]).format("DD/MM/YYYY")+"</td>";
+                        html += "<td class='text-center'>";
+                        if(registros[i]["produccion_fin"] != "" && registros[i]["produccion_fin"] != null && registros[i]["produccion_fin"] != "0000-00-00"){
+                            html += moment(registros[i]["produccion_fin"]).format("DD/MM/YYYY");
+                        }
+                        html += "</td>";
+                        html += "<td class='text-right'>";
+                        if(registros[i]["costo"] != null &&  registros[i]["costo"] !=""){
+                            html += numberFormat(Number(registros[i]["costo"]).toFixed(2));
+                            costototal += Number(registros[i]["costo"]);
+                        }else{
+                            html += "0.00";
+                        }
+                        html += "</td>";
                         html += "<td>"+registros[i]["usuario_nombre"]+"</td>";
                         html += "<td class='no-print' style='background-color: #"+registros[i]["estado_color"]+"'>"+registros[i]["estado_descripcion"]+"</td>";
 		        /*html += "<td class='no-print'>";
@@ -60,6 +74,11 @@ function mostrarproduccion(){
                         html += "</tr>";
 
                    }
+                   html += "<tr>";
+                   html += "<th style='text-align: right !important; text-font: 12pt' colspan='4'>Total:</th>";
+                   html += "<th style='text-align: right !important; text-font: 12pt' >"+numberFormat(Number(costototal).toFixed(2))+"</th>";
+                   html += "<th colspan='3'></th>";
+                   html += "</tr>";
                    $("#tablaproduccion").html(html);
                    document.getElementById('loader').style.display = 'none';
             }
@@ -430,3 +449,40 @@ function validar(e) {
         }
     }
 }
+function numberFormat(numero){
+        // Variable que contendra el resultado final
+        var resultado = "";
+ 
+        // Si el numero empieza por el valor "-" (numero negativo)
+        if(numero[0]=="-")
+        {
+            // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+            // el signo negativo
+            nuevoNumero=numero.replace(/\,/g,'').substring(1);
+        }else{
+            // Cogemos el numero eliminando los posibles puntos que tenga
+            nuevoNumero=numero.replace(/\,/g,'');
+        }
+ 
+        // Si tiene decimales, se los quitamos al numero
+        if(numero.indexOf(".")>=0)
+            nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+ 
+        // Ponemos un punto cada 3 caracteres
+        for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+            resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+ 
+        // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+        // los separadores de miles
+        if(numero.indexOf(".")>=0)
+            resultado+=numero.substring(numero.indexOf("."));
+ 
+        if(numero[0]=="-")
+        {
+            // Devolvemos el valor añadiendo al inicio el signo negativo
+            return "-"+resultado;
+        }else{
+            return resultado;
+        }
+    }
+    
