@@ -30,6 +30,10 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10pt;
 }
+
+.inner{
+    display: flow-root; 
+}
 .icon{
     font-size: 70px !important;
     right: 40px !important;
@@ -69,24 +73,6 @@
         <div class="box">
             <div class="box-body">
                 <section id="platabandas" class="row"></section>
-                <!-- <div class="center">
-                    <div class="imgBox">
-                        <div class="container">
-                            <div class="content">
-                                <h1>Lorem ipsum facilis!</h1>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati dolorum aliquid error nobis ratione nemo ad odio modi ducimus pariatur, molestias maiores excepturi explicabo ipsum animi sed dolor non id?</p>
-                            </div>
-                        </div>
-                        <div class="content-img">
-
-                            <img class="forma" src="https://s1.significados.com/foto/rosa-roja_bg.jpg" alt="">
-                            <img class="forma" src="https://s1.significados.com/foto/rosa-roja_bg.jpg" alt="">
-                        </div>
-                    </div>
-                </div> -->
-
-                
-                
             </div>
         </div>
         <div class="modal fade" id="modal_info_platabanda" tabindex="-1" role="dialog" aria-labelledby="modal_ubicacion" aria-hidden="true">

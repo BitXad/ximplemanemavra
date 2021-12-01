@@ -163,7 +163,7 @@ function show_modal_info(platabanda_id){
                                         <div class="form-group mb-12">
                                             <button class="btn btn-success btn-sm" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
                                             <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
-                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i>` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i>`}</button>
+                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Pasar a siguiente etapa` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -323,7 +323,7 @@ function form_costo(detproduccion_id, platabanda){
         data:{},
         success:(result)=>{
             let ress = JSON.parse(result);
-            html = `<div class="col-md-12 mb-2" style="margin-bottom: 15px">
+            html = `<div class="col-md-12 mb-2" style="margin-bottom: 5px">
                         <div class="form-inline">
                             <label for="planta_nombre">Agregar costo operativo: </label>
                         </div>
@@ -333,14 +333,14 @@ function form_costo(detproduccion_id, platabanda){
                                 <input type="number" min="0" class="form-control" id="costo${detproduccion_id}" name="costo${detproduccion_id}" value="" style=" cursor: pointer" placeholder="Costo" autocomplete="off" required>
                             </div>
                             <div class="form-group mb-2">
-                                <label for="cantidad">Perdida</label>
+                                <label for="cantidad"></label>
                                 <select class="form-control" id="detcosto${detproduccion_id}">`;
             ress.forEach(r => {
                 html +=             `<option value="${r['costodesc_id']}">${r['costodesc_descripcion']}</option>`;
             });
             html +=             `</select>
                             </div>
-                            <div class="form-group" mb-2 ml-2>
+                            <div class="form-group mb-2">
                                 <button class="btn btn-sm btn-success" title="Guardar" onclick="add_form(${detproduccion_id},${platabanda})"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                 <button class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form(${detproduccion_id})"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </div>
@@ -402,22 +402,25 @@ function calcular(detproduccion_id){
 function send_inventario(detproduccion_id,producto_id){
     let controlador = `${base_url}detalle_produccion/incrementar_inventario`
     let cantidad = $(`#cantidad${detproduccion_id}`).val();
-    $.ajax({
-        url: controlador,
-        type: 'POST',
-        cache: false,
-        data: {
-            detproduccion_id:detproduccion_id,
-            cantidad:cantidad,
-            producto_id:producto_id,
-        },
-        success:()=>{
-            alert("Se mando a inventario");
-            $("#modal_info_platabanda").modal('hide');
-            get_platabandas();
-        },
-        error:()=>{
-            alert("Algo salio mal al mandar a inventario...")
-        }
-    });
+    let mensaje = `Esta seguro que quiere enviar a ventas`
+    if(confirm(mensaje)){
+        $.ajax({
+            url: controlador,
+            type: 'POST',
+            cache: false,
+            data: {
+                detproduccion_id:detproduccion_id,
+                cantidad:cantidad,
+                producto_id:producto_id,
+            },
+            success:()=>{
+                alert("Se envio a inventario");
+                $("#modal_info_platabanda").modal('hide');
+                get_platabandas();
+            },
+            error:()=>{
+                alert("Algo salio mal al mandar a inventario...")
+            }
+        });
+    }
 }
