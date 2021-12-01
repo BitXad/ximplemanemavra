@@ -18,10 +18,11 @@ class Produccion_model extends CI_Model
     {
         $produccion = $this->db->query("
             SELECT
-                pr.*, usuario_nombre
+                pr.*, u.usuario_nombre, en.usuario_nombre as responsable
             FROM
                 `produccion` pr
             left join usuario u on pr.usuario_id = u.usuario_id
+            left join usuario en on pr.acargode_id = en.usuario_id
             WHERE
                 `produccion_id` = ?
         ",array($produccion_id))->row_array();

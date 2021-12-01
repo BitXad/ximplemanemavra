@@ -200,9 +200,11 @@ class Costo_operativo_model extends CI_Model
      */
     function get_costos_produccion($produccion_id){
         return $this->db->query(
-            "SELECT co.*, cd.costodesc_descripcion
+            "SELECT co.*, cd.costodesc_descripcion, u.usuario_nombre, e.estado_descripcion
             from costo_operativo co 
             left join costo_descripcion cd on co.costodesc_id = cd.costodesc_id
+            left join usuario u on co.usuario_id = u.usuario_id
+            left join estado e on co.estado_id = e.estado_id
             where 1=1
             and co.produccion_id = $produccion_id"
         )->result_array();

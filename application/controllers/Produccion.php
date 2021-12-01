@@ -742,4 +742,27 @@ class Produccion extends CI_Controller{
         $this->load->view('layouts/main',$data);
         // }
     }
+    /*
+     * reporte de producción
+     */
+    function reporte_produccion($produccion_id)
+    {
+        $this->load->model('Empresa_model');
+        $data['empresa'] = $this->Empresa_model->get_empresa(1);
+        
+        $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
+        
+        $this->load->model('Detalle_produccion_model');
+        $data['all_detalle'] = $this->Detalle_produccion_model->get_all_detalleproduccion($produccion_id);
+        
+        $this->load->model('Costo_operativo_model');
+        $data['all_costooperativo'] = $this->Costo_operativo_model->get_costos_produccion($produccion_id);
+        /*
+        $tipo = 9;
+        $this->load->model('Estado_model');
+        $data['all_estado'] = $this->Estado_model->get_estado_tipo($tipo);
+        */
+        $data['_view'] = 'produccion/reporte_produccion';
+        $this->load->view('layouts/main',$data);
+    }
 }
