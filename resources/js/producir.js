@@ -44,7 +44,7 @@ function buscar_platabanda(){
                         html += "<!--<option value=''>select produccion</option>-->";
                         for (var i = 0; i < n ; i++){
                         //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
-                            html += "<option value='"+registros[i]['controli_id']+"'>"+registros[i]['controli_id']+"</option>";
+                            html += "<option value='"+registros[i]['controli_id']+"'>Platabanda "+registros[i]['controli_id']+"</option>";
                         }
                         html += "</select>";
                         $("#paraplatabanda").html(html);

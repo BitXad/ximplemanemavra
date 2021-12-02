@@ -411,7 +411,7 @@ class Produccion extends CI_Controller{
                     'producto_id' => $this->input->post('producto_id'),
                     'controli_id' => $this->input->post('controli_id'),
                     'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
-                    //'detproduccion_costo' => $this->input->post('detproduccion_costo'),
+                    'detproduccion_costo' => $this->input->post('detproduccion_costo'),
                     'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
                     //'detproduccion_perdida' => 0,
                 );
@@ -749,6 +749,9 @@ class Produccion extends CI_Controller{
     {
         $this->load->model('Empresa_model');
         $data['empresa'] = $this->Empresa_model->get_empresa(1);
+        
+        $this->load->model('Parametro_model');
+        $data['parametro'] = $this->Parametro_model->get_parametros();
         
         $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
         

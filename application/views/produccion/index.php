@@ -74,12 +74,13 @@
                 <table class="table table-striped" id="mitabla">
                     <tr>
                         <th>#</th>
+                        <th>Prod.</th>
                         <th>Descripción</th>
                         <th>Fecha<br>Inicio</th>
                         <th>Fecha<br>Fin</th>
                         <th>Costo</th>
                         <th>Usuario</th>
-                        <th>Estado</th>
+                        <!--<th>Estado</th>-->
                         <th></th>
                     </tr>
                     <tbody class="buscar" id="tablaproduccion">
@@ -161,18 +162,12 @@
                 <span class="text-bold" style="font-size: 16px">Nuevo Detalle</span>
             </div>
             <div class="modal-body">
-               <!------------------------------------------------------------------->
-               <span class="text-danger" id="mensajenuevodetalle"></span>
-               <div class="col-md-6">
+                <!------------------------------------------------------------------->
+                <span class="text-danger" id="mensajenuevodetalle"></span>
+                <div class="col-md-6">
                     <label for="detproduccion_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
                     <div class="form-group">
-                        <input type="number" step="any" min="0"  name="detproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_cantidad" />
-                    </div>
-                </div>
-               <div class="col-md-6">
-                    <label for="detproduccion_observacion" class="control-label">Observación</label>
-                    <div class="form-group">
-                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
+                        <input type="number" step="any" min="0" name="detproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_cantidad" />
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -210,7 +205,12 @@
                        <span id="paraplatabanda"></span>
                     </div>
                 </div>
-                
+                <div class="col-md-6">
+                    <label for="detproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="detproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="detproduccion_observacion" />
+                    </div>
+                </div>
                <!------------------------------------------------------------------->
             </div>
             <div class="modal-footer">
@@ -245,9 +245,10 @@
                             <th>#</th>
                             <th>Producto</th>
                             <th>Cantidad</th>
-                            <th>Observación</th>
+                            <th>Costo</th>
                             <th>Area</th>
                             <th>Platabanda</th>
+                            <th>Observación</th>
                             <th>Estado</th>
                             <th></th>
                         </tr>
@@ -277,17 +278,17 @@
             </div>
             <div class="modal-body">
                <!------------------------------------------------------------------->
-               <span class="text-danger" id="mensajemodifcardetalle"></span>
-               <div class="col-md-6">
+                <span class="text-danger" id="mensajemodifcardetalle"></span>
+                <div class="col-md-6">
                     <label for="ladetproduccion_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
                     <div class="form-group">
                         <input type="number" step="any" min="0"  name="ladetproduccion_cantidad" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_cantidad" />
                     </div>
                 </div>
-               <div class="col-md-6">
-                    <label for="ladetproduccion_observacion" class="control-label">Observación</label>
+                <div class="col-md-6">
+                    <label for="ladetproduccion_costo" class="control-label">Costo</label>
                     <div class="form-group">
-                        <input type="text"  name="ladetproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_observacion" />
+                        <input type="number" step="any" min="0" name="ladetproduccion_costo" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_costo" />
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -324,6 +325,12 @@
                    <label for="controli_id" class="control-label">Platabanda</label>
                    <div class="form-group">
                        <span id="paraplatabandam"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="ladetproduccion_observacion" class="control-label">Observación</label>
+                    <div class="form-group">
+                        <input type="text"  name="ladetproduccion_observacion" value="<?php //echo ($this->input->post('produccion_descripcion') ? $this->input->post('produccion_fecha') : ""); ?>" class="form-control" id="ladetproduccion_observacion" />
                     </div>
                 </div>
                 

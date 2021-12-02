@@ -1,3 +1,4 @@
+<script src="<?php echo base_url('resources/js/bootstrap-select.js'); ?>"></script>
 <script src="<?php echo base_url('resources/js/producir.js'); ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -11,6 +12,9 @@
                 })
             }(jQuery));
         });
+        $('#producto_id').selectpicker({
+    style: 'btn-default'
+  });
 </script>
 <style type="text/css">
     .contorno{
@@ -20,6 +24,7 @@
         line-height: 15px;
     }
 </style>
+<link href="<?php echo base_url('resources/css/bootstrap-select.css'); ?>" rel="stylesheet">
 <link href="<?php echo base_url('resources/css/mitabla.css'); ?>" rel="stylesheet">
 
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
@@ -50,13 +55,13 @@
         <tr style="padding-top: 5px">
             <td style="width: 15%" class="text-right"><label for="producto_id">Producto:</label></td>
             <td style="width: 85%">
-                <select name="producto_id" class="form-control" id="producto_id">
+                <select name="producto_id" class="selectpicker form-control" id="producto_id" data-show-subtext="true" data-live-search="true">
                     <!--<option value="">select produccion</option>-->
                     <?php 
                     foreach($all_producto as $producto)
                     {
                         //$selected = ($produccion['produccion_id'] == $produccion['produccion_numeroorden']) ? ' selected="selected"' : "";
-                        echo '<option value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
+                        echo '<option data-tokens="'.$producto['producto_nombre'].'" value="'.$producto['producto_id'].'">'.$producto['producto_nombre'].'</option>';
                     } 
                     ?>
                 </select>

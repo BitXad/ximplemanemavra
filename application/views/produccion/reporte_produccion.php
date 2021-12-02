@@ -18,15 +18,19 @@
 <!------------------ ESTILO DE LAS TABLAS ----------------->
 <link href="<?php echo base_url('resources/css/cabecera.css'); ?>" rel="stylesheet">
 <link href="<?php echo base_url('resources/css/mitabla.css'); ?>" rel="stylesheet">
-<!-------------------------------------------------------->
-<!--<input type="hidden" name="base_url" id="base_url" value="<?php /*echo base_url(); ?>">
-<input type="hidden" name="tipousuario_id" id="tipousuario_id" value="<?php echo $tipousuario_id; ?>">
-<input type="hidden" name="nombre_moneda" id="nombre_moneda" value="<?php echo $elparametro[0]['moneda_descripcion']; ?>" />
-<input type="hidden" name="lamoneda_id" id="lamoneda_id" value="<?php echo $elparametro[0]['moneda_id']; ?>" />
-<input type="hidden" name="lamoneda" id="lamoneda" value='<?php echo json_encode($lamoneda);*/ ?>' />
-<input type="hidden" name="resproducto" id="resproducto" />
--->
-<div style="width: 18cm !important">
+<?php $tipo_factura = $parametro[0]["parametro_altofactura"]; //15 tamaño carta 
+      $ancho = $parametro[0]["parametro_anchofactura"]."cm";
+      //$margen_izquierdo = "col-xs-".$parametro[0]["parametro_margenfactura"];;
+      $margen_izquierdo = $parametro[0]["parametro_margenfactura"]."cm";
+?>
+
+<table class="table" >
+<tr>
+<td style="padding: 0; width: <?php echo $margen_izquierdo; ?>" >
+    
+</td>
+<td style="padding: 0;">
+<div style="width: <?php echo $ancho;?>">
 <div class="cuerpo">
     <div class="columna_derecha">
         <center> 
@@ -173,6 +177,9 @@
     </div>
 </div>
 </div>
+    </td>
+    </tr>
+    </table>
 <!--
 <div class="box" style="padding: 0;">
     <div class="box-body table-responsive" >

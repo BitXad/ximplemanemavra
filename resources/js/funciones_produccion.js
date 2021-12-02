@@ -29,6 +29,7 @@ function mostrarproduccion(){
                         html += "<tr>";
                         
                         html += "<td>"+(i+1)+"</td>";
+                        html += "<td class='text-center text-bold' style='font-size: 12px'>"+registros[i]["produccion_numeroorden"]+"</td>";
                         html += "<td>";
                         html += "<div id='horizontal'>";
                         html += "<div style='padding-left: 4px'>";
@@ -56,16 +57,7 @@ function mostrarproduccion(){
                         }
                         html += "</td>";
                         html += "<td>"+registros[i]["usuario_nombre"]+"</td>";
-                        html += "<td class='no-print' style='background-color: #"+registros[i]["estado_color"]+"'>"+registros[i]["estado_descripcion"]+"</td>";
-		        /*html += "<td class='no-print'>";
-                        html += "<a href='"+base_url+"producto/edit/"+registros[i]["miprod_id"]+"' target='_blank' class='btn btn-info btn-xs' title='Modificar Información'><span class='fa fa-pencil'></span></a>";
-                        html += "<a href='"+base_url+"imagen_producto/catalogoprod/"+registros[i]["miprod_id"]+"' class='btn btn-success btn-xs' title='Catálogo de Imagenes' ><span class='fa fa-image'></span></a>";
-                        */
-                        /*html += "<a class='btn btn-facebook btn-xs' onclick='buscarclasificador("+registros[i]["miprod_id"]+")' title='Ver Clasificador'><span class='fa fa-list-ol'></span></a>";
-                        html += "<a href='"+base_url+"producto/productoasignado/"+registros[i]["miprod_id"]+"' class='btn btn-soundcloud btn-xs' title='Ver si esta asignado a subcategorias' target='_blank' ><span class='fa fa-list'></span></a>";
-                        html += "<a class='btn btn-warning btn-xs' onclick='mostrarmodalcodigobarra("+registros[i]["miprod_id"]+", "+JSON.stringify(registros[i]["producto_nombre"])+", "+JSON.stringify(registros[i]["producto_codigobarra"])+")' title='Código de barras para impresión'><span class='fa fa-barcode'></span></a>";
-                        html += "</td>";
-                        */
+                        //html += "<td class='no-print' style='background-color: #"+registros[i]["estado_color"]+"'>"+registros[i]["estado_descripcion"]+"</td>";
                         html += "<td>";
                         //html += "<a onclick='ponercursornuevodetalle("+JSON.stringify(registros[i])+")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#modalnuevodetalle' title='Registrar detalle de producción'><span class='fa fa-sliders'></span></a>";
                         html += "<a onclick='ponercursordetalleproducion("+JSON.stringify(registros[i])+")' class='btn btn-info btn-xs' data-toggle='modal' data-target='#modaldetallesproduccion' title='Ver detalles de producción'><span class='fa fa-list'></span></a>";
@@ -75,9 +67,9 @@ function mostrarproduccion(){
 
                    }
                    html += "<tr>";
-                   html += "<th style='text-align: right !important; text-font: 12pt' colspan='4'>Total:</th>";
+                   html += "<th style='text-align: right !important; text-font: 12pt' colspan='5    '>Total:</th>";
                    html += "<th style='text-align: right !important; text-font: 12pt' >"+numberFormat(Number(costototal).toFixed(2))+"</th>";
-                   html += "<th colspan='3'></th>";
+                   html += "<th colspan='2'></th>";
                    html += "</tr>";
                    $("#tablaproduccion").html(html);
                    document.getElementById('loader').style.display = 'none';
@@ -227,7 +219,7 @@ function registrarnuevodetalle(){
 /* funcion que muestra los detalles de una produción */
 function ponercursordetalleproducion(produccion){
     var base_url = document.getElementById('base_url').value;
-    $('#titulomostrardetalle').html(produccion["produccion_descripcion"]+"<br>");
+    $('#titulomostrardetalle').html("Producción Nro. "+produccion["produccion_numeroorden"]+"<br>"+produccion["produccion_descripcion"]+"<br>");
     //$('#produccion_id').val(produccion["produccion_id"]);
     var produccion_id = produccion["produccion_id"];
     var controlador = base_url+'produccion/mostrardetalleproduccion/';
@@ -241,15 +233,24 @@ function ponercursordetalleproducion(produccion){
                 if (registrosa != null){
                     var n = registrosa.length; //tamaño del arreglo de la consulta
                     //$("#encontrados").html("Registros Encontrados: "+n+" ");
+                    var totalcantidad = Number(0);
                     html = "";
                     for (var i = 0; i < n ; i++){
+                        totalcantidad += Number(registrosa[i]["detproduccion_cantidad"]);
                         html += "<tr>";
-                        html += "<td>"+(i+1)+"</td>";
+                        html += "<td class='text-center'>"+(i+1)+"</td>";
                         html += "<td>"+registrosa[i]["producto_nombre"]+"</td>";
-                        html += "<td>"+registrosa[i]["detproduccion_cantidad"]+"</td>";
-                        html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
+                        html += "<td class='text-right'>"+numberFormat(Number(registrosa[i]["detproduccion_cantidad"]).toFixed(0))+"</td>";
+                        html += "<td class='text-right'>";
+                        if(registrosa[i]["detproduccion_costo"] != null && registrosa[i]["detproduccion_costo"] != ""){
+                            html += registrosa[i]["detproduccion_costo"];
+                        }else{
+                            html += "0.00"; 
+                        }
+                        html += "</td>";
                         html += "<td>"+registrosa[i]["area_nombre"]+"</td>";
-                        html += "<td>"+registrosa[i]["controli_id"]+"</td>";
+                        html += "<td class='text-center'>"+registrosa[i]["controli_id"]+"</td>";
+                        html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
                         html += "<td class='no-print' style='background-color: #"+registrosa[i]["estado_color"]+"'>"+registrosa[i]["estado_descripcion"]+"</td>";
                         html += "<td>";
                             html += "<a onclick='modificardetalleproduccion("+JSON.stringify(registrosa[i])+", "+JSON.stringify(produccion["produccion_descripcion"])+")' class='btn btn-info btn-xs' title='Modificar este detalle de producción'><span class='fa fa-pencil'></span></a>";
@@ -258,6 +259,10 @@ function ponercursordetalleproducion(produccion){
                         html += "</tr>";
 
                    }
+                   html += "<tr>";
+                   html += "<td class='text-right text-bold' style='font-size:12px' colspan='2'>Total:</td>";
+                   html += "<td class='text-right text-bold' style='font-size:12px'>"+numberFormat(Number(totalcantidad).toFixed(2))+"</td>";
+                   html += "</tr>";
                    $("#tabladetalleproduccion").html(html);
                    document.getElementById('loader3').style.display = 'none';
             }
@@ -284,6 +289,7 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
     $('#produccion_id').val(masproduccion["produccion_id"]);
     $('#detproduccion_id').val(masproduccion["detproduccion_id"]);
     $('#ladetproduccion_cantidad').val(masproduccion["detproduccion_cantidad"]);
+    $('#ladetproduccion_costo').val(masproduccion["detproduccion_costo"]);
     $('#ladetproduccion_observacion').val(masproduccion["detproduccion_observacion"]);
     var losproductos = JSON.parse(document.getElementById('losproductos').value);
     if (losproductos != null){
@@ -398,12 +404,13 @@ function buscar_platabandamodif2(){
         });
     }
 }
-/* registra nuevodetalle a una producción!. */
+/* guarda detalle modificado de una producción!. */
 function guardar_detallemodificado(){
     var base_url = document.getElementById('base_url').value;
     var produccion_id = document.getElementById('produccion_id').value;
     var detproduccion_id = document.getElementById('detproduccion_id').value;
     let detproduccion_cantidad = document.getElementById('ladetproduccion_cantidad').value;
+    let detproduccion_costo = document.getElementById('ladetproduccion_costo').value;
     let detproduccion_observacion = document.getElementById('ladetproduccion_observacion').value;
     var producto_id = document.getElementById('elproducto_id').value;
     var area_id = document.getElementById('elarea_id').value;
@@ -422,7 +429,7 @@ function guardar_detallemodificado(){
                 type:"POST",
                 data:{produccion_id:produccion_id, detproduccion_id:detproduccion_id,
                       producto_id:producto_id, controli_id:controli_id,
-                      detproduccion_cantidad:detproduccion_cantidad,
+                      detproduccion_cantidad:detproduccion_cantidad, detproduccion_costo:detproduccion_costo,
                       detproduccion_observacion:detproduccion_observacion},
                 success:function(respuesta){
                     var registros =  JSON.parse(respuesta);
