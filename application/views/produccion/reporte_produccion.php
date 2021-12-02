@@ -100,28 +100,28 @@
     <div class="col-md-12">
         <table class="table table-striped table-condensed" id="mitabla">
             <tr>
-                <th>#</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Costo</th>
-                <th>Observación</th>
-                <th>Area</th>
-                <th>Platabanda</th>
-                <th>Estado</th>
+                <th style="padding: 2px">#</th>
+                <th style="padding: 2px">Producto</th>
+                <th style="padding: 2px">Cantidad</th>
+                <th style="padding: 2px">Costo</th>
+                <th style="padding: 2px">Observación</th>
+                <th style="padding: 2px">Area</th>
+                <th style="padding: 2px">Platabanda</th>
+                <th style="padding: 2px">Estado</th>
             </tr>
             <?php
             $i = 0;
             foreach ($all_detalle as $detalle) {
             ?>
             <tr>
-                <td class="text-center"><?php echo $i+1; ?></td>
-                <td><?php echo $detalle['producto_nombre']; ?></td>
-                <td class="text-right"><?php echo $detalle['detproduccion_cantidad']; ?></td>
-                <td class="text-right"><?php echo $detalle['detproduccion_costo']; ?></td>
-                <td><?php echo $detalle['detproduccion_observacion']; ?></td>
-                <td class="text-center"><?php echo $detalle['area_nombre']; ?></td>
-                <td class="text-center"><?php echo $detalle['controli_id']; ?></td>
-                <td class="text-center"><?php echo $detalle['estado_descripcion']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $i+1; ?></td>
+                <td style="padding: 2px"><?php echo $detalle['producto_nombre']; ?></td>
+                <td style="padding: 2px" class="text-right"><?php echo $detalle['detproduccion_cantidad']; ?></td>
+                <td style="padding: 2px" class="text-right"><?php echo $detalle['detproduccion_costo']; ?></td>
+                <td style="padding: 2px"><?php echo $detalle['detproduccion_observacion']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $detalle['area_nombre']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $detalle['controli_id']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $detalle['estado_descripcion']; ?></td>
             </tr>
             <?php
             $i++;
@@ -140,12 +140,12 @@
     <div class="col-md-12">
         <table class="table table-striped table-condensed" id="mitabla">
             <tr>
-                <th>#</th>
-                <th>Detalle</th>
-                <th>Costo</th>
-                <th>Fecha</th>
-                <th>Registrado por</th>
-                <th>Estado</th>
+                <th style="padding: 2px">#</th>
+                <th style="padding: 2px">Detalle</th>
+                <th style="padding: 2px">Costo</th>
+                <th style="padding: 2px">Fecha</th>
+                <th style="padding: 2px">Registrado por</th>
+                <th style="padding: 2px">Estado</th>
             </tr>
             <?php
             $i = 0;
@@ -154,20 +154,20 @@
                 $costototal = ($costototal+$costo['costoop_costo']);
             ?>
             <tr>
-                <td class="text-center"><?php echo $i+1; ?></td>
-                <td><?php echo $costo['costodesc_descripcion']; ?></td>
-                <td class="text-right"><?php echo $costo['costoop_costo']; ?></td>
-                <td class="text-center"><?php echo date("d/m/Y", strtotime($costo['costoop_fecha'])); ?></td>
-                <td class="text-center"><?php echo $costo['usuario_nombre']; ?></td>
-                <td class="text-center"><?php echo $costo['estado_descripcion']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $i+1; ?></td>
+                <td style="padding: 2px"><?php echo $costo['costodesc_descripcion']; ?></td>
+                <td style="padding: 2px" class="text-right"><?php echo $costo['costoop_costo']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo date("d/m/Y", strtotime($costo['costoop_fecha'])); ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $costo['usuario_nombre']; ?></td>
+                <td style="padding: 2px" class="text-center"><?php echo $costo['estado_descripcion']; ?></td>
             </tr>
             <?php
             $i++;
             }
             ?>
             <tr>
-                <td class="text-bold text-right" colspan="2" style="font-size: 10pt">Total:</td>
-                <td class="text-bold text-right" style="font-size: 10pt"><?php echo number_format($costototal, 2, ".", ","); ?></td>
+                <td style="padding: 2px; font-size: 10pt" class="text-bold text-right" colspan="2">Total:</td>
+                <td style="padding: 2px; font-size: 10pt" class="text-bold text-right"><?php echo number_format($costototal, 2, ".", ","); ?></td>
             </tr>
         </table>
     </div>
