@@ -13,7 +13,11 @@ class Control_inventario extends CI_Controller{
         $this->load->model('Ubicacion_producto_model');
         $this->load->model('Compra_model');
         $this->load->model('Venta_model');
+<<<<<<< HEAD
         $this->load->model('Perdida_model');
+=======
+        $this->load->model('Produccion_model');
+>>>>>>> master
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
         }else {
@@ -315,6 +319,30 @@ class Control_inventario extends CI_Controller{
             $area_id = $this->input->post("area_id");
             $data['respuesta'] = $this->Control_inventario_model->get_platabanda($area_id);
             $data['plantas'] = $this->Control_inventario_model->get_platabanda_area($area_id);
+            
+            // $mostrar_aviso = ['aviso' => true];
+            // $no_mostrar = array('aviso' => false);
+            // $fecha_actual = strtotime(date("d-m-Y H:i:00",time()));
+            // foreach($data['plantas'] as $planta){
+            //     $fecha="";
+            //     if($planta['estado_id'] == 33){//33 estado germinado
+            //         $fecha = date("Y-m-d",strtotime($planta['produccion_inicio']."+ {$planta['aproducto_dias']} days")); 
+            //     }else{
+            //         if($planta['estado_id'] == 34)//34 estado desarrollo
+            //             $fecha = date("Y-m-d",strtotime($planta['produccion_inicio']."+ ".($planta['aproducto_dias']+$planta['aproducto_dias2'])." days")); 
+            //     }
+            //     if(true){
+            //         $fecha = strtotime($fecha);
+            //         if($fecha_actual >= $fecha){
+            //             array_push($planta,$mostrar_aviso);
+            //         }else{
+            //             array_push($planta,$no_mostrar);
+            //         }
+            //     }else{
+            //         array_push($planta,$mostrar_aviso);
+            //     }
+            // }
+
             echo json_encode($data);
         }
     }
@@ -358,6 +386,27 @@ class Control_inventario extends CI_Controller{
                 "estado_id" => $estado_id,
             );
             $this->Control_inventario_model->update_control_inventario($control_id,$params);
+        }
+    }
+
+
+    function platabandas_produccion($produccion){
+        $data['produccion_id'] = $produccion;
+        $data['produccion'] = $this->Produccion_model->get_produccion($produccion);
+        $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
+        $data['page_title'] = "Control inventario";
+        $data['_view'] = 'control_inventario/produccion';
+        $this->load->view('layouts/main',$data);
+    }
+
+    function get_platabanda_produccion(){
+        if($this->input->is_ajax_request()){
+            $produccion_id = $this->input->post("produccion_id");
+            $data['respuesta'] = $this->Control_inventario_model->get_platabanda_produccion($produccion_id);
+            $data['plantas'] = $this->Control_inventario_model->get_platabanda_producciont_items($produccion_id);
+            echo json_encode($data);
+        }else{
+            show_404();
         }
     }
 }

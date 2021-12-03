@@ -1,33 +1,24 @@
 var base_url;
 $(window).load(function(){ 
     base_url = document.getElementById("base_url").value;
-    get_platabandas();
+    let produccion_id = document.getElementById("produccion").value;
+    get_platabandas(produccion_id);
 })
 // const base_url = url;
-function get_platabandas(){
-    var area_id = document.getElementById("area_id").value;
-    var controlador = `${base_url}control_inventario/get_platabanda_area`;
+function get_platabandas(produccion_id){
+    var controlador = `${base_url}control_inventario/get_platabanda_produccion`;
     $.ajax({
         url: controlador,
         type: "POST",
-        data:{area_id:area_id},
+        data:{produccion_id:produccion_id},
         success:(respuesta)=>{
             var resp = JSON.parse(respuesta);
-            let color, boton, info, cant_fotos;
-            let html = `<div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="cuadro bg-default">
-                            <button class="btn btn-default" style="width: 100%;" onclick="agregar_platabanda()">
-                                <div class="inner button_add">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>`;
+            let color, boton, info;
+            let html = ``;
             resp['respuesta'].forEach(e => {
                 color = "";
                 boton = "";
                 info = "";
-                cant_fotos = 0;
                 
                 switch (e['estado_id']) {
                     case '36':
@@ -43,19 +34,6 @@ function get_platabandas(){
                         resp['plantas'].forEach(p => {
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
-<<<<<<< HEAD
-                                    info += `<a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
-                                                <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}">
-                                                    <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
-                                                    <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
-                                                    <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
-                                                    <div class="progress" style="border-radius: 10px; color:black; margin: 1px; background: #766;">
-                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width:70%">
-                                                        </div>
-                                                      </div>
-                                                </div>
-                                            </a>`;
-=======
                                     info += `<div class="col-md-12">
                                                 <a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
                                                     <div class="col-md-12 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ false ? `border: red 3px solid;`: ``}">
@@ -66,7 +44,6 @@ function get_platabandas(){
                                                 </a>
                                             </div>
                                             `;
->>>>>>> master
                                     cambiar = false;
                                 }else{
                                     platabanda = e['controli_id'];
@@ -75,7 +52,7 @@ function get_platabandas(){
                             
                         });
                         if(cambiar) {
-                            cambiar_estado_platabanda(platabanda, 38);
+                            cambiar_estado_platabanda(platabanda, 38, produccion_id);
                         }
                         break;
                     case '38':
@@ -99,7 +76,7 @@ function get_platabandas(){
                         </div>`;
             });
             
-            $("#platabandas").html(html);
+            $("#platabandas_produccion").html(html);
         },
         error:()=>{
             alert("ocurrio algo malo")
@@ -135,7 +112,6 @@ function show_modal_info(platabanda_id){
             result = JSON.parse(resultado);
             let res = result['plantas'];
             let costos = result['costos'];
-            let perdidas = result['perdidas'];
             let html = ``;
             res.forEach(item => {
                 if(item['estado_id'] != 39){
@@ -159,10 +135,6 @@ function show_modal_info(platabanda_id){
                                                 <label for="perdida${item['detproduccion_id']}">Perdida</label>
                                                 <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
                                             </div>
-                                            <div class="form-group mb-2">
-                                                <label for="perdida_observacion${item['detproduccion_id']}">Observación</label>
-                                                <input type="text" min="0" max="255" class="form-control" id="perdida_observacion${item['detproduccion_id']}" name="perdida_observacion${item['detproduccion_id']}" style="border: 1; cursor: pointer" autocomplete="off">
-                                            </div>
                                         </div>
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
@@ -183,10 +155,12 @@ function show_modal_info(platabanda_id){
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
                                         </div>
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-sm" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
-                                            <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
-                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a la siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Pasar a siguiente etapa` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
-                                            <button class="btn btn-danger btn-sm" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
+                                            <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
+                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
+                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -207,25 +181,9 @@ function show_modal_info(platabanda_id){
                     html +=`            </tbody>
                                     </table>
                                 </article>
-                                <article class="col-md-5">
-                                    <table class="table table-striped" style="font-size: 8pt;">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Perdida</th>
-                                                <th>Fecha</th>
-                                                <th>Observación</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla_perdida${ item['detproduccion_id'] }" style="font-size:8pt;">`
-                    html += get_tabla_perdida(item['detproduccion_id'], perdidas);
-                    html +=`            </tbody>
-                                    </table>
-                                </article>
                             </div>`;
                 }
                 get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
-                get_tabla_perdida(item['detproduccion_id'], perdidas);
             });
             $('#modal_infor_platabanda').html(html);
             $('#platabanda_number').html(platabanda_id);
@@ -248,19 +206,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
-<<<<<<< HEAD
-                                <td>${i}</td>
-                                <td>${cost['costodesc_descripcion']}</td>
-                                <td>${cost['controli_id']}</td>
-                                <td>${cost['costoop_costo']}</td>
-                                <td>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-=======
                                 <td style="padding: 0; text-align: right">${i}</td>
                                 <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 0; text-align: center;">${cost['controli_id']}</td>
                                 <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
                                 <td style="padding: 0; text-align: center">${fecha}</td>
->>>>>>> master
                             </tr>`;
                     i++;
                     total += Number(cost['costoop_costo']);
@@ -319,7 +269,6 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
 function actulizar_informacion(detproduccion_id){
     let controlador = `${base_url}detalle_produccion/update_detproduccion`;
     let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
-    let perdida_observacion = document.getElementById(`perdida_observacion${detproduccion_id}`).value;
     let observacion = $(`#observacion_${detproduccion_id}`).val();
     $.ajax({
         url: controlador,
@@ -328,7 +277,6 @@ function actulizar_informacion(detproduccion_id){
         data: {
             detproduccion_id:detproduccion_id,
             perdida: perdida,
-            perdida_observacion: perdida_observacion,
             observacion:observacion,
         },
         success:()=>{
@@ -365,7 +313,7 @@ function cambiar_estado_platabanda(controli_id, estado_id){
     });
 }
 
-function pasar_etapa(detproduccion_id, estado_id){
+function pasar_etapa(detproduccion_id, estado_id, produccion_id){
     let controlador = `${base_url}detalle_produccion/pasar_siguiente_estado`
     $.ajax({
         url: controlador,
@@ -374,10 +322,30 @@ function pasar_etapa(detproduccion_id, estado_id){
         data:{detproduccion_id:detproduccion_id, estado_id:estado_id},
         success:()=>{
             $("#modal_info_platabanda").modal('hide');
-            get_platabandas();
+            get_platabandas(produccion_id);
         },
         error:()=>{
             alert("Ocurrio un error al cambiar de estado")
+        }
+    });
+}
+
+function volver_estado(detproduccion_id){
+    let controlador = `${base_url}detalle_produccion/volver_estado_platabanda`;
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data: {
+            detproduccion_id:detproduccion_id,
+        },
+        success:(respuesta)=>{
+            let produccion = JSON.parse(respuesta);
+            $("#modal_info_platabanda").modal('hide');
+            get_platabandas(produccion);
+        },
+        error:()=>{
+            alert("Error")
         }
     });
 }
@@ -493,58 +461,59 @@ function send_inventario(detproduccion_id,producto_id){
         });
     }
 }
-<<<<<<< HEAD
-/* obtiene las perdidas de una platabanda */
-function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
-    
-    let html = ``;
-    let i = 1;
-    if (perdidas != "") {
-        perdidas.forEach(perdida => {
-            perdida.forEach(perd => {
-                if(detproduccion_id == perd['detproduccion_id']){
-                    html += `<tr>
-                                <td>${i}</td>
-                                <td>${perd['perdida_cantidad']}</td>
-                                <td>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
-                                <td>${perd['perdida_observacion']}</td>
-                            </tr>`;
-                    i++;
-                }
-            });
-        });
-    }else{
-        let controlador = `${base_url}perdida/get_perdidas`;
-        $.ajax({
-            url: controlador,
-            type: 'POST',
-            cache: false,
-            data: {detproduccion_id:detproduccion_id},
-            success: (result)=>{
-                let perdidas = JSON.parse(result);
-                let html = ``;
-                let i = 1;
-                perdidas.forEach(perd => {
-                    html += `<tr>
-                                <td>${i}</td>
-                                <td>${perd['perdida_cantidad']}</td>
-                                <td>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
-                                <td>${perd['perdida_observacion']}</td>
-                            </tr>`;
-                    i++;
-                });
-                $(`#tabla_perdida${detproduccion_id}`).html(html);
-            },error: ()=>{
-                alert('error algo salio mal en la consulta para obtener las perdidas')
-            }
-        });
-    }
-    if (id === ``) {
-        return html;
-    }
-=======
 
 function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
->>>>>>> master
+}
+
+function vender_item(detproduccion_id, platabanda){
+    cerrar_modal();
+    $('#modal_form_venta').modal('show');
+    $('#platabanda').val(platabanda);
+    $('#det_produccion').val(detproduccion_id);
+    let controlador = `${base_url}detalle_produccion/get_detproduccion_venta`
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data:{
+            detproduccion_id:detproduccion_id,
+            platabanda:platabanda,
+        },
+        success:(result) => {
+            let ress = JSON.parse(result);
+            $('#form_producto').val(ress[0]['producto_nombre']);
+            $('#form_producto_id').val(ress[0]['producto_id']);
+            document.getElementById('form_cantidad').setAttribute("max", ress[0]['detproduccion_cantidad']);
+        },
+        error:(error) => {
+            alert('algo salio mal al obtener los datos');
+        }
+
+    })
+}
+
+function save_compra(){
+    let controlador = `${base_url}compra/add_planta`;
+    let form_producto_id = document.getElementById("form_producto_id").value;
+    let form_cantidad = document.getElementById("form_cantidad").value;
+    let platabanda = document.getElementById("platabanda").value;
+    let det_produccion = document.getElementById("det_produccion").value;
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache: false,
+        data:{
+            form_producto_id:form_producto_id,
+            form_cantidad:form_cantidad,
+            platabanda:platabanda,
+            det_produccion:det_produccion,
+        },
+        success:()=>{
+            window.location =`${base_url}venta/ventas`;
+        },
+        error:()=>{
+            alert("error")
+        }
+    })
 }

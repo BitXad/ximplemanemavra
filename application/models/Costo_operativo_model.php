@@ -222,6 +222,16 @@ class Costo_operativo_model extends CI_Model
             and dp.detproduccion_id = $detproduccion_id
             group by co.costoop_id"
         )->result_array();
+    }
 
+    function get_costoop_platabanda($detproduccion_id,$controli_id){
+        return $this->db->query(
+            "SELECT if(sum(co.costoop_costo) = 0, 0,sum(co.costoop_costo) ) as costo
+            from costo_operativo co 
+            left join detalle_produccion dp on dp.produccion_id = co.produccion_id 
+            where 1=1
+            and dp.detproduccion_id = $detproduccion_id
+            and dp.controli_id = $controli_id"
+        )->row_array();
     }
 }

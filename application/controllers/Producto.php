@@ -1109,4 +1109,37 @@ class Producto extends CI_Controller{
         $productos = $this->Producto_model->get_busqueda_producto_limite($categoria,$estado);
         echo json_encode($productos);
     }
+    /**
+     * Agregar avisos de producto
+     */
+    function add_aviso_producto(){
+        if($this->input->is_ajax_request()) {
+            $producto_id = $this->input->post("producto");
+            $tiempo1 = $this->input->post("tiempo1");
+            $tiempo2 = $this->input->post("tiempo2");
+            $aproducto = $this->input->post("aproducto");
+            $params = array(
+                'producto_id' => $producto_id,
+                'aproducto_dias' => $tiempo1,
+                'aproducto_dias2' => $tiempo2,
+            );
+            if($aproducto == 0){
+                $this->Producto_model->add_avisos_producto($params);
+            }else{
+                $this->Producto_model->edit_avisos_producto($aproducto,$params);
+            }
+        }else{
+            show_404();
+        }
+    }
+
+    function aviso_producto(){
+        if($this->input->is_ajax_request()){
+            $producto_id = $this->input->post("producto_id");
+            $avisos = $this->Producto_model->buscar_avisos($producto_id);
+            echo json_encode($avisos);
+        }else{
+            show_404();
+        }
+    }
 }

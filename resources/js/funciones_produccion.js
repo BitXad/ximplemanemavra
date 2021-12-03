@@ -62,9 +62,11 @@ function mostrarproduccion(){
                         //html += "<a onclick='ponercursornuevodetalle("+JSON.stringify(registros[i])+")' class='btn btn-success btn-xs' data-toggle='modal' data-target='#modalnuevodetalle' title='Registrar detalle de producción'><span class='fa fa-sliders'></span></a>";
                         html += "<a onclick='ponercursordetalleproducion("+JSON.stringify(registros[i])+")' class='btn btn-info btn-xs' data-toggle='modal' data-target='#modaldetallesproduccion' title='Ver detalles de producción'><span class='fa fa-list'></span></a>";
                         html += "<a href='"+base_url+"produccion/reporte_produccion/"+registros[i]["produccion_id"]+"' class='btn btn-success btn-xs' title='Reporte'><span class='fa fa-print'></span></a>";
+                        html += "<a href='"+base_url+"control_inventario/platabandas_produccion/"+registros[i]["produccion_id"]+"' class='btn btn-info btn-xs' title='Platabandas'><i class='fa fa-leaf' aria-hidden='true'></i></a>";
                         html += "</td>";
                         html += "</tr>";
 
+                        
                    }
                    html += "<tr>";
                    html += "<th style='text-align: right !important; text-font: 12pt' colspan='5    '>Total:</th>";

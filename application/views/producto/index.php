@@ -463,6 +463,35 @@ echo '<script type="text/javascript">
     </div>
 </div>
 <!------------------------ FIN modal para elegir precio factor en PRECIOS ------------------->
+<!------------------------ Modal para agregar aviso ------------------->
+<div class="modal fade" id="aviso_modal" tabindex="-1" role="dialog" aria-labelledby="modal_label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold">ETAPAS DE PRODUCCION</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="siguiente_paso">Tiempo en germinación(Días)</label>
+                    <input class="form-control" type="number" id="tiempo1" name="siguiente_paso" placeholder="14 días">
+                </div>
+                <div class="form-group">
+                    <label for="siguiente_paso2">Tiempo en desarrollo(Días)</label>
+                    <input class="form-control" type="number" id="tiempo2" name="siguiente_paso2" placeholder="20 días">
+                    <input type="hidden" id="producto">
+                    <input type="hidden" id="aproducto">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="button_save" class="btn btn-success" onclick="add_aviso()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------ Modal para agregar aviso ------------------->
+
 <!------------------------ INICIO modal para elegir # imagenes(codigo de barras de un producto) para su impresion! ------------------->
 <div class="modal fade" id="modalcodigobarra" tabindex="-1" role="dialog" aria-labelledby="modalcodigobarralabel" style="font-family: Arial">
     <div class="modal-dialog" role="document">
