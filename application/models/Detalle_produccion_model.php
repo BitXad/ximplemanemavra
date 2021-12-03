@@ -127,4 +127,25 @@ class Detalle_produccion_model extends CI_Model
             and p.producto_id = $producto_id"
             )->row_array();
     }
+
+    function get_costo_producto($detproduccion_id){
+        return $this->db->query(
+            "SELECT p.producto_costo 
+            from producto p 
+            left join detalle_produccion dp on dp.producto_id = p.producto_id 
+            where 1=1
+            and dp.detproduccion_id = $detproduccion_id"
+        )->row_array();
+    }
+
+    function get_detproduccion_venta($detproduccion_id,$controli_id){
+        return $this->db->query(
+            "SELECT dp.*,p2.producto_nombre
+            from detalle_produccion dp 
+            left join produccion p on p.produccion_id = dp.produccion_id 
+            left join producto p2 on p2.producto_id = dp.producto_id 
+            where 1=1
+            and dp.controli_id = 10"
+        )->result_array();
+    }
 }

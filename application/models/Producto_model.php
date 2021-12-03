@@ -604,4 +604,24 @@ class Producto_model extends CI_Model
         $sql="select * from producto";
         return $this->db->query($sql)->result_array();
     }
+
+    function add_avisos_producto($params){
+        $this->db->insert('aviso_producto',$params);
+        return $this->db->insert_id();
+    }
+
+    function buscar_avisos($producto_id){
+        return $this->db->query(
+            "SELECT ap.* 
+            FROM aviso_producto ap
+            WHERE 1=1
+            AND ap.producto_id = $producto_id
+            order by ap.aproducto_id"
+        )->result_array();
+    }
+
+    function edit_avisos_producto($producto_id,$params){
+        $this->db->where('aproducto_id',$producto_id);
+        return $this->db->update('aviso_producto',$params);
+    }
 }

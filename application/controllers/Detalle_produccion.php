@@ -136,4 +136,39 @@ class Detalle_produccion extends CI_Controller{
             show_404();
         }
     }
+
+    function volver_estado_platabanda(){
+        if($this->input->is_ajax_request()){
+            $detproduccion_id = $this->input->post('detproduccion_id');
+            $detproduccion = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
+            $detproduccion = $detproduccion[0];
+            if($detproduccion != null){
+                if($detproduccion['estado_id'] <= 35 && $detproduccion['estado_id'] > 33){
+                    $detproduccion['estado_id'] = $detproduccion['estado_id'] - 1;
+                }else{
+                    if($detproduccion['estado_id'] == 39){
+                        $detproduccion['estado_id'] = 35;
+                    }
+                }
+            }
+            $params = array(
+                'estado_id' => $detproduccion['estado_id'],
+            );
+            $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
+            echo json_encode($detproduccion['produccion_id']);
+        }else{
+            show_404();
+        }
+    }
+
+    function get_detproduccion_venta(){
+        if($this->input->is_ajax_request()){
+            $detproduccion_id = $this->input->post("detproduccion_id");
+            $platabanda = $this->input->post("platabanda");
+            $resultado = $this->Detalle_produccion_model->get_detproduccion_venta($detproduccion_id,$platabanda);
+            echo json_encode($resultado);
+        }else{
+            show_404();
+        } 
+    }
 }

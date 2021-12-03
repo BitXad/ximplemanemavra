@@ -90,21 +90,22 @@ class Control_inventario_model extends CI_Model
 
     function get_platabanda_area($area_id = 1){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
             left join producto p on dp.producto_id = p.producto_id
+            left join aviso_producto ap on ap.producto_id = dp.producto_id
+            left join produccion p2 on p2.produccion_id = dp.produccion_id 
             where 1=1
             and ci.area_id = $area_id
             and e.estado_tipo = 9
-            
+            and dp.estado_id <> 39
             order by ci.controli_id,dp.estado_id asc"
         )->result_array();
     }
 
-    function add_platabanda($params)
-    {
+    function add_platabanda($params){
         $this->db->insert('control_inventario',$params);
         return $this->db->insert_id();
     }
@@ -120,6 +121,36 @@ class Control_inventario_model extends CI_Model
             where 1=1
             and ci.controli_id = $controli_id
             order by dp.estado_id asc"
+        )->result_array();
+    }
+    
+    function get_platabanda_produccion($produccion_id){
+        return $this->db->query(
+            "SELECT ci.*,e.*
+            from control_inventario ci
+            left join estado e on ci.estado_id = e.estado_id
+            left join detalle_produccion dp on dp.controli_id = ci.controli_id 
+            where 1=1
+            and dp.produccion_id = $produccion_id
+            and e.estado_tipo = 9
+            order by ci.controli_id asc
+                        "
+        )->result_array();
+    }
+    function get_platabanda_producciont_items($produccion_id){
+        return $this->db->query(
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*
+            from control_inventario ci
+            left join detalle_produccion dp on ci.controli_id = dp.controli_id 
+            left join estado e on dp.estado_id = e.estado_id
+            left join producto p on dp.producto_id = p.producto_id
+            left join aviso_producto ap on ap.producto_id = dp.producto_id
+            left join produccion p2 on p2.produccion_id = dp.produccion_id 
+            where 1=1
+            and dp.produccion_id = $produccion_id
+            and e.estado_tipo = 9
+            and dp.estado_id <> 39
+            order by ci.controli_id,dp.estado_id asc"
         )->result_array();
     }
 }

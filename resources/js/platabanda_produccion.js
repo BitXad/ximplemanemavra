@@ -1,33 +1,24 @@
 var base_url;
 $(window).load(function(){ 
     base_url = document.getElementById("base_url").value;
-    get_platabandas();
+    let produccion_id = document.getElementById("produccion").value;
+    get_platabandas(produccion_id);
 })
 // const base_url = url;
-function get_platabandas(){
-    var area_id = document.getElementById("area_id").value;
-    var controlador = `${base_url}control_inventario/get_platabanda_area`;
+function get_platabandas(produccion_id){
+    var controlador = `${base_url}control_inventario/get_platabanda_produccion`;
     $.ajax({
         url: controlador,
         type: "POST",
-        data:{area_id:area_id},
+        data:{produccion_id:produccion_id},
         success:(respuesta)=>{
             var resp = JSON.parse(respuesta);
-            let color, boton, info, cant_fotos;
-            let html = `<div class="col-xs-12 col-sm-6 col-md-3">
-                        <div class="cuadro bg-default">
-                            <button class="btn btn-default" style="width: 100%;" onclick="agregar_platabanda()">
-                                <div class="inner button_add">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>`;
+            let color, boton, info;
+            let html = ``;
             resp['respuesta'].forEach(e => {
                 color = "";
                 boton = "";
                 info = "";
-                cant_fotos = 0;
                 
                 switch (e['estado_id']) {
                     case '36':
@@ -61,7 +52,7 @@ function get_platabandas(){
                             
                         });
                         if(cambiar) {
-                            cambiar_estado_platabanda(platabanda, 38);
+                            cambiar_estado_platabanda(platabanda, 38, produccion_id);
                         }
                         break;
                     case '38':
@@ -85,7 +76,7 @@ function get_platabandas(){
                         </div>`;
             });
             
-            $("#platabandas").html(html);
+            $("#platabandas_produccion").html(html);
         },
         error:()=>{
             alert("ocurrio algo malo")
@@ -164,10 +155,12 @@ function show_modal_info(platabanda_id){
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
                                         </div>
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-sm" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
-                                            <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
-                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a la siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Pasar a siguiente etapa` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
-                                            <button class="btn btn-danger btn-sm" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
+                                            <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
+                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
+                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -320,7 +313,7 @@ function cambiar_estado_platabanda(controli_id, estado_id){
     });
 }
 
-function pasar_etapa(detproduccion_id, estado_id){
+function pasar_etapa(detproduccion_id, estado_id, produccion_id){
     let controlador = `${base_url}detalle_produccion/pasar_siguiente_estado`
     $.ajax({
         url: controlador,
@@ -329,10 +322,30 @@ function pasar_etapa(detproduccion_id, estado_id){
         data:{detproduccion_id:detproduccion_id, estado_id:estado_id},
         success:()=>{
             $("#modal_info_platabanda").modal('hide');
-            get_platabandas();
+            get_platabandas(produccion_id);
         },
         error:()=>{
             alert("Ocurrio un error al cambiar de estado")
+        }
+    });
+}
+
+function volver_estado(detproduccion_id){
+    let controlador = `${base_url}detalle_produccion/volver_estado_platabanda`;
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data: {
+            detproduccion_id:detproduccion_id,
+        },
+        success:(respuesta)=>{
+            let produccion = JSON.parse(respuesta);
+            $("#modal_info_platabanda").modal('hide');
+            get_platabandas(produccion);
+        },
+        error:()=>{
+            alert("Error")
         }
     });
 }
@@ -451,4 +464,56 @@ function send_inventario(detproduccion_id,producto_id){
 
 function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
+}
+
+function vender_item(detproduccion_id, platabanda){
+    cerrar_modal();
+    $('#modal_form_venta').modal('show');
+    $('#platabanda').val(platabanda);
+    $('#det_produccion').val(detproduccion_id);
+    let controlador = `${base_url}detalle_produccion/get_detproduccion_venta`
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data:{
+            detproduccion_id:detproduccion_id,
+            platabanda:platabanda,
+        },
+        success:(result) => {
+            let ress = JSON.parse(result);
+            $('#form_producto').val(ress[0]['producto_nombre']);
+            $('#form_producto_id').val(ress[0]['producto_id']);
+            document.getElementById('form_cantidad').setAttribute("max", ress[0]['detproduccion_cantidad']);
+        },
+        error:(error) => {
+            alert('algo salio mal al obtener los datos');
+        }
+
+    })
+}
+
+function save_compra(){
+    let controlador = `${base_url}compra/add_planta`;
+    let form_producto_id = document.getElementById("form_producto_id").value;
+    let form_cantidad = document.getElementById("form_cantidad").value;
+    let platabanda = document.getElementById("platabanda").value;
+    let det_produccion = document.getElementById("det_produccion").value;
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache: false,
+        data:{
+            form_producto_id:form_producto_id,
+            form_cantidad:form_cantidad,
+            platabanda:platabanda,
+            det_produccion:det_produccion,
+        },
+        success:()=>{
+            window.location =`${base_url}venta/ventas`;
+        },
+        error:()=>{
+            alert("error")
+        }
+    })
 }

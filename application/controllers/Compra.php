@@ -10,12 +10,13 @@ class Compra extends CI_Controller{
         parent::__construct();
         $this->load->model('Compra_model');
         $this->load->model('Producto_model');
-        //$this->load->model('Inventario_model');
+        $this->load->model('Costo_operativo_model');
         $this->load->model('Estado_model');
         $this->load->model('Tipo_transaccion_model');
         $this->load->model('Empresa_model');
         $this->load->model('Parametro_model');
         $this->load->model('Detalle_compra_model');
+        $this->load->model('Detalle_produccion_model');
         $this->load->model('Inventario_model');
         $this->load->model('Moneda_model');
         $this->load->helper('numeros');
@@ -1807,7 +1808,7 @@ WHERE producto_id=".$producto_id.")";
 
 $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
 
-        $resulrado=$this->db->query($inventario);
+        $resultado=$this->db->query($inventario);
     echo json_encode($resultado);  
         
     }
@@ -1958,6 +1959,108 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                 $detallecomp_id = $this->Detalle_compra_model->add_detalle_compra_aux($params);
             }
             redirect('compra/edit/'.$compra_id.'/'.$bandera);
+        }
+    }
+
+    function add_planta(){
+        if($this->input->is_ajax_request()){
+            $producto_id = $this->input->post("form_producto_id");
+            $cantidad = $this->input->post("form_cantidad");
+            $controli_id = $this->input->post("platabanda");
+            $detproduccion_id = $this->input->post("det_produccion");
+            $costo = $this->Detalle_produccion_model->get_costo_producto($detproduccion_id);
+            $costo_inicial = $costo['producto_costo'];
+            
+            $costo_op = $this->Costo_operativo_model->get_costoop_platabanda($detproduccion_id, $controli_id);
+            $costo_operativo = $costo_op['costo']/$cantidad;
+            $costo_total = $costo_inicial + $costo_operativo;
+            $producto_costo = $costo_total;
+            $usuario_id = $this->session_data['usuario_id'];
+            $compra_fecha = "now()";
+            $compra_hora = "'".date('H:i:s')."'";
+            $compra = array(
+                        'estado_id' => 1,
+                        'tipotrans_id' => 1,
+                        'usuario_id' => $usuario_id,
+                        'moneda_id' => 1,
+                        'proveedor_id' => 1,
+                        'forma_id' => 1,
+                        'compra_fecha' => $compra_fecha,
+                        'compra_hora' => $compra_hora,
+                        'compra_subtotal' => $producto_costo*$cantidad,
+                        'compra_descuento' => 0,
+                        'compra_descglobal' => 0,
+                        'compra_total' => $producto_costo*$cantidad,
+                        'compra_efectivo' => $producto_costo*$cantidad,
+                        'compra_cambio' => 0,            
+                    );
+    
+            $compra_id=$this->Compra_model->add_compra($compra);
+            $detalle = "INSERT into detalle_compra(
+                    compra_id,
+                    producto_id,
+                    detallecomp_codigo,
+                    detallecomp_unidad,
+                    detallecomp_costo,
+                    detallecomp_cantidad,
+                    detallecomp_precio,
+                    detallecomp_descuento,
+                    detallecomp_subtotal,
+                    detallecomp_total              
+                    )
+                    (
+                    SELECT
+                    ".$compra_id.",
+                    producto_id,
+                    producto_codigo,
+                    producto_unidad,
+                    producto_costo,
+                    ".$cantidad.",
+                    producto_precio,
+                    0,
+                    ".$producto_costo." * ".$cantidad.",
+                    ".$producto_costo." * ".$cantidad."
+                    
+                    from producto where producto_id = ".$producto_id."
+                )";  
+            $this->db->query($detalle);
+            $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
+            $producto = $this->Producto_model->get_producto($producto_id);
+            $this->db->query($inventario);
+                
+            $detalle_venta_aux = "INSERT INTO detalle_venta_aux(
+                producto_id,venta_id,moneda_id,detalleven_codigo,
+                detalleven_cantidad,detalleven_unidad,detalleven_costo,detalleven_precio,
+                detalleven_subtotal,detalleven_descuento,detalleven_total,
+                detalleven_caracteristicas,detalleven_preferencia,detalleven_comision,
+                detalleven_tipocambio,usuario_id,existencia,producto_nombre,
+                producto_unidad,producto_marca,categoria_id,producto_codigobarra,
+                detalleven_envase,detalleven_nombreenvase,detalleven_costoenvase,
+                detalleven_precioenvase,detalleven_cantidadenvase,detalleven_garantiaenvase,
+                detalleven_devueltoenvase,detalleven_fechadevolucion,detalleven_horadevolucion,
+                detalleven_montodevolucion,detalleven_prestamoenvase,detalleven_fechavenc, promocion_id
+            )values(
+                $producto_id,0,1,94000,
+                $cantidad,0,0,{$producto[0]['producto_precio']},
+                ".($cantidad+$producto[0]['producto_precio']).",0,".($cantidad+$producto[0]['producto_precio']).",
+                0,0,0,
+                1,$usuario_id,$cantidad,'{$producto[0]['producto_nombre']}',
+                '{$producto[0]['producto_unidad']}','{$producto[0]['producto_marca']}',{$producto[0]['categoria_id']},{$producto[0]['producto_codigobarra']},
+                0,0,0,
+                0,$cantidad,0,
+                $cantidad,0,0,
+                0,0,".date('Y-m-d').",0
+            );";
+            $this->db->query($detalle_venta_aux);
+            $platabanda = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
+            // $platabanda['detproduccion_perdida'] = $platabanda['detproduccion_perdida'] + $cantidad;
+            $params = array(
+                "detproduccion_perdida" => $platabanda['detproduccion_perdida'] + $cantidad,
+                // "estado_id"=>39
+            );
+            $this->Detalle_produccion_model->update_detalle($detproduccion_id,$params);
+        }else{
+            show_404();
         }
     }
 }

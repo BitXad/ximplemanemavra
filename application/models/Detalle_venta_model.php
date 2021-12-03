@@ -553,7 +553,7 @@ function ventas_dia($estado)
     {
         $get_detalle = $this->db->query(
             "SELECT
-		dv.detalleven_id, dv.producto_nombre, dv.detalleven_codigo, dv.detalleven_cantidad,
+        dv.detalleven_id, dv.producto_nombre, dv.detalleven_codigo, dv.detalleven_cantidad,
                 dv.detalleven_precio, (dv.detalleven_cantidad*dv.detalleven_precio) as total,
                 u.usuario_nombre
             FROM

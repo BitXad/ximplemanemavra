@@ -234,6 +234,7 @@ function tablaresultadosproducto(limite){
                         html += "<td class='no-print' style='background-color: #"+registros[i]["estado_color"]+"'>"+registros[i]["estado_descripcion"]+"</td>";
 		        html += "<td class='no-print'>";
                         html += "<a href='"+base_url+"producto/edit/"+registros[i]["miprod_id"]+"' target='_blank' class='btn btn-info btn-xs' title='Modificar Información'><span class='fa fa-pencil'></span></a>";
+                        html += "<a class='btn btn-default btn-xs' title='Aviso' onclick='show_aviso("+registros[i]["miprod_id"]+")'><i class='fa fa-clock-o' aria-hidden='true'></i></a>";
                         html += "<a href='"+base_url+"imagen_producto/catalogoprod/"+registros[i]["miprod_id"]+"' class='btn btn-success btn-xs' title='Catálogo de Imagenes' ><span class='fa fa-image'></span></a>";
                         html += "<a class='btn btn-danger btn-xs' data-toggle='modal' data-target='#myModal"+i+"' title='Eliminar'><span class='fa fa-trash'></span></a>";
                         html += "<a class='btn btn-facebook btn-xs' onclick='buscarclasificador("+registros[i]["miprod_id"]+")' title='Ver Clasificador'><span class='fa fa-list-ol'></span></a>";
@@ -1948,4 +1949,61 @@ function codbarra_producto(num_imagenes) {
                 JsBarcode("#barcode"+i, codigo_barra);
             }
         }
+}
+function show_aviso(producto_id){
+    $('#tiempo1').val('');
+    $('#tiempo2').val('');
+    $('#aproducto').val('');
+    $('#aviso_modal').modal("show");
+    $('#producto').val(producto_id);
+    let base_url = document.getElementById("base_url").value;
+    let controlador = `${base_url}producto/aviso_producto`;
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache: false,
+        data:{producto_id: producto_id},
+        success:(avisos)=>{
+            let aviso = JSON.parse(avisos);
+            if(aviso.length != 0){
+                $('#tiempo1').val(aviso[0]['aproducto_dias']);
+                $('#tiempo2').val(aviso[0]['aproducto_dias2']);
+                $('#aproducto').val(aviso[0]['aproducto_id']);
+                document.getElementById('button_save').setAttribute('onclick','add_aviso(1)')
+            }
+        },
+        error:()=>{
+            alert("Error al obtener los avisos");
+        }
+    });
+}
+// 0 para indicar guardar, 1 para editar
+function add_aviso(edit = 0){
+    let base_url = document.getElementById("base_url").value;
+    let controlador = `${base_url}producto/add_aviso_producto`
+    let producto = document.getElementById("producto").value;
+    let tiempo1 = document.getElementById("tiempo1").value;
+    let tiempo2 = document.getElementById("tiempo2").value;
+    let aproducto = 0
+    if (edit == 1){
+        aproducto = document.getElementById('aproducto').value;
+    }
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache: false,
+        data: {
+            producto:producto,
+            tiempo1:tiempo1,
+            tiempo2:tiempo2,
+            aproducto:aproducto,
+        },
+        success:()=>{
+            alert("Se agrego los avisos");
+        },
+        error:()=>{
+            alert("Algo salio mal al agregar los avisos")
+        }
+    });
+    $('#aviso_modal').modal("hide");
 }
