@@ -10,6 +10,7 @@ class Detalle_produccion extends CI_Controller{
         parent::__construct();
         $this->load->model('Detalle_produccion_model');
         $this->load->model('Estado_model');
+        $this->load->model('Perdida_model');
         $this->load->model('Producto_model');
         $this->load->model('Inventario_model');
         $this->load->model('Compra_model');
@@ -52,13 +53,27 @@ class Detalle_produccion extends CI_Controller{
         if($this->input->is_ajax_request()){
             $detproduccion_id = $this->input->post("detproduccion_id");
             $perdida = $this->input->post("perdida");
+            //$perdida_observacion = $this->input->post("perdida_observacion");
             $observacion = $this->input->post("observacion");
             $detproduccion = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
             $params = array(
-                'detproduccion_perdida' => $detproduccion[0]['detproduccion_perdida'] + $perdida,
+                //'detproduccion_perdida' => $detproduccion[0]['detproduccion_perdida'] + $perdida,
                 'detproduccion_observacion' => $observacion,
             );
             $this->Detalle_produccion_model->update_detalle($detproduccion_id, $params);
+            if($perdida > 0){
+                $fecha = date("Y-m-d");
+                $estado_id = 1;
+                $paramsp = array(
+                    'detproduccion_id' => $detproduccion_id,
+                    'estado_id' => $estado_id,
+                    'perdida_cantidad' => $perdida,
+                    'perdida_fecha' => $fecha,
+                    'perdida_observacion' => $this->input->post("perdida_observacion"),
+                );
+                $this->Perdida_model->add_perdida($paramsp);
+            }
+            
         }else{
             show_404();
         }

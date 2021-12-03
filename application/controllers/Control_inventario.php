@@ -13,6 +13,7 @@ class Control_inventario extends CI_Controller{
         $this->load->model('Ubicacion_producto_model');
         $this->load->model('Compra_model');
         $this->load->model('Venta_model');
+        $this->load->model('Perdida_model');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
         }else {
@@ -335,9 +336,14 @@ class Control_inventario extends CI_Controller{
             $controli_id = $this->input->post("platabanda_id");
             $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id);
             $data['costos'] = [];
+            $data['perdidas'] = [];
             foreach($data['plantas'] as $a){
                 array_push($data['costos'], $this->Costo_operativo_model->get_costos_produccion($a['produccion_id']));
-            }            
+            }
+            
+            foreach($data['plantas'] as $a){
+                array_push($data['perdidas'], $this->Perdida_model->get_perdidas_platabanda($a['detproduccion_id']));
+            }
             echo json_encode($data);
         }else{
             show_404();
