@@ -13,11 +13,8 @@ class Control_inventario extends CI_Controller{
         $this->load->model('Ubicacion_producto_model');
         $this->load->model('Compra_model');
         $this->load->model('Venta_model');
-<<<<<<< HEAD
         $this->load->model('Perdida_model');
-=======
         $this->load->model('Produccion_model');
->>>>>>> master
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
         }else {

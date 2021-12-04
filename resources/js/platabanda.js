@@ -43,7 +43,6 @@ function get_platabandas(){
                         resp['plantas'].forEach(p => {
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
-<<<<<<< HEAD
                                     info += `<a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
                                                 <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
@@ -55,18 +54,6 @@ function get_platabandas(){
                                                       </div>
                                                 </div>
                                             </a>`;
-=======
-                                    info += `<div class="col-md-12">
-                                                <a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
-                                                    <div class="col-md-12 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ false ? `border: red 3px solid;`: ``}">
-                                                        <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
-                                                        <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
-                                                        <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            `;
->>>>>>> master
                                     cambiar = false;
                                 }else{
                                     platabanda = e['controli_id'];
@@ -248,19 +235,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
-<<<<<<< HEAD
                                 <td>${i}</td>
                                 <td>${cost['costodesc_descripcion']}</td>
                                 <td>${cost['controli_id']}</td>
                                 <td>${cost['costoop_costo']}</td>
                                 <td>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-=======
-                                <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0; text-align: center;">${cost['controli_id']}</td>
-                                <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
-                                <td style="padding: 0; text-align: center">${fecha}</td>
->>>>>>> master
                             </tr>`;
                     i++;
                     total += Number(cost['costoop_costo']);
@@ -493,7 +472,6 @@ function send_inventario(detproduccion_id,producto_id){
         });
     }
 }
-<<<<<<< HEAD
 /* obtiene las perdidas de una platabanda */
 function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
     
@@ -542,9 +520,7 @@ function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
     if (id === ``) {
         return html;
     }
-=======
-
+}
 function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
->>>>>>> master
 }
