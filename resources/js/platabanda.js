@@ -139,16 +139,20 @@ function show_modal_info(platabanda_id){
                                         </div>
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
-                                                <label for="cantidad${item['detproduccion_id']}">Cantidad</label>
-                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off">
+                                                <label for="cantidad${item['detproduccion_id']}" title='Cantidad de plantas'>Cantidad</label>
+                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
                                             </div>
                                             <div class="form-group mb-2">
-                                                <label for="perdida${item['detproduccion_id']}">Perdida</label>
-                                                <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
+                                                <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
+                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
                                             </div>
                                             <div class="form-group mb-2">
-                                                <label for="perdida_observacion${item['detproduccion_id']}">Observación</label>
-                                                <input type="text" min="0" max="255" class="form-control" id="perdida_observacion${item['detproduccion_id']}" name="perdida_observacion${item['detproduccion_id']}" style="border: 1; cursor: pointer" autocomplete="off">
+                                                <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Salida</label>
+                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label for="elsaldo${item['detproduccion_id']}" title='Saldo de plantas en esta platabanda'>Saldo</label>
+                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
                                             </div>
                                         </div>
                                         <div class="form-inline">
@@ -164,7 +168,17 @@ function show_modal_info(platabanda_id){
                                         </figure>
                                     </div>
                                     <div class="col-md-12">
+                                        <div class="form-inline">
+                                            <div class="form-group mb-2">
+                                                <label for="perdida${item['detproduccion_id']}">Reg. Perdida</label>
+                                                <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 1; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
+                                            </div>
+                                        </div>
                                         <div class="form-group mb-2">
+                                            <label for="perdida_observacion${item['detproduccion_id']}">Observación</label>
+                                            <input type="text" min="0" max="255" class="form-control" id="perdida_observacion${item['detproduccion_id']}" name="perdida_observacion${item['detproduccion_id']}" style="border: 1; cursor: pointer" autocomplete="off">
+                                        </div>
+                                        <div class="form-group mb-2" hidden>
                                             <label for="observacion">Observación</label>
                                             <textarea class="form-control" id="observacion_${item['detproduccion_id']}" placeholder="Ingrese una observación">${(item['detproduccion_observacion'] == null)?"":item['detproduccion_observacion']}</textarea>
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
@@ -182,11 +196,11 @@ function show_modal_info(platabanda_id){
                                     <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>#</th>
-                                                <th>Detalle</th>
-                                                <th># Pb.</th>
-                                                <th>Costo</th>
-                                                <th>Fecha</th>
+                                                <th style='padding: 2px'>#</th>
+                                                <th style='padding: 2px'>Detalle</th>
+                                                <th style='padding: 2px'># Pb.</th>
+                                                <th style='padding: 2px'>Costo</th>
+                                                <th style='padding: 2px'>Fecha</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tabla_costo${ item['detproduccion_id'] }" style="font-size:8pt;">`
@@ -195,13 +209,13 @@ function show_modal_info(platabanda_id){
                                     </table>
                                 </article>
                                 <article class="col-md-5">
-                                    <table class="table table-striped" style="font-size: 8pt;">
+                                    <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>#</th>
-                                                <th>Perdida</th>
-                                                <th>Fecha</th>
-                                                <th>Observación</th>
+                                                <th style='padding: 2px'>#</th>
+                                                <th style='padding: 2px'>Fecha</th>
+                                                <th style='padding: 2px'>Perdida</th>
+                                                <th style='padding: 2px's>Observación</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tabla_perdida${ item['detproduccion_id'] }" style="font-size:8pt;">`
@@ -212,7 +226,7 @@ function show_modal_info(platabanda_id){
                             </div>`;
                 }
                 get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
-                get_tabla_perdida(item['detproduccion_id'], perdidas);
+                get_tabla_perdida(item['detproduccion_id'], perdidas, item['produccion_id']);
             });
             $('#modal_infor_platabanda').html(html);
             $('#platabanda_number').html(platabanda_id);
@@ -235,11 +249,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
-                                <td>${i}</td>
-                                <td>${cost['costodesc_descripcion']}</td>
-                                <td>${cost['controli_id']}</td>
-                                <td>${cost['costoop_costo']}</td>
-                                <td>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                                <td style='padding: 2px' class='text-center'>${i}</td>
+                                <td style='padding: 2px'>${cost['costodesc_descripcion']}</td>
+                                <td style='padding: 2px' class='text-center'>${cost['controli_id']}</td>
+                                <td style='padding: 2px' class='text-right'>${cost['costoop_costo']}</td>
+                                <td style='padding: 2px' class='text-center'>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     i++;
                     total += Number(cost['costoop_costo']);
@@ -247,11 +261,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             });
         });
         html += `<tr>
-                    <th style="padding: 0;"></th>
-                    <th style="padding: 0;"></th>
-                    <th style="padding: 0; text-align: right;"><b>Total</b></th>
-                    <th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
-                    <th style="padding: 0;"></th>
+                    <th style="padding: 2px;"></th>
+                    <th style="padding: 2px;"></th>
+                    <th style="padding: 2px; text-align: right;"><b>Total</b></th>
+                    <th style="padding: 2px; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
+                    <th style="padding: 2px;"></th>
                 </tr>`
     }else{
         let controlador = `${base_url}costo_operativo/get_costos`;
@@ -267,21 +281,21 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                 costos.forEach(cost => {
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
-                                <td style="padding: 0;">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0;">${cost['controli_id']}</td>
-                                <td style="padding: 0;">${cost['costoop_costo']}</td>
-                                <td style="padding: 0;">${fecha}</td>
+                                <td style="padding: 2px;" class='text-center'>${i}</td>
+                                <td style="padding: 2px;">${cost['costodesc_descripcion']}</td>
+                                <td style="padding: 2px;" class='text-center'>${cost['controli_id']}</td>
+                                <td style="padding: 2px;" class='text-right'>${cost['costoop_costo']}</td>
+                                <td style="padding: 2px;"v>${fecha}</td>
                             </tr>`;
                     total += Number(cost['costoop_costo']);
                     i++;
                 });
                 html += `<r>
-                            <th style="padding: 0;"></th>
-                            <th style="padding: 0;"></th>
-                            <th style="padding: 0;text-align: right;"><b>Total</b></th>
-                            <th style="padding: 0;text-align: right;">${parseFloat(total).toFixed(2)}</th>
-                            <th style="padding: 0;"></th>
+                            <th style="padding: 2px;"></th>
+                            <th style="padding: 2px;"></th>
+                            <th style="padding: 2px;text-align: right;"><b>Total</b></th>
+                            <th style="padding: 2px;text-align: right;">${parseFloat(total).toFixed(2)}</th>
+                            <th style="padding: 2px;"></th>
                         </tr>`;
                 $(`#tabla_costo${detproduccion_id}`).html('');
                 $(`#tabla_costo${detproduccion_id}`).html(html);
@@ -312,6 +326,7 @@ function actulizar_informacion(detproduccion_id){
         },
         success:()=>{
             alert("Se guardo correctamente");
+            get_tabla_perdida(detproduccion_id);
         },
         error:()=>{
             alert("Algo salio mal...!!!");
@@ -430,6 +445,7 @@ function add_form(detproduccion_id,platabanda){
                 alert("Se guardo correctamente");
                 show_close_form(detproduccion_id);
                 get_tabla_costo(detproduccion_id);
+                get_tabla_perdida(detproduccion_id);
             },
             errocr:()=>{
                 alert("Ha ocurrido un error al guardar el costo");
@@ -474,25 +490,32 @@ function send_inventario(detproduccion_id,producto_id){
 }
 /* obtiene las perdidas de una platabanda */
 function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
-    
+    let totalperdida = Number(0);
     let html = ``;
     let i = 1;
     if (perdidas != "") {
         perdidas.forEach(perdida => {
             perdida.forEach(perd => {
                 if(detproduccion_id == perd['detproduccion_id']){
+                    totalperdida += Number(perd['perdida_cantidad']);
                     html += `<tr>
-                                <td>${i}</td>
-                                <td>${perd['perdida_cantidad']}</td>
-                                <td>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
-                                <td>${perd['perdida_observacion']}</td>
+                                <td style='padding: 2px' class='text-center'>${i}</td>
+                                <td style='padding: 2px' class='text-center'>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
+                                <td style='padding: 2px' class='text-right'>${perd['perdida_cantidad']}</td>
+                                <td style='padding: 2px'>${perd['perdida_observacion']}</td>
                             </tr>`;
                     i++;
                 }
             });
+            html += `<tr>
+                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
+                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                        <th></th>
+                    </tr>`;
         });
     }else{
         let controlador = `${base_url}perdida/get_perdidas`;
+        let totalperdida = Number(0);
         $.ajax({
             url: controlador,
             type: 'POST',
@@ -503,14 +526,21 @@ function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
                 let html = ``;
                 let i = 1;
                 perdidas.forEach(perd => {
+                    totalperdida += Number(perd['perdida_cantidad']);
                     html += `<tr>
-                                <td>${i}</td>
-                                <td>${perd['perdida_cantidad']}</td>
-                                <td>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
-                                <td>${perd['perdida_observacion']}</td>
+                                <td style='padding: 2px' class='text-center'>${i}</td>
+                                <td style='padding: 2px' class='text-center'>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
+                                <td style='padding: 2px' class='text-right'>${perd['perdida_cantidad']}</td>
+                                <td style='padding: 2px'>${perd['perdida_observacion']}</td>
                             </tr>`;
                     i++;
                 });
+                html += `<tr>
+                            <th style='padding: 2px; font-size: 12px' class='text-right text-bold' colspan='2'>Total:</th>
+                            <th style='padding: 2px; font-size: 12px' class='text-right text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                            <th></th>
+                        </tr>`;
+                $(`#tabla_perdida${detproduccion_id}`).html('');
                 $(`#tabla_perdida${detproduccion_id}`).html(html);
             },error: ()=>{
                 alert('error algo salio mal en la consulta para obtener las perdidas')
@@ -524,3 +554,41 @@ function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
 function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
 }
+
+function numberFormat(numero){
+    // Variable que contendra el resultado final
+    var resultado = "";
+
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+    }
+
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."));
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
+}
+ 
