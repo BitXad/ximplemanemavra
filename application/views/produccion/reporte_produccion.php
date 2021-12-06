@@ -136,7 +136,7 @@
                             <tr>
                                 <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold" colspan="2">Total:</th>
                                 <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($cantidadtotal, 2, ".", ",")?></th>
-                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($elcostot, 2, ".", ",")?></th>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($costototal1/$cantidadtotal, 2, ".", ",")?></th>
                                 <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($costototal1, 2, ".", ","); ?></th>
                             </tr>
                         </table>
