@@ -142,7 +142,7 @@ function show_modal_info(platabanda_id){
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
                                                 <label for="cantidad${item['detproduccion_id']}" title='Cantidad de plantas'>Cantidad</label>
-                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" disabled readonly>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
@@ -186,7 +186,7 @@ function show_modal_info(platabanda_id){
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
                                         </div>
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-sm" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-success btn-sm" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
                                             <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                                             <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a la siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Pasar a siguiente etapa` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
                                             <button class="btn btn-danger btn-sm" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
@@ -313,7 +313,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     }
 }
 
-function actulizar_informacion(detproduccion_id){
+function actualizar_informacion(detproduccion_id){
     let controlador = `${base_url}detalle_produccion/update_detproduccion`;
     let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
     let perdida_observacion = document.getElementById(`perdida_observacion${detproduccion_id}`).value;
