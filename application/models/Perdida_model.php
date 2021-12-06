@@ -43,5 +43,15 @@ class Perdida_model extends CI_Model
                 p.detproduccion_id = $detproduccion_id "
         )->result_array();
     }
+    /* get saldos de un detalle de producción */
+    function getperdida_total($detproduccion_id){
+        return $this->db->query(
+            "SELECT if(SUM(p.perdida_cantidad) > 0, SUM(p.perdida_cantidad), 0 ) as perdida_total
+            from perdida p
+            where
+            	p.estado_id = 1 and
+                p.detproduccion_id = $detproduccion_id "
+        )->result_array();
+    }
     
 }

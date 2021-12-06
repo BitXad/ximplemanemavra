@@ -193,6 +193,7 @@ function show_modal_info(platabanda_id){
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
                                 </article>
                                 <article class="col-md-5">
+                                    <span class='text-bold'>Costos:</span>
                                     <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
                                         <thead class="thead-light">
                                             <tr>
@@ -209,6 +210,7 @@ function show_modal_info(platabanda_id){
                                     </table>
                                 </article>
                                 <article class="col-md-5">
+                                    <span class='text-bold'>Perdidas:</span>
                                     <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
                                         <thead class="thead-light">
                                             <tr>
