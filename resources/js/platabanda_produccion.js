@@ -136,11 +136,19 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
                                                 <label for="cantidad${item['detproduccion_id']}">Cantidad</label>
-                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off">
+                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" disabled>
                                             </div>
                                             <div class="form-group mb-2">
-                                                <label for="perdida${item['detproduccion_id']}">Perdida</label>
-                                                <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
+                                                <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
+                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_perdida']}" readonly>
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Salida</label>
+                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_compra']}" readonly>
+                                            </div>
+                                            <div class="form-group mb-2">
+                                                <label for="elsaldo${item['detproduccion_id']}" title='Saldo de plantas en esta platabanda'>Saldo</label>
+                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${(item['detproduccion_cantidad'] - item['cant_compra'] - item['cant_perdida'])}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-inline">
@@ -156,10 +164,15 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         </figure>
                                     </div>
                                     <div class="col-md-12">
+                                        <div class="form-inline">
+                                            <div class="form-group mb-2">
+                                                <label for="perdida${item['detproduccion_id']}">Reg. Perdida</label>
+                                                <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 1; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
+                                            </div>
+                                        </div>
                                         <div class="form-group mb-2">
-                                            <label for="observacion">Observación</label>
-                                            <textarea class="form-control" id="observacion_${item['detproduccion_id']}" placeholder="Ingrese una observación">${(item['detproduccion_observacion'] == null)?"":item['detproduccion_observacion']}</textarea>
-                                            <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
+                                            <label for="perdida_observacion${item['detproduccion_id']}">Observación</label>
+                                            <input type="text" min="0" max="255" class="form-control" id="perdida_observacion${item['detproduccion_id']}" name="perdida_observacion${item['detproduccion_id']}" style="border: 1; cursor: pointer" autocomplete="off">
                                         </div>
                                         <div class="form-group mb-12">
                                             <button class="btn btn-success btn-xs" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
@@ -301,6 +314,7 @@ function actualizar_informacion(detproduccion_id){
         },
         success:()=>{
             alert("Se guardo correctamente");
+            get_tabla_perdida(detproduccion_id);
         },
         error:()=>{
             alert("Algo salio mal...!!!");
