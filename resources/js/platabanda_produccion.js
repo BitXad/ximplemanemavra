@@ -162,7 +162,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
                                         </div>
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-xs" onclick="actulizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-success btn-xs" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
                                             <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                                             <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
                                             <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
@@ -284,9 +284,10 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     }
 }
 
-function actulizar_informacion(detproduccion_id){
+function actualizar_informacion(detproduccion_id){
     let controlador = `${base_url}detalle_produccion/update_detproduccion`;
     let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
+    let perdida_observacion = document.getElementById(`perdida_observacion${detproduccion_id}`).value;
     let observacion = $(`#observacion_${detproduccion_id}`).val();
     $.ajax({
         url: controlador,
@@ -295,6 +296,7 @@ function actulizar_informacion(detproduccion_id){
         data: {
             detproduccion_id:detproduccion_id,
             perdida: perdida,
+            perdida_observacion: perdida_observacion,
             observacion:observacion,
         },
         success:()=>{

@@ -146,15 +146,15 @@ function show_modal_info(platabanda_id){
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
-                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_perdida']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Salida</label>
-                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_compra']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="elsaldo${item['detproduccion_id']}" title='Saldo de plantas en esta platabanda'>Saldo</label>
-                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${(item['detproduccion_cantidad'] - item['cant_compra'] - item['cant_perdida'])}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-inline">
@@ -557,40 +557,40 @@ function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
 }
 
-    function numberFormat(numero){
-        // Variable que contendra el resultado final
-        var resultado = "";
+function numberFormat(numero){
+    // Variable que contendra el resultado final
+    var resultado = "";
 
-        // Si el numero empieza por el valor "-" (numero negativo)
-        if(numero[0]=="-")
-        {
-            // Cogemos el numero eliminando los posibles puntos que tenga, y sin
-            // el signo negativo
-            nuevoNumero=numero.replace(/\,/g,'').substring(1);
-        }else{
-            // Cogemos el numero eliminando los posibles puntos que tenga
-            nuevoNumero=numero.replace(/\,/g,'');
-        }
-
-        // Si tiene decimales, se los quitamos al numero
-        if(numero.indexOf(".")>=0)
-            nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
-
-        // Ponemos un punto cada 3 caracteres
-        for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
-            resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
-
-        // Si tiene decimales, se lo añadimos al numero una vez forateado con 
-        // los separadores de miles
-        if(numero.indexOf(".")>=0)
-            resultado+=numero.substring(numero.indexOf("."));
-
-        if(numero[0]=="-")
-        {
-            // Devolvemos el valor añadiendo al inicio el signo negativo
-            return "-"+resultado;
-        }else{
-            return resultado;
-        }
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
     }
+
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."));
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
+}
  

@@ -130,16 +130,37 @@ class Control_inventario_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    function get_items_platabanda($controli_id, $produccion){
+    function get_items_platabanda($controli_id, $produccion=""){
         return $this->db->query(
-            "SELECT dp.*,p.producto_nombre,p.producto_foto, e.*,p2.produccion_id,p2.produccion_registro
+            "SELECT dp.*,p.producto_nombre,p.producto_foto, e.*,p2.produccion_id,p2.produccion_registro, sa.*
             from detalle_produccion dp 
             left join producto p on p.producto_id = dp.producto_id 
             left join control_inventario ci on ci.controli_id = dp.controli_id 
             left join estado e on e.estado_id = dp.estado_id 
-            left join produccion p2 on p2.produccion_id = dp.produccion_id 
+            left join produccion p2 on p2.produccion_id = dp.produccion_id
+            left join (
+                select dp2.*, if(sum(dc.detallecomp_cantidad)>0,sum(dc.detallecomp_cantidad),0) as cant_compra, d3.cant_perdida
+                from detalle_produccion dp2
+                left join control_inventario ci2 on dp2.controli_id = ci2.controli_id
+                left join detalle_compra dc on dc.detproduccion_id = dp2.detproduccion_id 
+                left join (
+                    select dp3.detproduccion_id , if(sum(p.perdida_cantidad)>0,sum(p.perdida_cantidad),0) as cant_perdida
+                    from detalle_produccion dp3
+                    left join control_inventario ci3 on ci3.controli_id = dp3.controli_id 
+                    left join perdida p on dp3.detproduccion_id = p.detproduccion_id 
+                    where 1=1
+                    and dp3.controli_id = $controli_id
+                    and dp3.estado_id <> 39
+                    group by dp3.detproduccion_id
+                ) as d3 on d3.detproduccion_id = dp2.detproduccion_id 
+                where 1=1
+                and dp2.controli_id = $controli_id
+                and dp2.estado_id <> 39
+                group by dp2.detproduccion_id 
+            )sa on sa.detproduccion_id = dp.detproduccion_id 
             where 1=1
-            and ci.controli_id = $controli_id
+            and dp.controli_id = $controli_id
+            and dp.estado_id <> 39
             $produccion
             order by dp.estado_id asc"
         )->result_array();
