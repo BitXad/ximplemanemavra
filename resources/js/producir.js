@@ -117,8 +117,10 @@ function mostrardetalleproducion_aux(){
                 if (registrosa != null){
                     var n = registrosa.length; //tamaño del arreglo de la consulta
                     //$("#encontrados").html("Registros Encontrados: "+n+" ");
+                    var cantidadtotal = Number(0);
                     html = "";
                     for (var i = 0; i < n ; i++){
+                        cantidadtotal += Number(registrosa[i]["detproduccion_cantidad"]);
                         html += "<tr>";
                         html += "<td class='text-center'>"+(i+1)+"</td>";
                         html += "<td>"+registrosa[i]["producto_nombre"]+"</td>";
@@ -134,6 +136,10 @@ function mostrardetalleproducion_aux(){
                         html += "</tr>";
 
                    }
+                   html += "<tr>";
+                   html += "<th style='font-size: 12px; text-align: right' class='text-bold' colspan='2'>Total</th>";
+                   html += "<th style='font-size: 12px; text-align: right' class='text-bold'>"+numberFormat(Number(cantidadtotal).toFixed(0))+"</th>";
+                   html += "</tr>";
                    $("#tabladetalleproduccion_aux").html(html);
                    document.getElementById('loader').style.display = 'none';
             }
@@ -261,4 +267,41 @@ function valores_pordefecto(){
     $("#producto_id").val($("#producto_id option:first").val());
     $("#acargode_id").val($("#acargode_id option:first").val());
     $('#filtrar').val("");
+}
+
+function numberFormat(numero){
+    // Variable que contendra el resultado final
+    var resultado = "";
+
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+    }
+
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."));
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
 }
