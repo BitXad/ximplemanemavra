@@ -49,8 +49,8 @@ function get_platabandas(){
                                                 <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
-                                                    <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
-                                                    <div class="progress" style="height: 10px;border-radius: 10px; color:black; margin: 1px; background: #766;">
+                                                    <span style="font-size: 7pt;"><b> (${(p['detproduccion_cantidad'] - suma)}/${p['detproduccion_cantidad']})</b></span>
+                                                    <div class="progress" style="height: 4px;border-radius: 10px; color:black; margin: 1px; background: #766;">
                                                         <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
                                                         </div>
                                                     </div>
@@ -130,7 +130,7 @@ function show_modal_info(platabanda_id){
                 if(item['estado_id'] != 39){
                     html += `<div class="row">
                                 <article class="col-md-7">
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <div class="form-inline">
                                             <label for="planta_nombre">Producci&oacute;n: </label>
                                             <span id="planta_nombre${item['detproduccion_id']}">${item['producto_nombre']}</span><sub>[${item['produccion_id']}]</sub>
@@ -164,7 +164,7 @@ function show_modal_info(platabanda_id){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <figure>
                                             <img class="img-rounded" src="${base_url}resources/images/productos/${item['producto_foto']}" width="100%" alt="${item['producto_nombre']}" title="${item['producto_nombre']}">
                                         </figure>
@@ -186,10 +186,12 @@ function show_modal_info(platabanda_id){
                                             <input type="hidden" id="platabanda-${item['detproduccion_id']}" name="platabanda-${item['detproduccion_id']}" placeholder="Ingrese una observación">
                                         </div>
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-sm" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
-                                            <button class="btn btn-primary btn-sm" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
-                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sm" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar a la siguiente etapa` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Pasar a siguiente etapa` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
-                                            <button class="btn btn-danger btn-sm" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
+                                            <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
+                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``} >${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : ``}</button>
+                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            <button class="btn btn-success btn-xs" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -595,4 +597,23 @@ function numberFormat(numero){
         return resultado;
     }
 }
- 
+
+function volver_estado(detproduccion_id){
+    let controlador = `${base_url}detalle_produccion/volver_estado_platabanda`;
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data: {
+            detproduccion_id:detproduccion_id,
+        },
+        success:(respuesta)=>{
+            let produccion = JSON.parse(respuesta);
+            $("#modal_info_platabanda").modal('hide');
+            get_platabandas(produccion);
+        },
+        error:()=>{
+            alert("Error")
+        }
+    });
+}
