@@ -32,17 +32,20 @@ function get_platabandas(produccion_id){
                         let platabanda;
                         let cambiar = true;
                         resp['plantas'].forEach(p => {
+                            let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
-                                    info += `<div class="col-md-12">
-                                                <a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
-                                                    <div class="col-md-12 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ false ? `border: red 3px solid;`: ``}">
-                                                        <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
-                                                        <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
-                                                        <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
+                                    info += `<a onclick="show_modal_info(${e['controli_id']},${produccion_id})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
+                                                <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ false ? `border: red 3px solid;`: ``}">
+                                                    <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
+                                                    <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
+                                                    <span style="font-size: 7pt;"><b> (${(parseInt(p['detproduccion_cantidad'])-suma)}/${p['detproduccion_cantidad']})</b></span>
+                                                    <div class="progress" style="height: 10px;border-radius: 10px; color:black; margin: 1px; background: #766;">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
+                                                        </div>
                                                     </div>
-                                                </a>
-                                            </div>
+                                                </div>
+                                            </a>
                                             `;
                                     cambiar = false;
                                 }else{
@@ -100,18 +103,22 @@ function agregar_platabanda(){
     });
 }
 
-function show_modal_info(platabanda_id){
+function show_modal_info(platabanda_id,produccion_id = 0){
     let controlador = `${base_url}control_inventario/get_items_platabanda`;
     $("#modal_info_platabanda").modal('show');
     $.ajax({
         url: controlador,
         type: "POST",
         cache: false,
-        data:{platabanda_id:platabanda_id},
+        data:{
+            platabanda_id:platabanda_id,
+            produccion_id:produccion_id
+        },
         success:(resultado)=>{
             result = JSON.parse(resultado);
             let res = result['plantas'];
             let costos = result['costos'];
+            let perdidas = result['perdidas'];
             let html = ``;
             res.forEach(item => {
                 if(item['estado_id'] != 39){
@@ -181,6 +188,21 @@ function show_modal_info(platabanda_id){
                     html +=`            </tbody>
                                     </table>
                                 </article>
+                                <article class="col-md-5">
+                                    <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th style='padding: 2px'>#</th>
+                                                <th style='padding: 2px'>Fecha</th>
+                                                <th style='padding: 2px'>Perdida</th>
+                                                <th style='padding: 2px's>Observación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla_perdida${ item['detproduccion_id'] }" style="font-size:8pt;">`
+                    html += get_tabla_perdida(item['detproduccion_id'], perdidas);
+                    html +=`            </tbody>
+                                    </table>
+                                </article>
                             </div>`;
                 }
                 get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
@@ -218,9 +240,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             });
         });
         html += `<tr>
-                    <th style="padding: 0;"></th>
-                    <th style="padding: 0;"></th>
-                    <th style="padding: 0; text-align: right;"><b>Total</b></th>
+                    <th colspan="3" style="padding: 0; text-align: right;"><b>Total</b></th>
                     <th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
@@ -248,10 +268,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     i++;
                 });
                 html += `<r>
-                            <th style="padding: 0;"></th>
-                            <th style="padding: 0;"></th>
-                            <th style="padding: 0;text-align: right;"><b>Total</b></th>
-                            <th style="padding: 0;text-align: right;">${parseFloat(total).toFixed(2)}</th>
+                            <th colspan="3" style="padding: 0;text-align: right;"><b>Total</b></th>
+                            <th xolspan="2" style="padding: 0;text-align: right;">${parseFloat(total).toFixed(2)}</th>
                             <th style="padding: 0;"></th>
                         </tr>`;
                 $(`#tabla_costo${detproduccion_id}`).html('');
@@ -516,4 +534,104 @@ function save_compra(){
             alert("error")
         }
     })
+}
+
+/* obtiene las perdidas de una platabanda */
+function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
+    let totalperdida = Number(0);
+    let html = ``;
+    let i = 1;
+    if (perdidas != "") {
+        perdidas.forEach(perdida => {
+            perdida.forEach(perd => {
+                if(detproduccion_id == perd['detproduccion_id']){
+                    totalperdida += Number(perd['perdida_cantidad']);
+                    html += `<tr>
+                                <td style='padding: 2px' class='text-center'>${i}</td>
+                                <td style='padding: 2px' class='text-center'>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
+                                <td style='padding: 2px' class='text-right'>${perd['perdida_cantidad']}</td>
+                                <td style='padding: 2px'>${perd['perdida_observacion']}</td>
+                            </tr>`;
+                    i++;
+                }
+            });
+        });
+        html += `<tr>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                    <th></th>
+                </tr>`;
+    }else{
+        let controlador = `${base_url}perdida/get_perdidas`;
+        let totalperdida = Number(0);
+        $.ajax({
+            url: controlador,
+            type: 'POST',
+            cache: false,
+            data: {detproduccion_id:detproduccion_id},
+            success: (result)=>{
+                let perdidas = JSON.parse(result);
+                let html = ``;
+                let i = 1;
+                perdidas.forEach(perd => {
+                    totalperdida += Number(perd['perdida_cantidad']);
+                    html += `<tr>
+                                <td style='padding: 2px' class='text-center'>${i}</td>
+                                <td style='padding: 2px' class='text-center'>${moment(perd["perdida_fecha"]).format("DD/MM/YYYY")}</td>
+                                <td style='padding: 2px' class='text-right'>${perd['perdida_cantidad']}</td>
+                                <td style='padding: 2px'>${perd['perdida_observacion']}</td>
+                            </tr>`;
+                    i++;
+                });
+                html += `<tr>
+                            <th style='padding: 2px; font-size: 12px' class='text-right text-bold' colspan='2'>Total:</th>
+                            <th style='padding: 2px; font-size: 12px' class='text-right text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                            <th></th>
+                        </tr>`;
+                $(`#tabla_perdida${detproduccion_id}`).html('');
+                $(`#tabla_perdida${detproduccion_id}`).html(html);
+            },error: ()=>{
+                alert('error algo salio mal en la consulta para obtener las perdidas')
+            }
+        });
+    }
+    if (id === ``) {
+        return html;
+    }
+}
+function numberFormat(numero){
+    // Variable que contendra el resultado final
+    var resultado = "";
+
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+    }
+
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."));
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
 }

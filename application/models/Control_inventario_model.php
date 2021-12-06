@@ -90,13 +90,33 @@ class Control_inventario_model extends CI_Model
 
     function get_platabanda_area($area_id = 1){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*,c2.*
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
             left join producto p on dp.producto_id = p.producto_id
             left join aviso_producto ap on ap.producto_id = dp.producto_id
-            left join produccion p2 on p2.produccion_id = dp.produccion_id 
+            left join produccion p2 on p2.produccion_id = dp.produccion_id
+            left join (
+                select dp2.*, if(sum(dc.detallecomp_cantidad)>0,sum(dc.detallecomp_cantidad),0) as cant_compra, d3.cant_perdida
+                from detalle_produccion dp2
+                left join control_inventario ci2 on dp2.controli_id = ci2.controli_id
+                left join detalle_compra dc on dc.detproduccion_id = dp2.detproduccion_id 
+                left join (
+                    select dp3.detproduccion_id , if(sum(p.perdida_cantidad)>0,sum(p.perdida_cantidad),0) as cant_perdida
+                    from detalle_produccion dp3
+                    left join control_inventario ci3 on ci3.controli_id = dp3.controli_id 
+                    left join perdida p on dp3.detproduccion_id = p.detproduccion_id 
+                    where 1=1
+                    and ci3.area_id = $area_id
+                    and dp3.estado_id <> 39
+                    group by dp3.detproduccion_id
+                ) as d3 on d3.detproduccion_id = dp2.detproduccion_id 
+                where 1=1
+                and ci2.area_id = $area_id
+                and dp2.estado_id <> 39
+                group by dp2.detproduccion_id 
+            ) c2 on c2.detproduccion_id = dp.detproduccion_id 
             where 1=1
             and ci.area_id = $area_id
             and e.estado_tipo = 9
@@ -110,7 +130,7 @@ class Control_inventario_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    function get_items_platabanda($controli_id){
+    function get_items_platabanda($controli_id, $produccion){
         return $this->db->query(
             "SELECT dp.*,p.producto_nombre,p.producto_foto, e.*,p2.produccion_id,p2.produccion_registro
             from detalle_produccion dp 
@@ -120,6 +140,7 @@ class Control_inventario_model extends CI_Model
             left join produccion p2 on p2.produccion_id = dp.produccion_id 
             where 1=1
             and ci.controli_id = $controli_id
+            $produccion
             order by dp.estado_id asc"
         )->result_array();
     }
@@ -139,13 +160,29 @@ class Control_inventario_model extends CI_Model
     }
     function get_platabanda_producciont_items($produccion_id){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*,c2.*
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
             left join producto p on dp.producto_id = p.producto_id
             left join aviso_producto ap on ap.producto_id = dp.producto_id
-            left join produccion p2 on p2.produccion_id = dp.produccion_id 
+            left join produccion p2 on p2.produccion_id = dp.produccion_id
+            left join (
+                select dc.detproduccion_id, sum(dc.detallecomp_cantidad) as cant_compra, p2.cant_perdida
+                from compra c 
+                left join detalle_compra dc on c.compra_id = dc.compra_id 
+                left join (
+                    select dp.detproduccion_id , if(sum(p.perdida_cantidad) >=0,sum(p.perdida_cantidad),0) as cant_perdida 
+                    from detalle_produccion dp 
+                    left join perdida p on p.detproduccion_id = dp.detproduccion_id 
+                    where 1=1
+                    and dp.produccion_id = $produccion_id
+                    group by p.detproduccion_id 
+                ) as p2 on p2.detproduccion_id = dc.detproduccion_id
+                where 1=1
+                and c.produccion_id = $produccion_id
+                group by dc.detproduccion_id
+            ) c2 on c2.detproduccion_id = dp.detproduccion_id 
             where 1=1
             and dp.produccion_id = $produccion_id
             and e.estado_tipo = 9

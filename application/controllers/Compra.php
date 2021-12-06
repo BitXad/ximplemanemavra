@@ -1970,9 +1970,9 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
             $detproduccion_id = $this->input->post("det_produccion");
             $costo = $this->Detalle_produccion_model->get_costo_producto($detproduccion_id);
             $costo_inicial = $costo['producto_costo'];
-            
             $costo_op = $this->Costo_operativo_model->get_costoop_platabanda($detproduccion_id, $controli_id);
             $costo_operativo = $costo_op['costo']/$cantidad;
+            $platabanda = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
             $costo_total = $costo_inicial + $costo_operativo;
             $producto_costo = $costo_total;
             $usuario_id = $this->session_data['usuario_id'];
@@ -1992,7 +1992,8 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                         'compra_descglobal' => 0,
                         'compra_total' => $producto_costo*$cantidad,
                         'compra_efectivo' => $producto_costo*$cantidad,
-                        'compra_cambio' => 0,            
+                        'compra_cambio' => 0,
+                        'produccion_id' => $platabanda[0]['produccion_id'],            
                     );
     
             $compra_id=$this->Compra_model->add_compra($compra);
@@ -2001,33 +2002,39 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     producto_id,
                     detallecomp_codigo,
                     detallecomp_unidad,
-                    detallecomp_costo,
+                    detallecomp_costo_inicial,
+                    detallecomp_costo_operativo,
+                    detallecomp_costo_total,
                     detallecomp_cantidad,
                     detallecomp_precio,
                     detallecomp_descuento,
                     detallecomp_subtotal,
-                    detallecomp_total              
+                    detallecomp_total,
+                    detproduccion_id
                     )
                     (
                     SELECT
-                    ".$compra_id.",
+                    $compra_id,
                     producto_id,
                     producto_codigo,
                     producto_unidad,
                     producto_costo,
-                    ".$cantidad.",
+                    $costo_operativo,
+                    $costo_total,
+                    $cantidad,
                     producto_precio,
                     0,
-                    ".$producto_costo." * ".$cantidad.",
-                    ".$producto_costo." * ".$cantidad."
-                    
+                    ".($producto_costo * $cantidad).",
+                    ".($producto_costo * $cantidad).",
+                    $detproduccion_id
                     from producto where producto_id = ".$producto_id."
-                )";  
+                )";
             $this->db->query($detalle);
             $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
             $producto = $this->Producto_model->get_producto($producto_id);
             $this->db->query($inventario);
                 
+            // -------------------------------- detalle_venta_aux --------------------------------------------------------
             $detalle_venta_aux = "INSERT INTO detalle_venta_aux(
                 producto_id,venta_id,moneda_id,detalleven_codigo,
                 detalleven_cantidad,detalleven_unidad,detalleven_costo,detalleven_precio,
@@ -2042,7 +2049,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
             )values(
                 $producto_id,0,1,94000,
                 $cantidad,0,0,{$producto[0]['producto_precio']},
-                ".($cantidad+$producto[0]['producto_precio']).",0,".($cantidad+$producto[0]['producto_precio']).",
+                ".($cantidad*$producto[0]['producto_precio']).",0,".($cantidad*$producto[0]['producto_precio']).",
                 0,0,0,
                 1,$usuario_id,$cantidad,'{$producto[0]['producto_nombre']}',
                 '{$producto[0]['producto_unidad']}','{$producto[0]['producto_marca']}',{$producto[0]['categoria_id']},{$producto[0]['producto_codigobarra']},
@@ -2052,7 +2059,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                 0,0,".date('Y-m-d').",0
             );";
             $this->db->query($detalle_venta_aux);
-            $platabanda = $this->Detalle_produccion_model->get_detproduccion($detproduccion_id);
+            // -------------------------------- detalle_venta_aux --------------------------------------------------------
             // $platabanda['detproduccion_perdida'] = $platabanda['detproduccion_perdida'] + $cantidad;
             $params = array(
                 "detproduccion_perdida" => $platabanda['detproduccion_perdida'] + $cantidad,

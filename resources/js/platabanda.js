@@ -41,6 +41,8 @@ function get_platabandas(){
                         let platabanda;
                         let cambiar = true;
                         resp['plantas'].forEach(p => {
+                            let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
+                            // let suma = 0;
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
                                     info += `<a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
@@ -48,10 +50,10 @@ function get_platabandas(){
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
                                                     <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
-                                                    <div class="progress" style="border-radius: 10px; color:black; margin: 1px; background: #766;">
-                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width:70%">
+                                                    <div class="progress" style="height: 10px;border-radius: 10px; color:black; margin: 1px; background: #766;">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
                                                         </div>
-                                                      </div>
+                                                    </div>
                                                 </div>
                                             </a>`;
                                     cambiar = false;
@@ -285,12 +287,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                 <td style="padding: 2px;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 2px;" class='text-center'>${cost['controli_id']}</td>
                                 <td style="padding: 2px;" class='text-right'>${cost['costoop_costo']}</td>
-                                <td style="padding: 2px;"v>${fecha}</td>
+                                <td style="padding: 2px;">${fecha}</td>
                             </tr>`;
                     total += Number(cost['costoop_costo']);
                     i++;
                 });
-                html += `<r>
+                html += `<tr>
                             <th style="padding: 2px;"></th>
                             <th style="padding: 2px;"></th>
                             <th style="padding: 2px;text-align: right;"><b>Total</b></th>
@@ -507,12 +509,12 @@ function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
                     i++;
                 }
             });
-            html += `<tr>
-                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
-                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
-                        <th></th>
-                    </tr>`;
         });
+        html += `<tr>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                    <th></th>
+                </tr>`;
     }else{
         let controlador = `${base_url}perdida/get_perdidas`;
         let totalperdida = Number(0);
@@ -555,40 +557,40 @@ function cerrar_modal(){
     $('#modal_info_platabanda').modal('hide');
 }
 
-function numberFormat(numero){
-    // Variable que contendra el resultado final
-    var resultado = "";
+    function numberFormat(numero){
+        // Variable que contendra el resultado final
+        var resultado = "";
 
-    // Si el numero empieza por el valor "-" (numero negativo)
-    if(numero[0]=="-")
-    {
-        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
-        // el signo negativo
-        nuevoNumero=numero.replace(/\,/g,'').substring(1);
-    }else{
-        // Cogemos el numero eliminando los posibles puntos que tenga
-        nuevoNumero=numero.replace(/\,/g,'');
+        // Si el numero empieza por el valor "-" (numero negativo)
+        if(numero[0]=="-")
+        {
+            // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+            // el signo negativo
+            nuevoNumero=numero.replace(/\,/g,'').substring(1);
+        }else{
+            // Cogemos el numero eliminando los posibles puntos que tenga
+            nuevoNumero=numero.replace(/\,/g,'');
+        }
+
+        // Si tiene decimales, se los quitamos al numero
+        if(numero.indexOf(".")>=0)
+            nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+        // Ponemos un punto cada 3 caracteres
+        for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+            resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+        // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+        // los separadores de miles
+        if(numero.indexOf(".")>=0)
+            resultado+=numero.substring(numero.indexOf("."));
+
+        if(numero[0]=="-")
+        {
+            // Devolvemos el valor añadiendo al inicio el signo negativo
+            return "-"+resultado;
+        }else{
+            return resultado;
+        }
     }
-
-    // Si tiene decimales, se los quitamos al numero
-    if(numero.indexOf(".")>=0)
-        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
-
-    // Ponemos un punto cada 3 caracteres
-    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
-        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
-
-    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
-    // los separadores de miles
-    if(numero.indexOf(".")>=0)
-        resultado+=numero.substring(numero.indexOf("."));
-
-    if(numero[0]=="-")
-    {
-        // Devolvemos el valor añadiendo al inicio el signo negativo
-        return "-"+resultado;
-    }else{
-        return resultado;
-    }
-}
  
