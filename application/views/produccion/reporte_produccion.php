@@ -102,6 +102,7 @@
                                 <th style="padding: 2px">Producto</th>
                                 <th style="padding: 2px">Cantidad</th>
                                 <th style="padding: 2px">Costo</th>
+                                <th style="padding: 2px">Costo Total</th>
                                 <th style="padding: 2px">Observación</th>
                                 <th style="padding: 2px">Area</th>
                                 <th style="padding: 2px">Platabanda</th>
@@ -109,13 +110,20 @@
                             </tr>
                             <?php
                             $i = 0;
+                            $costototal1 = 0;
+                            $cantidadtotal = 0;
+                            $elcostot = 0;
                             foreach ($all_detalle as $detalle) {
+                                $costototal1 += ($detalle['detproduccion_cantidad']*$detalle['detproduccion_costo']);
+                                $cantidadtotal += $detalle['detproduccion_cantidad'];
+                                $elcostot += $detalle['detproduccion_costo'];
                             ?>
                             <tr>
                                 <td style="padding: 2px" class="text-center"><?php echo $i+1; ?></td>
                                 <td style="padding: 2px"><?php echo $detalle['producto_nombre']; ?></td>
                                 <td style="padding: 2px" class="text-right"><?php echo $detalle['detproduccion_cantidad']; ?></td>
                                 <td style="padding: 2px" class="text-right"><?php echo $detalle['detproduccion_costo']; ?></td>
+                                <td style="padding: 2px" class="text-right"><?php echo $detalle['detproduccion_cantidad']*$detalle['detproduccion_costo']; ?></td>
                                 <td style="padding: 2px"><?php echo $detalle['detproduccion_observacion']; ?></td>
                                 <td style="padding: 2px" class="text-center"><?php echo $detalle['area_nombre']; ?></td>
                                 <td style="padding: 2px" class="text-center"><?php echo $detalle['controli_id']; ?></td>
@@ -125,7 +133,12 @@
                             $i++;
                             }
                             ?>
-
+                            <tr>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold" colspan="2">Total:</th>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($cantidadtotal, 2, ".", ",")?></th>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($elcostot, 2, ".", ",")?></th>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($costototal1, 2, ".", ","); ?></th>
+                            </tr>
                         </table>
                     </div>
                     <div  class="col-md-6">
@@ -149,7 +162,7 @@
                             $i = 0;
                             $costototal = 0;
                             foreach ($all_costooperativo as $costo) {
-                                $costototal = ($costototal+$costo['costoop_costo']);
+                                $costototal += ($costo['costoop_costo']);
                             ?>
                             <tr>
                                 <td style="padding: 2px" class="text-center"><?php echo $i+1; ?></td>
@@ -164,8 +177,8 @@
                             }
                             ?>
                             <tr>
-                                <td style="padding: 2px; font-size: 10pt" class="text-bold text-right" colspan="2">Total:</td>
-                                <td style="padding: 2px; font-size: 10pt" class="text-bold text-right"><?php echo number_format($costototal, 2, ".", ","); ?></td>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold" colspan="2">Total:</th>
+                                <th style="padding: 2px; font-size: 10pt; text-align: right" class="text-bold"><?php echo number_format($costototal, 2, ".", ","); ?></th>
                             </tr>
                         </table>
                     </div>

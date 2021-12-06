@@ -51,42 +51,41 @@
 }
 </style>
 <div class="box-header">
-    
+    <div class="col-md-12">
+        <div  class="col-md-12 text-bold text-center">
+            <font size='4' face='Arial'><b>PRODUCCION Nro.: <?php echo $produccion['produccion_numeroorden']; ?></b></font><br>
+            <font size='4' face='Arial'><b><?php echo $produccion['produccion_descripcion']; ?></b></font>    
+        </div>
+        <div  class="col-md-6">
+            <table>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Inicio:&nbsp;</b></td>
+                    <td style="width: 85%"><?php echo date("d/m/Y", strtotime($produccion['produccion_inicio'])); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Fin:&nbsp;</b></td>
+                    <td style="width: 85%">
+                        <?php
+                        if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
+                            echo date("d/m/Y", strtotime($produccion['produccion_fin']));
+                        }
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Responsable:&nbsp;</b></td>
+                    <td style="width: 85%"><?php echo $produccion['responsable']; ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
     <!-- <button class="btn btn-success btn-sm" style="float: right;">+ Añadir producci&oacute;n</button>  -->
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="box-tools">
-            <div class="col-md-12">
-                <div  class="col-md-12 text-bold text-center">
-                    <font size='4' face='Arial'><b><?php echo $produccion['produccion_descripcion']; ?></b></font>    
-                </div>
-                <div  class="col-md-6">
-                    <table>
-                        <tr>
-                            <td style="width: 15%" class="text-right"><b>Inicio:&nbsp;</b></td>
-                            <td style="width: 85%"><?php echo date("d/m/Y", strtotime($produccion['produccion_inicio'])); ?></td>
-                        </tr>
-                        <tr>
-                            <td style="width: 15%" class="text-right"><b>Fin:&nbsp;</b></td>
-                            <td style="width: 85%">
-                                <?php
-                                if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
-                                    echo date("d/m/Y", strtotime($produccion['produccion_fin']));
-                                }
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 15%" class="text-right"><b>Responsable:&nbsp;</b></td>
-                            <td style="width: 85%"><?php echo $produccion['responsable']; ?></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <!--<div class="box-tools"></div>-->
 
-        <div><br><br><br><br><br></div>
+        <!--<div><br><br><br><br><br></div>-->
         <div class="box">
             <div class="box-body">
                 <section id="platabandas_produccion" class="row"></section>
