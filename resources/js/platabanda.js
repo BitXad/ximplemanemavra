@@ -41,6 +41,8 @@ function get_platabandas(){
                         let platabanda;
                         let cambiar = true;
                         resp['plantas'].forEach(p => {
+                            let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
+                            // let suma = 0;
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
                                     info += `<a onclick="show_modal_info(${e['controli_id']})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
@@ -48,10 +50,10 @@ function get_platabandas(){
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
                                                     <span style="font-size: 7pt;"><b> (${p['detproduccion_cantidad']})</b></span>
-                                                    <div class="progress" style="border-radius: 10px; color:black; margin: 1px; background: #766;">
-                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width:70%">
+                                                    <div class="progress" style="height: 10px;border-radius: 10px; color:black; margin: 1px; background: #766;">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
                                                         </div>
-                                                      </div>
+                                                    </div>
                                                 </div>
                                             </a>`;
                                     cambiar = false;
@@ -144,15 +146,15 @@ function show_modal_info(platabanda_id){
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
-                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_perdida']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Salida</label>
-                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_compra']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="elsaldo${item['detproduccion_id']}" title='Saldo de plantas en esta platabanda'>Saldo</label>
-                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" readonly>
+                                                <input type="number" min="0" class="form-control" id="elsaldo${item['detproduccion_id']}" name="elsaldo${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${(item['detproduccion_cantidad'] - item['cant_compra'] - item['cant_perdida'])}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-inline">
@@ -287,12 +289,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                 <td style="padding: 2px;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 2px;" class='text-center'>${cost['controli_id']}</td>
                                 <td style="padding: 2px;" class='text-right'>${cost['costoop_costo']}</td>
-                                <td style="padding: 2px;"v>${fecha}</td>
+                                <td style="padding: 2px;">${fecha}</td>
                             </tr>`;
                     total += Number(cost['costoop_costo']);
                     i++;
                 });
-                html += `<r>
+                html += `<tr>
                             <th style="padding: 2px;"></th>
                             <th style="padding: 2px;"></th>
                             <th style="padding: 2px;text-align: right;"><b>Total</b></th>
@@ -509,12 +511,12 @@ function get_tabla_perdida(detproduccion_id, perdidas="", id = ``){
                     i++;
                 }
             });
-            html += `<tr>
-                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
-                        <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
-                        <th></th>
-                    </tr>`;
         });
+        html += `<tr>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold' colspan='2'>Total:</th>
+                    <th style='padding: 2px; font-size: 12px; text-align: right;' class='text-bold'>${numberFormat(Number(totalperdida).toFixed(0))}</th>
+                    <th></th>
+                </tr>`;
     }else{
         let controlador = `${base_url}perdida/get_perdidas`;
         let totalperdida = Number(0);

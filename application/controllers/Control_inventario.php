@@ -359,16 +359,16 @@ class Control_inventario extends CI_Controller{
     function get_items_platabanda(){
         if($this->input->is_ajax_request()){
             $controli_id = $this->input->post("platabanda_id");
-            $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id);
+            $produccion_id = $this->input->post("produccion_id");
+            $produccion = ($produccion_id == 0 ? "":"AND dp.produccion_id = $produccion_id");
+            $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id, $produccion);
             $data['costos'] = [];
             $data['perdidas'] = [];
             foreach($data['plantas'] as $a){
                 array_push($data['costos'], $this->Costo_operativo_model->get_costos_produccion($a['produccion_id']));
-            }
-            
-            foreach($data['plantas'] as $a){
                 array_push($data['perdidas'], $this->Perdida_model->get_perdidas_platabanda($a['detproduccion_id']));
             }
+            
             echo json_encode($data);
         }else{
             show_404();

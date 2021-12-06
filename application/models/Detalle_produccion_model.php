@@ -145,7 +145,8 @@ class Detalle_produccion_model extends CI_Model
             left join produccion p on p.produccion_id = dp.produccion_id 
             left join producto p2 on p2.producto_id = dp.producto_id 
             where 1=1
-            and dp.controli_id = 10"
+            and dp.controli_id = $controli_id
+            and dp.detproduccion_id = $detproduccion_id"
         )->result_array();
     }
 }
