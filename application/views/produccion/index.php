@@ -225,7 +225,7 @@
 <!------------------------ FIN modal para Registrar un nuevo detalle ------------------->
 <!------------------------ INICIO modal para ver los detalles de producción ------------------->
 <div class="modal fade" id="modaldetallesproduccion" tabindex="-1" role="dialog" aria-labelledby="modaldetallesproduccionlabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <br><br>
         <div class="modal-content">
             <div class="modal-header text-center">
@@ -246,6 +246,7 @@
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Costo</th>
+                            <th>Costo Total</th>
                             <th>Area</th>
                             <th>Platabanda</th>
                             <th>Observación</th>

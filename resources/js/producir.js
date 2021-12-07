@@ -246,7 +246,8 @@ function producir(){
                         //valores_pordefecto();
                         //mostrardetalleproducion_aux();
                         dir_url = base_url+"produccion";
-                        window.open(dir_url);
+                        //window.open(dir_url);
+                        location.href =dir_url;
                     }
                 },
                 error:function(respuesta){

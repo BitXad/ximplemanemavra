@@ -236,9 +236,11 @@ function ponercursordetalleproducion(produccion){
                     var n = registrosa.length; //tamaño del arreglo de la consulta
                     //$("#encontrados").html("Registros Encontrados: "+n+" ");
                     var totalcantidad = Number(0);
+                    var totalcosto = Number(0);
                     html = "";
                     for (var i = 0; i < n ; i++){
                         totalcantidad += Number(registrosa[i]["detproduccion_cantidad"]);
+                        totalcosto += Number(registrosa[i]["detproduccion_cantidad"])*Number(registrosa[i]["detproduccion_costo"]);
                         html += "<tr>";
                         html += "<td class='text-center'>"+(i+1)+"</td>";
                         html += "<td>"+registrosa[i]["producto_nombre"]+"</td>";
@@ -250,6 +252,7 @@ function ponercursordetalleproducion(produccion){
                             html += "0.00"; 
                         }
                         html += "</td>";
+                        html += "<td class='text-right'>"+numberFormat(Number(registrosa[i]["detproduccion_cantidad"]*registrosa[i]["detproduccion_costo"]).toFixed(0))+"</td>";
                         html += "<td>"+registrosa[i]["area_nombre"]+"</td>";
                         html += "<td class='text-center'>"+registrosa[i]["controli_id"]+"</td>";
                         html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
@@ -262,8 +265,10 @@ function ponercursordetalleproducion(produccion){
 
                    }
                    html += "<tr>";
-                   html += "<td class='text-right text-bold' style='font-size:12px' colspan='2'>Total:</td>";
-                   html += "<td class='text-right text-bold' style='font-size:12px'>"+numberFormat(Number(totalcantidad).toFixed(2))+"</td>";
+                   html += "<th class='text-bold' style='font-size:12px; text-align: right' colspan='2'>Total:</th>";
+                   html += "<th class='text-bold' style='font-size:12px; text-align: right'>"+numberFormat(Number(totalcantidad).toFixed(2))+"</th>";
+                   html += "<th class='text-bold' style='font-size:12px; text-align: right'>"+numberFormat(Number(totalcosto/totalcantidad).toFixed(2))+"</th>";
+                   html += "<th class='text-bold' style='font-size:12px; text-align: right'>"+numberFormat(Number(totalcosto).toFixed(2))+"</th>";
                    html += "</tr>";
                    $("#tabladetalleproduccion").html(html);
                    document.getElementById('loader3').style.display = 'none';

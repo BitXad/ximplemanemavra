@@ -50,34 +50,44 @@
                             <?php echo date('d/m/Y H:i:s'); ?><br>
                         </center>
                     </div>
-                </div>
-                <div class="text-center col-md-2 no-print">
-                    <label for="expotar" class="control-label"> &nbsp; </label>
-                    <div class="form-group">
-                        <a onclick="imprimir()" class="btn btn-success btn-sm form-control"><i class="fa fa-print"> Imprimir</i></a>
+                    <div class="text-center col-md-2 no-print">
+                        <label for="expotar" class="control-label"> &nbsp; </label>
+                        <div class="form-group">
+                            <a onclick="imprimir()" class="btn btn-success btn-sm form-control"><i class="fa fa-print"> Imprimir</i></a>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="row col-md-12 no-print" id='loader'  style='display:none;'>
                     <center>
                         <img src="<?php echo base_url("resources/images/loader.gif"); ?>"  >        
                     </center>
                 </div>
                 <br>
-                <br>
-
+                
                 <div  class="col-md-12">
                     <div  class="col-md-12 text-bold text-center">
                         <?php echo $produccion['produccion_descripcion']; ?>
                     </div>
-                    <div  class="col-md-6">
+                    <div  class="col-md-12">
                         <table>
                             <tr>
-                                <td style="width: 15%" class="text-right">Inicio:&nbsp;</td>
-                                <td style="width: 85%"><?php echo date("d/m/Y", strtotime($produccion['produccion_inicio'])); ?></td>
+                                <td style="width: 45%" class="text-right">Inicio de Producción:&nbsp;</td>
+                                <td style="width: 55%"><?php echo date("d/m/Y", strtotime($produccion['produccion_inicio'])); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 15%" class="text-right">Fin:&nbsp;</td>
-                                <td style="width: 85%">
+                                <td style="width: 45%" class="text-right">Fecha Estimada:&nbsp;</td>
+                                <td style="width: 55%">
+                                    <?php
+                                    if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
+                                        echo date("d/m/Y", strtotime($produccion['produccion_fin']));
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 45%" class="text-right">Fecha Finalización:&nbsp;</td>
+                                <td style="width: 55%">
                                     <?php
                                     if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
                                         echo date("d/m/Y", strtotime($produccion['produccion_fin']));
