@@ -118,14 +118,17 @@ function mostrardetalleproducion_aux(){
                     var n = registrosa.length; //tamaño del arreglo de la consulta
                     //$("#encontrados").html("Registros Encontrados: "+n+" ");
                     var cantidadtotal = Number(0);
+                    var costototal = Number(0);
                     html = "";
                     for (var i = 0; i < n ; i++){
                         cantidadtotal += Number(registrosa[i]["detproduccion_cantidad"]);
+                        costototal += Number(registrosa[i]["detproduccion_cantidad"])*Number(registrosa[i]["detproduccion_costo"]);
                         html += "<tr>";
                         html += "<td class='text-center'>"+(i+1)+"</td>";
                         html += "<td>"+registrosa[i]["producto_nombre"]+"</td>";
                         html += "<td class='text-right'>"+registrosa[i]["detproduccion_cantidad"]+"</td>";
                         html += "<td class='text-right'>"+registrosa[i]["detproduccion_costo"]+"</td>";
+                        html += "<td class='text-right'>"+registrosa[i]["detproduccion_cantidad"]*registrosa[i]["detproduccion_costo"]+"</td>";
                         html += "<td>"+registrosa[i]["detproduccion_observacion"]+"</td>";
                         html += "<td>"+registrosa[i]["area_nombre"]+"</td>";
                         html += "<td>"+registrosa[i]["controli_id"]+"</td>";
@@ -139,6 +142,8 @@ function mostrardetalleproducion_aux(){
                    html += "<tr>";
                    html += "<th style='font-size: 12px; text-align: right' class='text-bold' colspan='2'>Total</th>";
                    html += "<th style='font-size: 12px; text-align: right' class='text-bold'>"+numberFormat(Number(cantidadtotal).toFixed(0))+"</th>";
+                   html += "<th style='font-size: 12px; text-align: right' class='text-bold'>"+numberFormat(Number(costototal/cantidadtotal).toFixed(2))+"</th>";
+                   html += "<th style='font-size: 12px; text-align: right' class='text-bold'>"+numberFormat(Number(costototal).toFixed(2))+"</th>";
                    html += "</tr>";
                    $("#tabladetalleproduccion_aux").html(html);
                    document.getElementById('loader').style.display = 'none';
@@ -238,8 +243,10 @@ function producir(){
                     var registros =  JSON.parse(respuesta);
                     if (registros != null){
                         alert("Producción realizada con éxito!");
-                        valores_pordefecto();
-                        mostrardetalleproducion_aux();
+                        //valores_pordefecto();
+                        //mostrardetalleproducion_aux();
+                        dir_url = base_url+"produccion";
+                        window.open(dir_url);
                     }
                 },
                 error:function(respuesta){

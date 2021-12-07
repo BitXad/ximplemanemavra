@@ -110,6 +110,7 @@
                         <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Costo</th>
+                        <th>Costo Total</th>
                         <th>Observación</th>
                         <th>Area</th>
                         <th>Platabanda</th>

@@ -6,9 +6,9 @@
 </script>   
 
 <style type="text/css">
- @page { 
+ /*@page { 
         size: landscape;
-    }
+    }*/
      
 </style>
 <!----------------------------- fin script buscador --------------------------------------->
