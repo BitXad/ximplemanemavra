@@ -5,7 +5,7 @@ function inicio(){
 
 /* funcion que pone el cursor a un input cuando se abre el modal */
 function ponercursornuevaplatabanda(){
-    var base_url  = document.getElementById('base_url').value;
+    //var base_url  = document.getElementById('base_url').value;
     var producto_nombre = $('select[name="producto_id"] option:selected').text();
     $('#titulodetalle').html(producto_nombre+"<br>");
     //$('#produccion_id').val(produccion["produccion_id"]);
