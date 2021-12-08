@@ -77,6 +77,7 @@
                         <th>Prod.</th>
                         <th>Descripción</th>
                         <th>Fecha<br>Inicio</th>
+                        <th>Fecha<br>Estimada</th>
                         <th>Fecha<br>Fin</th>
                         <th>Costo</th>
                         <th>Usuario</th>

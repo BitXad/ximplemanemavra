@@ -44,6 +44,11 @@ function mostrarproduccion(){
                         html += "</td>";
                         html += "<td class='text-center'>"+moment(registros[i]["produccion_inicio"]).format("DD/MM/YYYY")+"</td>";
                         html += "<td class='text-center'>";
+                        if(registros[i]["produccion_estimada"] != "" && registros[i]["produccion_estimada"] != null && registros[i]["produccion_estimada"] != "0000-00-00"){
+                            html += moment(registros[i]["produccion_estimada"]).format("DD/MM/YYYY");
+                        }
+                        html += "</td>";
+                        html += "<td class='text-center'>";
                         if(registros[i]["produccion_fin"] != "" && registros[i]["produccion_fin"] != null && registros[i]["produccion_fin"] != "0000-00-00"){
                             html += moment(registros[i]["produccion_fin"]).format("DD/MM/YYYY");
                         }
@@ -69,8 +74,8 @@ function mostrarproduccion(){
                         
                    }
                    html += "<tr>";
-                   html += "<th style='text-align: right !important; text-font: 12pt' colspan='5    '>Total:</th>";
-                   html += "<th style='text-align: right !important; text-font: 12pt' >"+numberFormat(Number(costototal).toFixed(2))+"</th>";
+                   html += "<th style='text-align: right !important; font-size: 12pt' colspan='6'>Total:</th>";
+                   html += "<th style='text-align: right !important; font-size: 12pt' >"+numberFormat(Number(costototal).toFixed(2))+"</th>";
                    html += "<th colspan='2'></th>";
                    html += "</tr>";
                    $("#tablaproduccion").html(html);

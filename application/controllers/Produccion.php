@@ -272,6 +272,18 @@ class Produccion extends CI_Controller{
     {
         //if($this->acceso(118)){
             if ($this->input->is_ajax_request()){
+                $this->load->model('Producto_model');
+                $avisos = $this->Producto_model->buscar_avisos($this->input->post('producto_id'));
+                $dias = 0;
+                foreach ($avisos as $aviso){
+                    $dias += $aviso["aproducto_dias"]+$aviso["aproducto_dias2"];
+                }
+                $lafecha =  $this->input->post('fecha_inicio');
+                $dias = "+".$dias." day";
+                //$lafecha = date('Y-m-d', $fecha_inicio);
+                $date_aprox = strtotime($dias, strtotime($lafecha));
+                $date_aprox = date('Y-m-d', $date_aprox);
+                
                 $produccion_descripcion = $this->input->post('produccion_descripcion');
                 $produccion_inicio = $this->input->post('produccion_inicio');
                 $controli_id =  $this->input->post('controli_id');
@@ -285,6 +297,7 @@ class Produccion extends CI_Controller{
                     'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
                     'detproduccion_costo' => $this->input->post('detproduccion_costo'),
                     'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
+                    'detproduccion_fechaaproximada' => $date_aprox,
                 );
                 $this->load->model('Detalle_produccion_model');
                 $this->Detalle_produccion_model->add_detalle_produccion_aux($params);
@@ -348,10 +361,13 @@ class Produccion extends CI_Controller{
     {
         //if($this->acceso(118)){
             if ($this->input->is_ajax_request()){
+                $usuario_id = $this->session_data['usuario_id'];
+                $this->load->model('Detalle_produccion_model');
+                $fechaaprox = $this->Detalle_produccion_model->get_fechaaprox_deaux($usuario_id);
                 //$fecha_inicio = $this->input->post('fecha_inicio');
                 //$descripcion = $this->input->post('descripcion');
                 //$acargode_id = $this->input->post('acargode_id');
-                $usuario_id = $this->session_data['usuario_id'];
+                
                 /* ********** INICIO registrar produccion ********** */
                 $this->load->model('Parametro_model');
                 $parametro = $this->Parametro_model->get_parametro(1);
@@ -368,6 +384,7 @@ class Produccion extends CI_Controller{
                     'produccion_inicio' => $this->input->post('fecha_inicio'),
                     'produccion_descripcion' => $this->input->post('descripcion'),
                     'produccion_registro' => $produccion_fechahora,                    
+                    'produccion_estimada' => $fechaaprox["fecha_aproximada"],                    
                 );
                 $produccion_id = $this->Produccion_model->add_produccion($params);
                 
@@ -377,7 +394,7 @@ class Produccion extends CI_Controller{
                 $this->Parametro_model->update_parametro($parametro['parametro_id'],$paramsp);
                 /* ********** F I N  registrar produccion ********** */
                 /* ********** INICIO registrar en detalle venta ********** */
-                $this->load->model('Detalle_produccion_model');
+                
                 $this->Detalle_produccion_model->insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id);
                 /* ********** F I N  registrar en detalle venta ********** */
                 $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);

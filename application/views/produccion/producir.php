@@ -28,7 +28,6 @@
 <link href="<?php echo base_url('resources/css/mitabla.css'); ?>" rel="stylesheet">
 
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
-<input type="hidden" name="fecha_proxima" id="fecha_proxima" />
 <!--<input type="hidden" name="laformula" id="laformula" value='<?php //echo json_encode($all_formula); ?>' />-->
 <div class="box-header">
     <font size='4' face='Arial'><b>PRODUCCION</b></font>

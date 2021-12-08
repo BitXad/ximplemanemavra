@@ -79,8 +79,8 @@
                                 <td style="width: 45%" class="text-right">Fecha Estimada:&nbsp;</td>
                                 <td style="width: 55%">
                                     <?php
-                                    if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
-                                        echo date("d/m/Y", strtotime($produccion['produccion_fin']));
+                                    if($produccion['produccion_estimada'] != "" && $produccion['produccion_estimada'] != null && $produccion['produccion_estimada'] != "0000-00-00" ){
+                                        echo date("d/m/Y", strtotime($produccion['produccion_estimada']));
                                     }
                                     ?>
                                 </td>

@@ -116,6 +116,17 @@ class Detalle_produccion_model extends CI_Model
 
         return true;
     }
+    /*
+     * obtiene la fecha maxima aproximada de finalizacion de la producción
+     */
+    function get_fechaaprox_deaux($usuario_id)
+    {
+        return $this->db->query(
+            "SELECT MAX(dpa.detproduccion_fechaaproximada) as fecha_aproximada
+             from detalle_produccion_aux dpa
+             where dpa.usuario_id = $usuario_id"
+            )->row_array();
+    }
     /**
      * Get price for a producto
      */

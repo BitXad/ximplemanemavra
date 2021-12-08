@@ -63,7 +63,7 @@ function buscar_platabanda(){
 function registrarnuevodetalleaux(){
     var base_url = document.getElementById('base_url').value;
     //var produccion_id = document.getElementById('produccion_id').value;
-    //var fecha_inicio = document.getElementById('fecha_inicio').value;
+    var fecha_inicio = document.getElementById('fecha_inicio').value;
     //var fecha_fin = document.getElementById('fecha_fin').value;
     //var descripcion = document.getElementById('descripcion').value;
     var producto_id = document.getElementById('producto_id').value;
@@ -89,7 +89,8 @@ function registrarnuevodetalleaux(){
         $.ajax({url: controlador,
                 type:"POST",
                 data:{producto_id:producto_id, controli_id:controli_id, detproduccion_cantidad:detproduccion_cantidad,
-                      detproduccion_costo:detproduccion_costo, detproduccion_observacion:detproduccion_observacion},
+                      detproduccion_costo:detproduccion_costo, detproduccion_observacion:detproduccion_observacion,
+                      fecha_inicio:fecha_inicio},
                 success:function(respuesta){
                     var registros =  JSON.parse(respuesta);
                     if (registros != null){
