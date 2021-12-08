@@ -137,7 +137,7 @@ function show_modal_info(platabanda_id){
                                         </div>
                                         <div class="form-inline">
                                             <label for="planta_nombre">Fecha de producción: </label>
-                                            <span id="fecha${item['detproduccion_id']}">${item['produccion_registro']}</span>
+                                            <span id="fecha${item['detproduccion_id']}">${moment(item["produccion_registro"]).format("DD/MM/YYYY")}</span>
                                         </div>
                                         <div class="form-inline">
                                             <div class="form-group mb-2">

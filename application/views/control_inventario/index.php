@@ -75,11 +75,11 @@
                 <section id="platabandas" class="row"></section>
             </div>
         </div>
-        <div class="modal fade" id="modal_info_platabanda" tabindex="-1" role="dialog" aria-labelledby="modal_ubicacion" aria-hidden="true">
+        <div class="modal fade" id="modal_info_platabanda" tabindex="-1" role="dialog" aria-labelledby="modal_ubicacion" aria-hidden="true" style="font-family: Arial !important;">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" style="display: inline;">Platabanda: <span id="platabanda_number"></span></h4>
+                        <h4 class="modal-title" style="display: inline;"><b>PLATABANDA: <span id="platabanda_number"></span></b></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: red">
                             <span aria-hidden="true" style="padding-right: 10px;">&times;</span>
                         </button>

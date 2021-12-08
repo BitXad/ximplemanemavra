@@ -261,43 +261,6 @@
             <a href="<?php echo base_url('venta/ventas'); ?>" class="small-box-footer"><?php echo "En ".$ventas[0]['cantidad_ventas']." ventas"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
-          
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-              <div class="inner" >
-
-                <h3><b><fa class="fa fa-pie-chart"></fa></b></h3>
-                <h5><b><?php echo number_format($compras[0]['total_compras'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
-            </div>
-              
-            <div class="icon">
-              <i class="fa fa-pie-chart"></i>              
-            </div>
-                <a href="<?php echo base_url('compra'); ?>" class="small-box-footer"><?php echo "En ".$compras[0]['cantidad_compras']." compras"; ?> <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        
-          
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-              <div class="inner" >
-
-                <h3><b><fa class="fa fa-bar-chart"></fa></b></h3>
-                <h5><b><?php echo number_format($pedidos[0]['total_pedidos'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
-            </div>
-              
-            <div class="icon">
-              <i class="fa fa-bar-chart"></i>              
-            </div>
-                <a href="<?php echo base_url('pedido'); ?>" class="small-box-footer"><?php echo "En ".$pedidos[0]['cantidad_pedidos']." pedidos"; ?> <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-
-        
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
@@ -305,16 +268,51 @@
               <div class="inner" >
 
                 <h3><b><fa class="fa fa-wrench"></fa></b></h3>
-                <h5><b><?php echo number_format($servicios['cantidad_servicios'],0,'.',',')." Pendientes"; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h5><b><?php echo number_format($servicios['cantidad_servicios'],0,'.',',')." Produciendo"; ?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">
               <i class="fa fa-wrench"></i>              
             </div>
-                <a href="<?php echo base_url('servicio'); ?>" class="small-box-footer"><?php echo "En servicios"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('produccion'); ?>" class="small-box-footer"><?php echo "En produccion"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
 
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-blue-active">
+              <div class="inner" >
+
+                <h3><b><fa class="fa fa-cubes"></fa></b></h3>
+                <!-- <h5><b><?php echo number_format($productos['total_inventario'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5> -->
+                <h5><b><?php echo number_format($productos['total_inventario'],2,'.',',')." Productos"; ?><sup style="font-size: 20px"></sup></b></h5>
+            </div>
+              
+            <div class="icon">
+              <i class="fa fa-cubes"></i>              
+            </div>
+                <a href="<?php echo base_url('producto'); ?>" class="small-box-footer"><?php echo "Productos"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-green">
+              <div class="inner" >
+
+                <h3><b><i class="fa fa-leaf" aria-hidden="true"></i></b></h3>
+                <h5><b><?php echo number_format($pedidos[0]['total_pedidos'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
+            </div>
+              
+            <div class="icon">
+              <i class="fa fa-leaf" aria-hidden="true"></i>              
+            </div>
+                <a href="<?php echo base_url('control_inventario'); ?>" class="small-box-footer"><?php echo "En ".$pedidos[0]['cantidad_pedidos']." Platabandas"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
@@ -353,21 +351,20 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-blue-active">
+          <div class="small-box bg-red">
               <div class="inner" >
 
-                <h3><b><fa class="fa fa-cubes"></fa></b></h3>
-                <h5><b><?php echo number_format($productos['total_inventario'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h3><b><fa class="fa fa-pie-chart"></fa></b></h3>
+                <h5><b><?php echo number_format($compras[0]['total_compras'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">
-              <i class="fa fa-cubes"></i>              
+              <i class="fa fa-pie-chart"></i>              
             </div>
-                <a href="<?php echo base_url('inventario'); ?>" class="small-box-footer"><?php echo "Inventario valorado"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('compra'); ?>" class="small-box-footer"><?php echo "En ".$compras[0]['cantidad_compras']." compras"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
 
-        
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
@@ -381,7 +378,7 @@
             <div class="icon">
               <i class="fa fa-question-circle"></i>              
             </div>
-                <a href="<?php echo base_url('soporte_tecnico'); ?>" class="small-box-footer">Opciones de ayuda <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="http://passwordbolivia.com/site/" class="small-box-footer" target="_blank">Opciones de ayuda <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         

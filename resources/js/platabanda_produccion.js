@@ -131,19 +131,19 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         </div>
                                         <div class="form-inline">
                                             <label for="planta_nombre">Fecha de producción: </label>
-                                            <span id="fecha${item['detproduccion_id']}">${item['produccion_registro']}</span>
+                                            <span id="fecha${item['detproduccion_id']}">${moment(item["produccion_registro"]).format("DD/MM/YYYY")}</span>
                                         </div>
                                         <div class="form-inline">
                                             <div class="form-group mb-2">
                                                 <label for="cantidad${item['detproduccion_id']}">Cantidad</label>
-                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" disabled>
+                                                <input type="number" min="0" class="form-control" id="cantidad${item['detproduccion_id']}" name="cantidad${item['detproduccion_id']}" value="${item['detproduccion_cantidad']}" style="border: 0; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" disabled>
                                             </div>
                                             <div class="form-group mb-2">
                                                 <label for="laperdida${item['detproduccion_id']}" title='Perdida total de plantas'>Perdida</label>
                                                 <input type="number" min="0" class="form-control" id="laperdida${item['detproduccion_id']}" name="laperdida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_perdida']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
-                                                <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Salida</label>
+                                                <label for="lasalida${item['detproduccion_id']}" title='Salida(Venta) de plantas'>Ventas</label>
                                                 <input type="number" min="0" class="form-control" id="lasalida${item['detproduccion_id']}" name="lasalida${item['detproduccion_id']}" style="border: 0; cursor: pointer; background-color: #fff" autocomplete="off" value="${item['cant_compra']}" readonly>
                                             </div>
                                             <div class="form-group mb-2">
@@ -164,18 +164,9 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         </figure>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="form-inline">
-                                            <div class="form-group mb-2">
-                                                <label for="perdida${item['detproduccion_id']}">Reg. Perdida</label>
-                                                <input type="number" min="0" max="${item['detproduccion_cantidad'] - item['detproduccion_perdida']}" class="form-control" id="perdida${item['detproduccion_id']}" name="perdida${item['detproduccion_id']}" value="0" style="border: 1; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off" onchange="calcular(${item['detproduccion_id']})">
-                                            </div>
-                                        </div>
-                                        <div class="form-group mb-2">
-                                            <label for="perdida_observacion${item['detproduccion_id']}">Observación</label>
-                                            <input type="text" min="0" max="255" class="form-control" id="perdida_observacion${item['detproduccion_id']}" name="perdida_observacion${item['detproduccion_id']}" style="border: 1; cursor: pointer" autocomplete="off">
-                                        </div>
+                                        
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-xs" onclick="actualizar_informacion(${item['detproduccion_id']})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                                            <button class="btn btn-success btn-xs" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Perdida</button>
                                             <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                                             <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
                                             <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
@@ -184,8 +175,10 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
+                                    <div class="col-md-12" id="formulario-perdida-${item['detproduccion_id']}" style="display:none;"></div>
                                 </article>
                                 <article class="col-md-5">
+                                    <span class='text-bold'>Costos:</span>
                                     <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
                                         <thead class="thead-light">
                                             <tr>
@@ -202,6 +195,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                     </table>
                                 </article>
                                 <article class="col-md-5">
+                                    <span class='text-bold'>Perdidas:</span>
                                     <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
                                         <thead class="thead-light">
                                             <tr>
@@ -245,7 +239,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                 <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 0; text-align: center;">${cost['controli_id']}</td>
                                 <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
-                                <td style="padding: 0; text-align: center">${fecha}</td>
+                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     i++;
                     total += Number(cost['costoop_costo']);
@@ -275,7 +269,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                 <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 0;">${cost['controli_id']}</td>
                                 <td style="padding: 0;">${cost['costoop_costo']}</td>
-                                <td style="padding: 0;">${fecha}</td>
+                                <td style="padding: 0;">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     total += Number(cost['costoop_costo']);
                     i++;
@@ -299,27 +293,45 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
 
 function actualizar_informacion(detproduccion_id){
     let controlador = `${base_url}detalle_produccion/update_detproduccion`;
+    let saldo = $(`#elsaldo${detproduccion_id}`).val();
     let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
-    let perdida_observacion = document.getElementById(`perdida_observacion${detproduccion_id}`).value;
-    let observacion = $(`#observacion_${detproduccion_id}`).val();
-    $.ajax({
-        url: controlador,
-        type: 'POST',
-        cache: false,
-        data: {
-            detproduccion_id:detproduccion_id,
-            perdida: perdida,
-            perdida_observacion: perdida_observacion,
-            observacion:observacion,
-        },
-        success:()=>{
-            alert("Se guardo correctamente");
-            get_tabla_perdida(detproduccion_id);
-        },
-        error:()=>{
-            alert("Algo salio mal...!!!");
+    let perdida_observacion = document.getElementById(`perdida_razon${detproduccion_id}`).value;
+    let observacion = $(`#perdida_razon${detproduccion_id}`).val();
+    if(perdida >= 0 && perdida != "" && perdida <= saldo){
+        if (observacion != "") {
+            console.log(perdida)
+            console.log(observacion)
+            let msj = `Esta realizando una perdida de ${perdida}, ¿Quiere continuar con la perdida?`;
+            if (confirm(msj)) {
+                $.ajax({
+                    url: controlador,
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        detproduccion_id:detproduccion_id,
+                        perdida: perdida,
+                        perdida_observacion: perdida_observacion,
+                        observacion:observacion,
+                    },
+                    success:()=>{
+                        alert("Se guardo correctamente");
+                        get_tabla_perdida(detproduccion_id);
+                        calcular(detproduccion_id,perdida,0);
+                        show_close_form(`formulario-perdida-${detproduccion_id}`);
+                    },
+                    error:()=>{
+                        alert("Algo salio mal...!!!");
+                    }
+                });
+            }
+        }else{
+            alert(`- El campo razón es obligatorio`);
+            $(`#perdida_razon${detproduccion_id}`).focus();
         }
-    });
+    }else{
+        alert(`- El campo perdida es obligatorio  \n- La perdida no puede ser un número negativo\n- La perdida no puede sobrepasar el saldo de ${saldo}`);
+        $(`#perdida${detproduccion_id}`).focus();
+    }
 }
 
 function cambiar_estado_platabanda(controli_id, estado_id){
@@ -386,7 +398,8 @@ function volver_estado(detproduccion_id){
 
 function form_costo(detproduccion_id, platabanda){
     let form = document.getElementById(`formulario-costo-${detproduccion_id}`);
-    show_close_form(detproduccion_id);
+    let id = `formulario-costo-${detproduccion_id}`;
+    show_close_form(id);
 
     let controlador = `${base_url}costo_descripcion/get_costo_descripcion`
     $.ajax({
@@ -395,25 +408,34 @@ function form_costo(detproduccion_id, platabanda){
         data:{},
         success:(result)=>{
             let ress = JSON.parse(result);
-            html = `<div class="col-md-12 mb-2" style="margin-bottom: 15px">
+            html = `<div class="col-md-12 mb-2" style="border: 2px solid #AEAEAE; border-radius: 15px;">
                         <div class="form-inline">
                             <label for="planta_nombre">Agregar costo operativo: </label>
                         </div>
-                        <div class="form-inline">
-                            <div class="form-group mb-1">
+                        <div class="form-group row">
+                            <label class="col-md-2" for="costo${detproduccion_id}"><span style="color:red;">*</span>Costo Bs.</label>
+                            <div class="col-md-4">
                                 <input type="number" min="0" class="form-control" id="costo${detproduccion_id}" name="costo${detproduccion_id}" value="" style=" cursor: pointer" placeholder="Costo" autocomplete="off" style="width:10vw !important;" required>
                             </div>
-                            <div class="form-group mb-1">
-                                <label for="cantidad"></label>
+                            <div class="col-md-6"></div>
+                        </div>
+                        <div class="form-group row">    
+                            <label class="col-md-2" for="cantidad">Motivo</label>
+                            <div class="col-md-5">
                                 <select class="form-control" id="detcosto${detproduccion_id}">`;
             ress.forEach(r => {
                 html +=             `<option value="${r['costodesc_id']}">${r['costodesc_descripcion']}</option>`;
             });
             html +=             `</select>
                             </div>
-                            <div class="form-group mb-1">
-                                <button class="btn btn-sm btn-success" title="Guardar" onclick="add_form(${detproduccion_id},${platabanda})"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                                <button class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form(${detproduccion_id})"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <div class="col-md-5">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 text-center">
+                                <a class="btn btn-sm btn-success" title="Guardar" onclick="add_form(${detproduccion_id},${platabanda})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
+                                <a class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form('${id}')"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</a>
                             </div>
                         </div>
                     </div>`;
@@ -426,8 +448,8 @@ function form_costo(detproduccion_id, platabanda){
     
 }
 
-function show_close_form(detproduccion_id) {
-    let form = document.getElementById(`formulario-costo-${detproduccion_id}`);
+function show_close_form(id) {
+    let form = document.getElementById(id);
     if (form.style.display == "none") {
         form.style.display = "block";
     } else {
@@ -437,37 +459,52 @@ function show_close_form(detproduccion_id) {
 
 function add_form(detproduccion_id,platabanda){
     let controlador = `${base_url}costo_operativo/save_costo`
+    let id = `formulario-costo-${detproduccion_id}`;
     let costo = document.getElementById(`costo${detproduccion_id}`).value;
     let detcosto = document.getElementById(`detcosto${detproduccion_id}`).value;
-    if(costo != ""){
-        $.ajax({
-            url: controlador,
-            type: "POST",
-            data: {
-                    detproduccion_id:detproduccion_id,
-                    costo:costo,
-                    platabanda:platabanda,
-                    detcosto:detcosto,
-            },
-            success:()=>{
-                alert("Se guardo correctamente");
-                show_close_form(detproduccion_id);
-                get_tabla_costo(detproduccion_id);
-            },
-            errocr:()=>{
-                alert("Ha ocurrido un error al guardar el costo");
-            }
-        });
+    let msj = `Esta agregando un costo operativo de Bs ${parseFloat(costo)},¿Desea continuar?`
+    if(costo != "" && costo >= 0){
+        if (confirm(msj)){
+            $.ajax({
+                url: controlador,
+                type: "POST",
+                data: {
+                        detproduccion_id:detproduccion_id,
+                        costo:costo,
+                        platabanda:platabanda,
+                        detcosto:detcosto,
+                },
+                success:()=>{
+                    alert("Se guardo correctamente");
+                    show_close_form(id);
+                    get_tabla_costo(detproduccion_id);
+                },
+                errocr:()=>{
+                    alert("Ha ocurrido un error al guardar el costo");
+                }
+            });
+        }
     }else{
+        alert(`- El campo costo es obligarotio \n- El costo no puede ser un número negativo`);
         document.getElementById(`costo${detproduccion_id}`).style.border = "1px solid red";
+        $(`#costo${detproduccion_id}`).focus();
     }
 }
 
-function calcular(detproduccion_id){
+function calcular(detproduccion_id, cant_perdida = 0, cant_compra = 0){
     let cantidad = document.getElementById(`cantidad${detproduccion_id}`).value;
-    let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
-
-    $(`#cantidad${detproduccion_id}`).val(cantidad-perdida);
+    let perdida = document.getElementById(`laperdida${detproduccion_id}`).value;
+    console.log(perdida)
+    perdida  = parseInt(perdida) + parseInt(cant_perdida);
+    let compra = document.getElementById(`lasalida${detproduccion_id}`).value;
+    compra = parseInt(compra) + parseInt(cant_compra);
+    console.log(compra)
+    let aux = parseInt(perdida) + parseInt(compra); 
+    let saldo = parseInt(cantidad) - parseInt(aux);
+    
+    $(`#laperdida${detproduccion_id}`).val(perdida);
+    $(`#lasalida${detproduccion_id}`).val(compra);
+    $(`#elsaldo${detproduccion_id}`).val(saldo);
 }
 
 function send_inventario(detproduccion_id,producto_id){
@@ -650,4 +687,37 @@ function numberFormat(numero){
     }else{
         return resultado;
     }
+}
+
+function form_perdida(detproduccion_id, platabanda){
+    let form = document.getElementById(`formulario-perdida-${detproduccion_id}`);
+    let id = `formulario-perdida-${detproduccion_id}`
+    show_close_form(id);
+
+    let html = `<div class="col-md-12 mb-2" style="border-radius: 15px;border: 2px solid #AEAEAE; ">
+                    <div class="form-inline">
+                        <label for="planta_nombre">Registrar perdida</label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="perdida${detproduccion_id}"><span style="color: red;">*</span>Perdida</label>   
+                        <div class="col-sm-6">
+                            <input type="number" min="1" max="" class="form-control" id="perdida${detproduccion_id}" name="perdida${detproduccion_id}" value="" style="border: 1; cursor: pointer" placeholder="Cantidad de plantas" autocomplete="off">
+                        </div>
+                        <div class="col-sm-6"></div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="perdida_razon${detproduccion_id}" class="col-sm-2 col-form-label"><span style="color: red;">*</span>Razón</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="perdida_razon${detproduccion_id}" name="perdida_razon${detproduccion_id}" placeholder="Motivo/Razón de la perdida">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center">
+                            <a class="btn btn-sm btn-success" title="Guardar" onclick="actualizar_informacion(${detproduccion_id})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
+                            <a class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form('${id}')"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</a>
+                        </div>
+                    </div>
+                </div>`;
+    form.innerHTML = html;    
+    $(`#perdida${detproduccion_id}`).focus();
 }
