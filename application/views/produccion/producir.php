@@ -47,7 +47,7 @@
             </td>
         </tr>-->
         <tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="descripcion"><span class="text-danger">*</span>Descripción:</label></td>
+            <td style="width: 15%" class="text-right"><label for="descripcion"><span class="text-danger">*</span>Destino:</label></td>
             <td style="width: 85%">
                 <input type="text" width="100%" name="descripcion" value="<?php echo ($this->input->post('descripcion') ? $this->input->post('descripcion') : ""); ?>" class="form-control" id="descripcion"  required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
             </td>
@@ -68,7 +68,7 @@
             </td>
         </tr>
         <tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="descripcion">Responsable:</label></td>
+            <td style="width: 15%" class="text-right"><label for="descripcion">Responsable del Vivero:</label></td>
             <td style="width: 85%">
                 <select style="width: 50%" name="acargode_id" class="form-control" id="acargode_id">
                     <!--<option value="">select produccion</option>-->
