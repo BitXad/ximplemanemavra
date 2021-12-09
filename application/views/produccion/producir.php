@@ -32,7 +32,7 @@
 <div class="box-header">
     <font size='4' face='Arial'><b>PRODUCCION</b></font>
 </div>
-<div class="col-md-6">
+<div class="col-md-4">
     <table style="width: 100%">
         <tr>
             <td style="width: 15%" class="text-right"><label for="fecha_inicio"><span class="text-danger">*</span>Fecha Inicio:</label></td>
@@ -40,23 +40,17 @@
                 <input style="width: 50%" type="date" name="fecha_inicio" value="<?php echo ($this->input->post('fecha_inicio') ? $this->input->post('fecha_inicio') : date("Y-m-d")); ?>" class="form-control" id="fecha_inicio" required />
             </td>
         </tr>
-        <!--<tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="fecha_fin">Fecha Fin:</label></td>
-            <td style="width: 85%">
-                <input type="date" name="fecha_fin" value="<?php //echo ($this->input->post('fecha_fin') ? $this->input->post('fecha_fin') : ""); ?>" class="form-control" id="fecha_fin" />
-            </td>
-        </tr>-->
         <tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="descripcion"><span class="text-danger">*</span>Destino:</label></td>
+            <td style="width: 15%" class="text-right"><label for="descripcion"><span class="text-danger">*</span>Descripción:</label></td>
             <td style="width: 85%">
                 <input type="text" width="100%" name="descripcion" value="<?php echo ($this->input->post('descripcion') ? $this->input->post('descripcion') : ""); ?>" class="form-control" id="descripcion"  required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" />
             </td>
         </tr>
         <tr style="padding-top: 5px">
-            <td style="width: 15%" class="text-right"><label for="producto_id">Producto:</label></td>
+            <td style="width: 15%" class="text-right"><label for="producto_id"><span class="text-danger">*</span>Producto:</label></td>
             <td style="width: 85%">
-                <select name="producto_id" class="selectpicker form-control" id="producto_id" data-show-subtext="true" data-live-search="true">
-                    <!--<option value="">select produccion</option>-->
+                <select name="producto_id" class="selectpicker form-control" onchange="elegir_tiempoestimado()" id="producto_id" data-show-subtext="true" data-live-search="true" required>
+                    <option value="">--Seleccionar Producto --</option>
                     <?php 
                     foreach($all_producto as $producto)
                     {
@@ -82,15 +76,64 @@
                 </select>
             </td>
         </tr>
-        <!--<tr style="padding-top: 5px">
-            <td style="width: 100%" class="text-center" colspan="2">
-                <a class="form-control btn btn-soundcloud btn-block" onclick="calcularformula()"><span></span> Calcular</a>
+    </table>
+</div>
+<div class="col-md-4">
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 40%" class="text-right"><label for="produccion_metodoreproduccion"><span class="text-danger">*</span>Metodo de Reproducción:</label></td>
+            <td style="width:60%">
+                <select style="width: 100%" name="produccion_metodoreproduccion" class="form-control" id="produccion_metodoreproduccion">
+                    <option value="Semilla">Semilla</option>
+                    <option value="Esqueje">Esqueje</option>
+                </select>
             </td>
-        </tr>-->
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_semillaprecio"><span class="text-danger">*</span>Precio Total de la Semilla:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" step="any" min="0" name="produccion_semillaprecio" value="<?php echo ($this->input->post('produccion_semillaprecio') ? $this->input->post('produccion_semillaprecio') : ""); ?>" class="form-control" id="produccion_semillaprecio" required />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_tiempoestimadog"><span class="text-danger">*</span>Tiempo Estimado de Germinación:</label></td>
+            <td style="width:60%">
+                <input style="width: 100%" type="number" min="0" name="produccion_tiempoestimadog" value="<?php echo ($this->input->post('produccion_tiempoestimadog') ? $this->input->post('produccion_tiempoestimadog') : ""); ?>" class="form-control" id="produccion_tiempoestimadog" placeholder="en dias" required />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_cantidaesperada"><span class="text-danger">*</span>Cantidad Esperada:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" min="0" name="produccion_cantidaesperada" value="<?php echo ($this->input->post('produccion_cantidaesperada') ? $this->input->post('produccion_cantidaesperada') : ""); ?>" class="form-control" id="produccion_cantidaesperada" required />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-4">
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 40%" class="text-right"><label for="produccion_cantidadobtenida"><span class="text-danger">*</span>Cantidad Obtenida:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" min="0" name="produccion_cantidadobtenida" value="<?php echo ($this->input->post('produccion_cantidadobtenida') ? $this->input->post('produccion_cantidadobtenida') : ""); ?>" class="form-control" id="produccion_cantidadobtenida" required />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_costototalxgermin"><span class="text-danger">*</span>Costos Operativos Totales x Germinación:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" step="any" min="0" onchange="calcular_costoxunidad()" name="produccion_costototalxgermin" value="<?php echo ($this->input->post('produccion_costototalxgermin') ? $this->input->post('produccion_costototalxgermin') : ""); ?>" class="form-control" id="produccion_costototalxgermin" required />
+            </td>
+        </tr>
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_costounidefectiva"><span class="text-danger">*</span>Costo x Unidad Efectiva:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" step="any" min="0" name="produccion_costounidefectiva" value="<?php echo ($this->input->post('produccion_costounidefectiva') ? $this->input->post('produccion_costounidefectiva') : ""); ?>" class="form-control" id="produccion_costounidefectiva" required />
+            </td>
+        </tr>
     </table>
 </div>
 <div class="col-md-2">
-    <a class="form-control btn btn-success btn-block" onclick="ponercursornuevaplatabanda()" data-toggle="modal" data-target="#modalparaplatabanda"><span></span> Añadir</a>
+    <!-- <a class="form-control btn btn-success btn-block" onclick="ponercursornuevaplatabanda()" data-toggle="modal" data-target="#modalparaplatabanda"><span></span> Añadir</a> -->
+    <a class="form-control btn btn-success btn-block" onclick="ponercursornuevaplatabanda()"><span></span> Añadir</a>
 </div>
 <div class="row">
     <div class="col-md-12">

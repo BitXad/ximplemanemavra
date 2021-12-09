@@ -31,8 +31,9 @@ class Control_inventario_model extends CI_Model
     function get_control_inventario($controli_id)
     {
         return $this->db->query(
-            "SELECT ci.*
+            "SELECT ci.*, a.usuario_id as encargado_id
             from control_inventario ci 
+            left join area a on ci.area_id =  a.area_id
             where ci.controli_id = $controli_id")->row_array();
     }
     

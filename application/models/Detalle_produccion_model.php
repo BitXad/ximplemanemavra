@@ -102,11 +102,11 @@ class Detalle_produccion_model extends CI_Model
         $detalle_formula = $this->db->query("
             insert into detalle_produccion
             (
-            produccion_id, producto_id, controli_id, estado_id, detproduccion_cantidad,
+            produccion_id, producto_id, controli_id, encargado_id, estado_id, detproduccion_cantidad,
             detproduccion_costo, detproduccion_perdida, detproduccion_observacion
             )
             (SELECT
-                $produccion_id, df.producto_id, df.controli_id, df.estado_id, df.detproduccion_cantidad,
+                $produccion_id, df.producto_id, df.controli_id, df.encargado_id, df.estado_id, df.detproduccion_cantidad,
                 df.detproduccion_costo, 0, df.detproduccion_observacion
             FROM
               `detalle_produccion_aux` df

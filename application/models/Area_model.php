@@ -25,13 +25,12 @@ class Area_model extends CI_Model
     function get_all_area(){
         $area = $this->db->query(
             "SELECT
-                u.*, e.estado_descripcion
+                a.*, e.estado_color, e.estado_descripcion, u.usuario_nombre
             FROM
-                area as u,
-                estado as e
-            WHERE
-                u.estado_id = e.estado_id
-                ORDER BY area_id ASC
+                area a
+            LEFT JOIN usuario u on a.usuario_id = u.usuario_id
+            LEFT JOIN estado e on a.estado_id = e.estado_id
+            ORDER BY a.area_nombre ASC
         ")->result_array();
 
         return $area;

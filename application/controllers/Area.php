@@ -5,6 +5,7 @@ class Area extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Area_model');
+        $this->load->model('Usuario_model');
         $this->load->model('Estado_model');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
@@ -37,7 +38,7 @@ class Area extends CI_Controller{
     /*
      * Adding a new areas
      */
-    function add(){   
+    function add(){
         if($this->acceso(136)){
             $this->load->library('form_validation');
 
@@ -45,6 +46,7 @@ class Area extends CI_Controller{
             $estado = 1;
             if($this->form_validation->run()){
                 $params = array(
+                    'usuario_id' => $this->input->post('usuario_id'),
                     'estado_id' => $estado,
                     'area_nombre' => $this->input->post('area_nombre'),
                     'area_descripcion' => $this->input->post('area_descripcion'),
@@ -53,6 +55,7 @@ class Area extends CI_Controller{
                 $this->Area_model->add_area($params);
                 redirect('area/index');
             }else{
+                $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
                 $data['page_title'] = "Area";
                 $data['_view'] = 'area/add';
                 $this->load->view('layouts/main',$data);
@@ -73,6 +76,7 @@ class Area extends CI_Controller{
                 $this->form_validation->set_rules('area_nombre','Nombre','trim|required', array('required' => 'Este Campo no debe ser vacio'));
                 if($this->form_validation->run()){
                     $params = array(
+                        'usuario_id' => $this->input->post('usuario_id'),
                         'estado_id' => $this->input->post('estado'),
                         'area_nombre' => $this->input->post('area_nombre'),
                         'area_descripcion' => $this->input->post('area_descripcion'),
@@ -81,7 +85,8 @@ class Area extends CI_Controller{
                     $this->Area_model->update_area($area_id,$params);            
                     redirect('area/index');
                 }else{
-                    $data['estados'] = $this->Estado_model->get_all_estado_activo_inactivo  ();
+                    $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
+                    $data['estados'] = $this->Estado_model->get_all_estado_activo_inactivo();
                     $data['page_title'] = "Area";
                     $data['_view'] = 'area/edit';
                     $this->load->view('layouts/main',$data);

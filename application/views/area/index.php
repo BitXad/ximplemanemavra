@@ -40,6 +40,7 @@
                             <th>#</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
+                            <th>Encargado</th>
                             <th>Estado</th>
                             <th class="no-print"></th>
                         </tr>
@@ -53,6 +54,7 @@
                             <td><?= $i+1; ?></td>
                             <td><?= $a['area_nombre']; ?></td>
                             <td><?= $a['area_descripcion']; ?></td>
+                            <td><?= $a['usuario_nombre']; ?></td>
                             <td><?= $a['estado_descripcion']; ?></td>
                             <td class="no-print">
                                 <a href="<?php echo site_url('area/edit/'.$a['area_id']); ?>" class="btn btn-info btn-xs" title="Editar area"><span class="fa fa-pencil"></span></a>

@@ -276,7 +276,8 @@ class Produccion extends CI_Controller{
                 $avisos = $this->Producto_model->buscar_avisos($this->input->post('producto_id'));
                 $dias = 0;
                 foreach ($avisos as $aviso){
-                    $dias += $aviso["aproducto_dias"]+$aviso["aproducto_dias2"];
+                    //$dias += $aviso["aproducto_dias"]+$aviso["aproducto_dias2"];
+                    $dias += $aviso["aproducto_dias2"];
                 }
                 $lafecha =  $this->input->post('fecha_inicio');
                 $dias = "+".$dias." day";
@@ -287,6 +288,9 @@ class Produccion extends CI_Controller{
                 $produccion_descripcion = $this->input->post('produccion_descripcion');
                 $produccion_inicio = $this->input->post('produccion_inicio');
                 $controli_id =  $this->input->post('controli_id');
+                $this->load->model('Control_inventario_model');
+                $elconotrol = $this->Control_inventario_model->get_control_inventario($controli_id);
+                $encargado_id = $elconotrol["encargado_id"];
                 $usuario_id = $this->session_data['usuario_id'];
                 $estado_id = 33;
                 $params = array(
@@ -294,6 +298,7 @@ class Produccion extends CI_Controller{
                     'estado_id' => $estado_id,
                     'producto_id' => $this->input->post('producto_id'),
                     'controli_id' => $controli_id,
+                    'encargado_id' => $encargado_id,
                     'detproduccion_cantidad' => $this->input->post('detproduccion_cantidad'),
                     'detproduccion_costo' => $this->input->post('detproduccion_costo'),
                     'detproduccion_observacion' => $this->input->post('detproduccion_observacion'),
@@ -364,9 +369,6 @@ class Produccion extends CI_Controller{
                 $usuario_id = $this->session_data['usuario_id'];
                 $this->load->model('Detalle_produccion_model');
                 $fechaaprox = $this->Detalle_produccion_model->get_fechaaprox_deaux($usuario_id);
-                //$fecha_inicio = $this->input->post('fecha_inicio');
-                //$descripcion = $this->input->post('descripcion');
-                //$acargode_id = $this->input->post('acargode_id');
                 
                 /* ********** INICIO registrar produccion ********** */
                 $this->load->model('Parametro_model');
@@ -382,10 +384,18 @@ class Produccion extends CI_Controller{
                     'estado_id' => $estado_id,
                     'produccion_numeroorden' => $produccion_numeroorden,
                     'produccion_inicio' => $this->input->post('fecha_inicio'),
+                    'produccion_estimada' => $fechaaprox["fecha_aproximada"],
                     'produccion_descripcion' => $this->input->post('descripcion'),
-                    'produccion_registro' => $produccion_fechahora,                    
-                    'produccion_estimada' => $fechaaprox["fecha_aproximada"],                    
+                    'produccion_registro' => $produccion_fechahora,
+                    'produccion_metodoreproduccion' => $this->input->post('produccion_metodoreproduccion'),
+                    'produccion_semillaprecio' => $this->input->post('produccion_semillaprecio'),
+                    'produccion_tiempoestimadog' => $this->input->post('produccion_tiempoestimadog'),
+                    'produccion_cantidaesperada' => $this->input->post('produccion_cantidaesperada'),
+                    'produccion_cantidadobtenida' => $this->input->post('produccion_cantidadobtenida'),
+                    'produccion_costototalxgermin' => $this->input->post('produccion_costototalxgermin'),
+                    'produccion_costounidefectiva' => $this->input->post('produccion_costounidefectiva'),
                 );
+                
                 $produccion_id = $this->Produccion_model->add_produccion($params);
                 
                 $paramsp = array(
@@ -443,6 +453,36 @@ class Produccion extends CI_Controller{
             }
         //}
     }
+    /* busca el tiempo del almacigo */
+    function tiempoestimado_germinacion()
+    {
+        //if($this->acceso(118)){
+            if ($this->input->is_ajax_request()) {
+                $this->load->model('Producto_model');
+                $avisos = $this->Producto_model->buscar_avisos($this->input->post('producto_id'));
+                $dias = 0;
+                foreach ($avisos as $aviso){
+                    $dias += $aviso["aproducto_dias"];
+                }
+                echo json_encode($dias);
+            }else{                 
+                show_404();
+            }
+        //}
+    }
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -785,4 +825,4 @@ class Produccion extends CI_Controller{
         $data['_view'] = 'produccion/reporte_produccion';
         $this->load->view('layouts/main',$data);
     }
-}
+}                
