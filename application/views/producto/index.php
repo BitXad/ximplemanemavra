@@ -500,23 +500,26 @@ echo '<script type="text/javascript">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
                 <span class="text-bold">Costos producto</span>
             </div>
-            <div class="text-right col-md-12">
-                <a class="btn btn-sm btn-success" onclick="form_costo_producto()"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Costo</a>
+            <div class="text-right col-md-12 m-3">
+                <a class="btn btn-sm btn-success" onclick="form_costo_producto()" style="margin-top: 5px; margin-bottom:5px;"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Costo</a>
                 <input type="hidden" id="producto_costo">
             </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Insumo / parametro</th>
-                        <th>Unidad</th>
-                        <th>Cantidad</th>
-                        <th>Unitario(Bs)</th>
-                        <th>Parciar(Bs)</th>
-                    </tr>
-                </thead>
-                <tbody id="costos_producto"></tbody>
-            </table>
+            <div class="col-md-12">
+                <table class="table table-striped" id="mitabla">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Insumo / parametro</th>
+                            <th>Unidad</th>
+                            <th>Cantidad</th>
+                            <th>Unitario(Bs)</th>
+                            <th>Parciar(Bs)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="costos_producto"></tbody>
+                </table>
+            </div>
             <div class="modal-footer">
                 <!-- <button type="button" id="button_save" class="btn btn-success" onclick="add_aviso()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button> -->
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
@@ -574,7 +577,7 @@ echo '<script type="text/javascript">
             </div>
             <div class="modal-footer">
                 <button type="submit" id="button_save_costo" class="btn btn-success" onclick="guardar_costo()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_campos()"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_campos(), volver()"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
             </div>
             <!-- <?= form_close() ?> -->
         </div>
