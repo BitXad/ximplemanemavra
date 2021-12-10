@@ -15,7 +15,7 @@ function registrarnuevadescripcion(){
 
                    if (registros != null){
                         html = "";
-                        html += "<option value='"+registros["costodesc_id"]+"' selected >";
+                        html += "<option value='"+registros["costodesc_descripcion"]+"' selected >";
                         html += registros["costodesc_descripcion"];
                         html += "</option>";
                         $("#costodesc_id").append(html);

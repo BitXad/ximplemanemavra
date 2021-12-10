@@ -92,6 +92,34 @@ class Costo_operativo_model extends CI_Model
     {
         return $this->db->delete('costo_operativo',array('costoop_id'=>$costoop_id));
     }
+    /*
+     * inserta el costo_producto de un producto en costo_operativo
+     */
+    function insertar_costoproducto_acostoperativo($producto_id, $produccion_id, $usuario_id, $cantidad_obtenida)
+    {
+        $detalle_formula = $this->db->query("
+            insert into costo_operativo
+            (
+            produccion_id, producto_id, catcosto_id, usuario_id,
+            estado_id, costoop_costo, costoop_fecha, costoop_descripcion,
+            unidad, costoop_cantidad, costoop_parcial
+            )
+            (SELECT
+                $produccion_id, cp.producto_id, cp.catcosto_id, $usuario_id,
+                1, cp.cproducto_costo*$cantidad_obtenida, now(), cp.cproducto_descripcion,
+                cp.unidad, cp.cproducto_cantidad*$cantidad_obtenida, cp.cproducto_costoparcial*$cantidad_obtenida
+            FROM
+              `costo_producto` cp
+            WHERE 
+              cp.producto_id = $producto_id)"
+            ); //->result_array();
+
+        return true;
+    }
+    
+    
+    
+    
     
     
     

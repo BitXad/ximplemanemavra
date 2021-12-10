@@ -160,4 +160,15 @@ class Detalle_produccion_model extends CI_Model
             and dp.detproduccion_id = $detproduccion_id"
         )->result_array();
     }
+    /* obtiene los productos de un detalle de produccion */
+    function getproducto_detalleprod($produccion_id){
+        return $this->db->query(
+            "SELECT dp.*,p2.producto_nombre, p2.producto_precio
+            from detalle_produccion dp
+            left join produccion p on p.produccion_id = dp.produccion_id 
+            left join producto p2 on p2.producto_id = dp.producto_id 
+            where 1=1
+            and dp.produccion_id = $produccion_id"
+        )->result_array();
+    }
 }

@@ -8,6 +8,7 @@ class Produccion extends CI_Controller{
     function __construct()
     {
         parent::__construct();
+        $this->load->model('Costo_operativo_model');
         $this->load->model('Produccion_model');
         $this->load->model('Control_inventario_model');
         $this->session_data = $this->session->userdata('logged_in');
@@ -375,6 +376,7 @@ class Produccion extends CI_Controller{
                 $parametro = $this->Parametro_model->get_parametro(1);
                 $produccion_numeroorden = $parametro['parametro_numordenproduccion']+1;
                 //$produccion_total = $this->input->post('formula_cantidad')*$this->input->post('formula_preciounidad');
+                $cantidad_obtenida = $this->input->post('produccion_cantidadobtenida');
                 $estado_id = 33;
                 $produccion_fechahora = date("Y-m-d H:i:s");
                 //$produccion_hora = date("H:i:s");
@@ -391,7 +393,7 @@ class Produccion extends CI_Controller{
                     'produccion_semillaprecio' => $this->input->post('produccion_semillaprecio'),
                     'produccion_tiempoestimadog' => $this->input->post('produccion_tiempoestimadog'),
                     'produccion_cantidaesperada' => $this->input->post('produccion_cantidaesperada'),
-                    'produccion_cantidadobtenida' => $this->input->post('produccion_cantidadobtenida'),
+                    'produccion_cantidadobtenida' => $cantidad_obtenida,
                     'produccion_costototalxgermin' => $this->input->post('produccion_costototalxgermin'),
                     'produccion_costounidefectiva' => $this->input->post('produccion_costounidefectiva'),
                 );
@@ -407,7 +409,14 @@ class Produccion extends CI_Controller{
                 
                 $this->Detalle_produccion_model->insertar_detalleprod_aux_endetalleprod($usuario_id, $produccion_id);
                 /* ********** F I N  registrar en detalle venta ********** */
+                $detalle_prod = $this->Detalle_produccion_model->getproducto_detalleprod($produccion_id);
+                $producto_id = 0;
+                if(isset($detalle_prod)){
+                    $producto_id = $detalle_prod[0]["producto_id"];
+                }
                 $this->Detalle_produccion_model->delete_alldetalleproduccion_aux($usuario_id);
+                
+                $this->Costo_operativo_model->insertar_costoproducto_acostoperativo($producto_id, $produccion_id, $usuario_id, $cantidad_obtenida);
 
                 //$this->Control_inventario_model->update_control_inventario();
                 echo json_encode("ok");
