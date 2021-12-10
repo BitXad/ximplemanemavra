@@ -27,15 +27,11 @@ class Unidad_model extends CI_Model
         $unidad = $this->db->query("
             SELECT
                 *
-
             FROM
                 unidad
-
             WHERE
                 1 = 1
-                
                 ORDER BY unidad_id DESC
-
         ")->result_array();
 
         return $unidad;

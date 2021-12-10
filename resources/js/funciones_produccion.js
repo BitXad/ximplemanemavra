@@ -6,7 +6,7 @@ function inicio(){
 //muestra la tabla de producciones
 function mostrarproduccion(){
     var base_url = document.getElementById('base_url').value;
-        var controlador = base_url+'produccion/mostrarproduccion/';
+    var controlador = base_url+'produccion/mostrarproduccion/';
     var parametro   = document.getElementById('filtrar').value;
     var fecha_desde = document.getElementById('fecha_desde').value;
     var fecha_hasta = document.getElementById('fecha_hasta').value;

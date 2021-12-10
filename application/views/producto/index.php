@@ -1,4 +1,5 @@
 <!----------------------------- script buscador --------------------------------------->
+
 <script src="<?php echo base_url('resources/js/funciones_producto.js'); ?>" type="text/javascript"></script>
 <script src="<?php echo base_url('resources/js/JsBarcode.all.js'); ?>" type="text/javascript"></script>
 <!--<script src="<?php /*echo base_url('resources/plugins/datatables/dataTables.bootstrap.css'); ?>" type="text/javascript"></script>
@@ -491,6 +492,95 @@ echo '<script type="text/javascript">
     </div>
 </div>
 <!------------------------ Modal para agregar aviso ------------------->
+<!------------------------ Modal agregar costos_producto ------------------->
+<div class="modal fade" id="costo_producto_modal" tabindex="-1" role="dialog" aria-labelledby="modal_label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold">Costos producto</span>
+            </div>
+            <div class="text-right col-md-12">
+                <a class="btn btn-sm btn-success" onclick="form_costo_producto()"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Costo</a>
+                <input type="hidden" id="producto_costo">
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Insumo / parametro</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Unitario(Bs)</th>
+                        <th>Parciar(Bs)</th>
+                    </tr>
+                </thead>
+                <tbody id="costos_producto"></tbody>
+            </table>
+            <div class="modal-footer">
+                <!-- <button type="button" id="button_save" class="btn btn-success" onclick="add_aviso()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button> -->
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="form_costo_producto_modal" tabindex="-1" role="dialog" aria-labelledby="modal_label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                <span class="text-bold">Agregar costo</span>
+            </div>
+            <!-- <?= form_open('costo_producto/add_costo')?> -->
+            <div class="col-md-12">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="form_insumo"><span style="color:red">*</span>Insumo / Parametro</label>
+                        <input type="text" class="form-control" id="form_insumo" name="form_insumo" placeholder="Lama" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" >
+                        <input type="hidden" id="form_producto" name="form_producto">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="form-group">
+                        <label for="form_catcosto">Categoria costo</label>    
+                        <select class="form-control" name="form_catcosto" id="form_catcosto"></select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="form_unidad">Unidad</label>    
+                        <input type="text" class="form-control" placeholder="LITROS" id="form_unidad" name="form_unidad">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="form_cantidad">Cantidad</label>    
+                        <input type="number" step="any" class="form-control" placeholder="1" id="form_cantidad" name="form_cantidad" value="0" onchange="calcular_costoParcial()">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="form_punitario">Precio Unitario(Bs)</label>    
+                        <input type="number" step="any" id="form_punitario" name="form_punitario" class="form-control" placeholder="" value="0" onchange="calcular_costoParcial()">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="form_pparcial">Precio parcial(Bs)</label>    
+                        <input type="number" step="any" id="form_pparcial" name="form_pparcial" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="button_save_costo" class="btn btn-success" onclick="guardar_costo()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_campos()"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+            </div>
+            <!-- <?= form_close() ?> -->
+        </div>
+    </div>
+</div>
+<!------------------------ Modal agregar costos_producto------------------->
 
 <!------------------------ INICIO modal para elegir # imagenes(codigo de barras de un producto) para su impresion! ------------------->
 <div class="modal fade" id="modalcodigobarra" tabindex="-1" role="dialog" aria-labelledby="modalcodigobarralabel" style="font-family: Arial">
@@ -545,3 +635,4 @@ echo '<script type="text/javascript">
     </div>
 </div>
 <!------------------------ F I N  modal para elegir # imagenes(codigo de barras de un producto) para su impresion! ------------------->
+<script src="<?php echo base_url('resources/js/funciones_costoproducto.js'); ?>" type="text/javascript"></script>

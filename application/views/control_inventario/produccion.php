@@ -112,7 +112,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title" style="display: inline;">ENIVAR A VENTAS</h3>
+                        <h3 class="modal-title" style="display: inline;">ENVIAR A VENTAS</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: red">
                             <span aria-hidden="true" style="padding-right: 10px;">&times;</span>
                         </button>
@@ -121,28 +121,47 @@
                         <div class="row">
                             <div class="box-body">
                                 <div class="row clearfix">
-                                    <div class="col-md-12">
-                                        <label for="form_producto" class="control-label">Producto</label>
-                                        <div class="form-group">
-                                            <input type="text" name="form_producto" value="" class="form-control" id="form_producto" disabled/>
-                                            <input type="hidden" name="form_producto_id" value="" class="form-control" id="form_producto_id"/>
+
+                                    <form action="">
+                                        <div class="col-md-12">
+                                            <label for="form_producto" class="control-label">Producto</label>
+                                            <div class="form-group">
+                                                <input type="text" name="form_producto" value="" class="form-control" id="form_producto" disabled/>
+                                                <input type="hidden" name="form_producto_id" value="" class="form-control" id="form_producto_id"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="form_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad a vender</label>
-                                        <div class="form-group">
-                                            <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required/>
-                                            <input type="hidden" id="platabanda">
-                                            <input type="hidden" id="det_produccion">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <label for="form_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
+                                                <div class="form-group">
+                                                    <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required/>
+                                                    <input type="hidden" id="platabanda">
+                                                    <input type="hidden" id="det_produccion">
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-3">
+                                                <label for="form_costo">Costo Bs</label>
+                                                <input type="number" id="form_costo" name="form_costo" class="form-control" placeholder="Last name">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="form_precio">Precio</label>
+                                                <input type="number" id="form_precio" name="form_precio" class="form-control" placeholder="Last name">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="form_total">Total</label>
+                                                <input type="number" id="form_total" name="form_total" class="form-control" placeholder="Last name">
+                                            </div> -->
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button class="btn btn-success" onclick="save_compra()">
-                                    <i class="fa fa-check"></i>Guardar
-                                </button>
-                                <button data-dismiss="modal" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</button>
+                                <div class="col-md-12 text-center">
+                                    <a class="btn btn-success" onclick="save_compra()">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender
+                                    </a>
+                                    <a data-dismiss="modal" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</a>
+                                </div>
                             </div>
                         </div>  
                     </div>            

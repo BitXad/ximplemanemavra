@@ -151,7 +151,7 @@ class Detalle_produccion_model extends CI_Model
 
     function get_detproduccion_venta($detproduccion_id,$controli_id){
         return $this->db->query(
-            "SELECT dp.*,p2.producto_nombre
+            "SELECT dp.*,p2.producto_nombre, p2.producto_precio
             from detalle_produccion dp 
             left join produccion p on p.produccion_id = dp.produccion_id 
             left join producto p2 on p2.producto_id = dp.producto_id 

@@ -240,6 +240,7 @@ function tablaresultadosproducto(limite){
                         html += "<a class='btn btn-facebook btn-xs' onclick='buscarclasificador("+registros[i]["miprod_id"]+")' title='Ver Clasificador'><span class='fa fa-list-ol'></span></a>";
                         html += "<a href='"+base_url+"producto/productoasignado/"+registros[i]["miprod_id"]+"' class='btn btn-soundcloud btn-xs' title='Ver si esta asignado a subcategorias' target='_blank' ><span class='fa fa-list'></span></a>";
                         html += "<a class='btn btn-warning btn-xs' onclick='mostrarmodalcodigobarra("+registros[i]["miprod_id"]+", "+JSON.stringify(registros[i]["producto_nombre"])+", "+JSON.stringify(registros[i]["producto_codigobarra"])+")' title='Código de barras para impresión'><span class='fa fa-barcode'></span></a>";
+                        html += "<a class='btn btn-success btn-xs' onclick='mostrar_costos_producto("+registros[i]["miprod_id"]+")' title='Mostrar costos del producto'><i class='fa fa-money' aria-hidden='true'></i></a>";
                         html += "<!------------------------ INICIO modal para confirmar eliminación ------------------->";
                         html += "<div class='modal fade' id='myModal"+i+"' tabindex='-1' role='dialog' aria-labelledby='myModalLabel"+i+"'>";
                         html += "<div class='modal-dialog' role='document'>";

@@ -1,4 +1,5 @@
 var base_url;
+var costo_total_op;
 $(window).load(function(){ 
     base_url = document.getElementById("base_url").value;
     let produccion_id = document.getElementById("produccion").value;
@@ -69,7 +70,7 @@ function get_platabandas(produccion_id){
                 html+=`<div class="col-xs-12 col-sm-6 col-md-3">
                             <div class="small-box ${color}">
                                 <div class="inner">
-                                    <span style="font-size: 8pt;"><b>Platabanda: </b>${e['controli_id']}<a style="float:right; cursor:pointer; color:${e['estado_id'] == 38 ? "":"#00019E"}" onclick="cambiar_estado_platabanda(${e['controli_id']},${e['estado_id']})"><i class="fa fa-toggle-${estado}" aria-hidden="true"></i></a></span><br>
+                                    <span style="font-size: 8pt;"><b>${e['area_nombre']}</b>: <b>Platabanda: </b>${e['controli_id']}<a style="float:right; cursor:pointer; color:${e['estado_id'] == 38 ? "":"#00019E"}" onclick="cambiar_estado_platabanda(${e['controli_id']},${e['estado_id']})"><i class="fa fa-toggle-${estado}" aria-hidden="true"></i></a></span><br>
                                     ${info}
                                     <br>
                                     <br>
@@ -130,7 +131,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <span id="planta_nombre${item['detproduccion_id']}">${item['producto_nombre']}</span><sub>[${item['produccion_id']}]</sub>
                                         </div>
                                         <div class="form-inline">
-                                            <label for="planta_nombre">Fecha de producción: </label>
+                                            <label for="planta_nombre">Inicio de producción: </label>
                                             <span id="fecha${item['detproduccion_id']}">${moment(item["produccion_registro"]).format("DD/MM/YYYY")}</span>
                                         </div>
                                         <div class="form-inline">
@@ -170,23 +171,38 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
                                             <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
                                             <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
-                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
                                             ${ item['estado_id'] > 33 ? `<button class="btn btn-success btn-xs" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender</button>`:``}
+                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
                                     <div class="col-md-12" id="formulario-perdida-${item['detproduccion_id']}" style="display:none;"></div>
                                 </article>
                                 <article class="col-md-5">
+                                    <span class='text-bold'>Costos iniciales:</span>
+                                    <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
+                                        <thead class="thead-light">
+                                                <tr>
+                                                    <th style="padding: 0;">Costo Ini.(Bs)</th>
+                                                    <th style="padding: 0;">Costo Op.(Bs)</th>
+                                                    <th style="padding: 0;">Costo total(Bs)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>`
+                    html += get_costos_produccion(item['producto_costo'], item['detproduccion_cantidad'], costos,item['produccion_id'],item['detproduccion_id']);
+                    html +=                     `</tr>
+                                            </tbody>
+                                    </table>
                                     <span class='text-bold'>Costos:</span>
                                     <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>#</th>
-                                                <th>Detalle</th>
-                                                <th># Pb.</th>
-                                                <th>Costo</th>
-                                                <th>Fecha</th>
+                                                <th style="padding: 0">#</th>
+                                                <th style="padding: 0">Detalle</th>
+                                                <th style="padding: 0"># Pb.</th>
+                                                <th style="padding: 0">Costo</th>
+                                                <th style="padding: 0">Fecha</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tabla_costo${ item['detproduccion_id'] }" style="font-size:8pt;">`
@@ -520,7 +536,7 @@ function send_inventario(detproduccion_id,producto_id){
                 detproduccion_id:detproduccion_id,
                 cantidad:cantidad,
                 producto_id:producto_id,
-            },
+            },    
             success:()=>{
                 alert("Se envio a inventario");
                 $("#modal_info_platabanda").modal('hide');
@@ -538,6 +554,8 @@ function cerrar_modal(){
 }
 
 function vender_item(detproduccion_id, platabanda){
+    let costo_total = document.getElementById(`costo_total${detproduccion_id}`).value;
+    console.log(detproduccion_id)
     cerrar_modal();
     $('#modal_form_venta').modal('show');
     $('#platabanda').val(platabanda);
@@ -555,6 +573,13 @@ function vender_item(detproduccion_id, platabanda){
             let ress = JSON.parse(result);
             $('#form_producto').val(ress[0]['producto_nombre']);
             $('#form_producto_id').val(ress[0]['producto_id']);
+
+            let costo = getCosto();
+            $(`#form_costo`).val(costo_total)
+            $(`#form_precio`).val(ress[0]['producto_precio'])
+            
+            $(`#form_total`).val()
+
             document.getElementById('form_cantidad').setAttribute("max", ress[0]['detproduccion_cantidad']);
         },
         error:(error) => {
@@ -720,4 +745,35 @@ function form_perdida(detproduccion_id, platabanda){
                 </div>`;
     form.innerHTML = html;    
     $(`#perdida${detproduccion_id}`).focus();
+}
+
+function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detproduccion_id,bandera = 0){
+    let total = 0;
+    costos.forEach(costo => {
+        costo.forEach(cost => {
+            if(produccion == cost['produccion_id']){
+                total += Number(cost['costoop_costo']);
+            }
+        });
+    });
+    let costo_operativo = parseFloat(total)/parseFloat(cantidad);
+    let costo_total = parseFloat(costo_inicial)+parseFloat(costo_operativo)
+    let html = `
+        <td style="padding:0; text-align:center"><span id="costo_inicial${detproduccion_id}">${parseFloat(costo_inicial).toFixed(2)}</span></td>
+        <td style="padding:0; text-align:center"><span id="costo_operativo${detproduccion_id}">${parseFloat(costo_operativo).toFixed(2)}</span></td>
+        <td style="padding:0; text-align:center"><span id="costo_total${detproduccion_id}">${parseFloat(costo_total).toFixed(2)}</span></td>
+    `;
+    if(bandera == 0){
+        return html;
+    }else{
+        setCosto(costo_total);
+    }
+}
+
+function setCosto(costo){
+    costo_total_op = costo;
+}
+
+function getCosto(){
+    return costo_total_op;
 }

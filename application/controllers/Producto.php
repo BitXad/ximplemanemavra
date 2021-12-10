@@ -1123,11 +1123,11 @@ class Producto extends CI_Controller{
                 'aproducto_dias' => $tiempo1,
                 'aproducto_dias2' => $tiempo2,
             );
-            if($aproducto == 0){
-                $this->Producto_model->add_avisos_producto($params);
-            }else{
-                $this->Producto_model->edit_avisos_producto($aproducto,$params);
-            }
+            $this->Producto_model->add_avisos_producto($params);
+            // if($aproducto == 0){
+            // }else{
+            //     $this->Producto_model->edit_avisos_producto($aproducto,$params);
+            // }
         }else{
             show_404();
         }

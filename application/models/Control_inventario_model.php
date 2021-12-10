@@ -133,7 +133,7 @@ class Control_inventario_model extends CI_Model
 
     function get_items_platabanda($controli_id, $produccion=""){
         return $this->db->query(
-            "SELECT dp.*,p.producto_nombre,p.producto_foto, e.*,p2.produccion_id,p2.produccion_registro, sa.*
+            "SELECT dp.*,p.producto_nombre,p.producto_costo,p.producto_foto, e.*,p2.produccion_id,p2.produccion_registro, sa.*
             from detalle_produccion dp 
             left join producto p on p.producto_id = dp.producto_id 
             left join control_inventario ci on ci.controli_id = dp.controli_id 
@@ -169,15 +169,15 @@ class Control_inventario_model extends CI_Model
     
     function get_platabanda_produccion($produccion_id){
         return $this->db->query(
-            "SELECT ci.*,e.*
+            "SELECT a.area_nombre ,ci.*,e.*
             from control_inventario ci
             left join estado e on ci.estado_id = e.estado_id
-            left join detalle_produccion dp on dp.controli_id = ci.controli_id 
+            left join detalle_produccion dp on dp.controli_id = ci.controli_id
+            left join area a on a.area_id = ci.area_id 
             where 1=1
             and dp.produccion_id = $produccion_id
             and e.estado_tipo = 9
-            order by ci.controli_id asc
-                        "
+            order by ci.controli_id asc"
         )->result_array();
     }
     function get_platabanda_producciont_items($produccion_id){
