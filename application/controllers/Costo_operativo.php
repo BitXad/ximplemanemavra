@@ -57,12 +57,16 @@ class Costo_operativo extends CI_Controller{
                 $params = array(
                     'produccion_id' => $this->input->post('produccion_id'),
                     'usuario_id' => $this->input->post('usuario_id'),
+                    'unidad' => $this->input->post('unidad_nombre'),
+                    'catcosto_id' => $this->input->post('catcosto_id'),
+                    'usuarioid' => $this->input->post('usuario_id'),
                     'estado_id' => $estado_id,
-                    'costodesc_id' => $this->input->post('costodesc_id'),
+                    //'costodesc_id' => $this->input->post('costodesc_id'),
+                    'costoop_descripcion' => $this->input->post('costodesc_id'),
                     'costoop_costo' => $this->input->post('costoop_costo'),
                 );
 
-                $costoop_id_id = $this->Costo_operativo_model->add_costo_operativo($params);
+                $costoop_id = $this->Costo_operativo_model->add_costo_operativo($params);
                 redirect('costo_operativo/index');
             }
             else
@@ -72,6 +76,12 @@ class Costo_operativo extends CI_Controller{
                 
                 $this->load->model('Usuario_model');
                 $data['all_usuario'] = $this->Usuario_model->get_all_usuario_activo();
+                
+                $this->load->model('Categoria_costo_model');
+                $data['all_categoria'] = $this->Categoria_costo_model->get_all_categorias();
+                
+                $this->load->model('Unidad_model');
+                $data['all_unidad'] = $this->Unidad_model->get_all_unidad();
                 
                 $this->load->model('Costo_descripcion_model');
                 $data['all_costo_descripcion'] = $this->Costo_descripcion_model->get_all_costo_descripcion();

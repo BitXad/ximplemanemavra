@@ -31,7 +31,7 @@ class Unidad_model extends CI_Model
                 unidad
             WHERE
                 1 = 1
-                ORDER BY unidad_id DESC
+                ORDER BY unidad_nombre ASC
         ")->result_array();
 
         return $unidad;

@@ -1,6 +1,5 @@
 <script src="<?php echo base_url('resources/js/funciones_costodesc.js'); ?>" type="text/javascript"></script>
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
-
 <div class="row">
     <div class="col-md-12">
       	<div class="box box-info">
@@ -19,7 +18,7 @@
                                 foreach($all_costo_descripcion as $costo_descripcion)
                                 {
                                     $selected = ($costo_descripcion['costodesc_id'] == $this->input->post('costodesc_id')) ? ' selected="selected"' : "";
-                                    echo '<option value="'.$costo_descripcion['costodesc_id'].'" '.$selected.'>'.$costo_descripcion['costodesc_descripcion'].'</option>';
+                                    echo '<option value="'.$costo_descripcion['costodesc_descripcion'].'" '.$selected.'>'.$costo_descripcion['costodesc_descripcion'].'</option>';
                                 }
                                 ?>
                             </select>
@@ -42,13 +41,41 @@
                                 foreach($all_produccion as $produccion)
                                 {
                                     $selected = ($produccion['produccion_id'] == $this->input->post('produccion_id')) ? ' selected="selected"' : "";
-                                    echo '<option value="'.$produccion['produccion_id'].'" '.$selected.'>'.$produccion['costodesc_descripcion'].'</option>';
+                                    echo '<option value="'.$produccion['produccion_id'].'" '.$selected.'>'.$produccion['produccion_descripcion'].'</option>';
                                 }
                                 ?>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <label for="unidad_nombre" class="control-label"><span class="text-danger">*</span>Unidad</label>
+                        <div class="form-group">
+                            <select name="unidad_nombre" class="form-control" id="unidad_nombre" required>
+                                <?php 
+                                foreach($all_unidad as $unidad)
+                                {
+                                    $selected = ($unidad['unidad_nombre'] == $this->input->post('unidad_nombre')) ? ' selected="selected"' : "";
+                                    echo '<option value="'.$unidad['unidad_nombre'].'" '.$selected.'>'.$unidad['unidad_nombre'].'</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="catcosto_id" class="control-label"><span class="text-danger">*</span>Categoria</label>
+                        <div class="form-group">
+                            <select name="catcosto_id" class="form-control" id="catcosto_id" required>
+                                <?php 
+                                foreach($all_categoria as $categoria)
+                                {
+                                    $selected = ($categoria['catcosto_id'] == $this->input->post('catcosto_id')) ? ' selected="selected"' : "";
+                                    echo '<option value="'.$categoria['catcosto_id'].'" '.$selected.'>'.$categoria['catcosto_descripcion'].'</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <label for="usuario_id" class="control-label"><span class="text-danger">*</span>Usuario</label>
                         <div class="form-group">
                             <select name="usuario_id" class="form-control" id="usuario_id" required>
