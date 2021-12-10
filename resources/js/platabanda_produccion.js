@@ -263,7 +263,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             });
         });
         html += `<tr>
-                    <th colspan="3" style="padding: 0; text-align: right;"><b>Total</b></th>
+                    <th colspan="2" style="padding: 0; text-align: right;"><b>Total</b></th>
                     <th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
