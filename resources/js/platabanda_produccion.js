@@ -200,7 +200,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <tr>
                                                 <th style="padding: 0">#</th>
                                                 <th style="padding: 0">Detalle</th>
-                                                <th style="padding: 0"># Pb.</th>
+                                                <!--<th style="padding: 0"># Pb.</th>-->
                                                 <th style="padding: 0">Costo</th>
                                                 <th style="padding: 0">Fecha</th>
                                             </tr>
@@ -252,8 +252,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
                                 <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0; text-align: center;">${cost['controli_id']}</td>
+                                <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                                <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
                                 <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
                                 <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
