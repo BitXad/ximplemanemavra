@@ -149,6 +149,7 @@ function form_costo_producto(costop_id = 0){
         success: (result)=>{
             ress = JSON.parse(result);
             limpiar_campos()
+            $('#form_insumo').css('border','2px solid #d5d9e0');
             let html = ``;
             let html2 = ``;
             if(costop_id != 0){
