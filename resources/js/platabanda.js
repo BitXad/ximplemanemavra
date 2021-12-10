@@ -203,7 +203,7 @@ function show_modal_info(platabanda_id){
                                             <tr>
                                                 <th style='padding: 2px'>#</th>
                                                 <th style='padding: 2px'>Detalle</th>
-                                                <th style='padding: 2px'># Pb.</th>
+                                                <!--<th style='padding: 2px'># Pb.</th>-->
                                                 <th style='padding: 2px'>Costo</th>
                                                 <th style='padding: 2px'>Fecha</th>
                                             </tr>
@@ -256,8 +256,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
                                 <td style='padding: 2px' class='text-center'>${i}</td>
-                                <td style='padding: 2px'>${cost['costodesc_descripcion']}</td>
-                                <td style='padding: 2px' class='text-center'>${cost['controli_id']}</td>
+                                <td style='padding: 2px'>${cost['costoop_descripcion']}</td>
+                                <!--<td style='padding: 2px' class='text-center'>${cost['controli_id']}</td>-->
                                 <td style='padding: 2px' class='text-right'>${cost['costoop_costo']}</td>
                                 <td style='padding: 2px' class='text-center'>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
@@ -268,7 +268,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
         });
         html += `<tr>
                     <th style="padding: 2px;"></th>
-                    <th style="padding: 2px;"></th>
+                    <!--<th style="padding: 2px;"></th>-->
                     <th style="padding: 2px; text-align: right;"><b>Total</b></th>
                     <th style="padding: 2px; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
                     <th style="padding: 2px;"></th>
