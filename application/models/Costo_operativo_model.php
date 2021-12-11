@@ -110,8 +110,9 @@ class Costo_operativo_model extends CI_Model
                 cp.unidad, cp.cproducto_cantidad*$cantidad_obtenida, cp.cproducto_costoparcial*$cantidad_obtenida
             FROM
               `costo_producto` cp
-            WHERE 
-              cp.producto_id = $producto_id)"
+            WHERE
+                (cp.catcosto_id = 1 or cp.catcosto_id = 2)
+                and cp.producto_id = $producto_id)"
             ); //->result_array();
 
         return true;
