@@ -571,7 +571,7 @@ echo '<script type="text/javascript">
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="form_pparcial">Precio parcial(Bs)</label>    
-                        <input type="number" step="any" id="form_pparcial" name="form_pparcial" class="form-control" placeholder="" disabled style="background-color: #f2f2f2">
+                        <input type="number" step="any" id="form_pparcial" name="form_pparcial" class="form-control" placeholder="" disabled style="background-color:">
                     </div>
                 </div>
             </div>
