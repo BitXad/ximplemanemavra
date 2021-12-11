@@ -200,6 +200,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <tr>
                                                 <th style="padding: 0">#</th>
                                                 <th style="padding: 0">Detalle</th>
+                                                <th style="padding: 0">Unidad</th>
+                                                <th style="padding: 0">Prec. Unit</th>
                                                 <!--<th style="padding: 0"># Pb.</th>-->
                                                 <th style="padding: 0">Costo</th>
                                                 <th style="padding: 0">Fecha</th>
@@ -253,8 +255,10 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     html += `<tr>
                                 <td style="padding: 0; text-align: right">${i}</td>
                                 <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                                <td style="padding: 0;">${cost['unidad']}</td>
+                                <td style="padding: 0;">${cost['cproducto_costo']}</td>
                                 <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
-                                <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
+                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
                                 <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     i++;
@@ -264,7 +268,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
         });
         html += `<tr>
                     <th colspan="2" style="padding: 0; text-align: right;"><b>Total</b></th>
-                    <th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
+                    <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total).toFixed(2))}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
     }else{
