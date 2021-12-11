@@ -553,7 +553,7 @@ echo '<script type="text/javascript">
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="form_unidad">Unidad</label>    
-                        <input type="text" class="form-control" placeholder="LITROS" id="form_unidad" name="form_unidad">
+                        <input type="text" class="form-control" placeholder="LITROS" id="form_unidad" name="form_unidad" onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" >
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
@@ -571,7 +571,7 @@ echo '<script type="text/javascript">
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="form_pparcial">Precio parcial(Bs)</label>    
-                        <input type="number" step="any" id="form_pparcial" name="form_pparcial" class="form-control" placeholder="">
+                        <input type="number" step="any" id="form_pparcial" name="form_pparcial" class="form-control" placeholder="" disabled style="background-color:">
                     </div>
                 </div>
             </div>

@@ -121,6 +121,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
             let costos = result['costos'];
             let perdidas = result['perdidas'];
             let html = ``;
+            let ancho_boton = 100;
+            let alto_boton = 120;
             res.forEach(item => {
                 if(item['estado_id'] != 39){
                     html += `<div class="row">
@@ -167,12 +169,13 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                     <div class="col-md-12">
                                         
                                         <div class="form-group mb-12">
-                                            <button class="btn btn-success btn-xs" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> Perdida</button>
-                                            <button class="btn btn-primary btn-xs" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> Costo</button>
-                                            <button class="btn btn-info btn-xs" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> Estado anterior</button>
-                                            <button class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-xs" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> Enviar a Ventas`}</button>
-                                            ${ item['estado_id'] > 33 ? `<button class="btn btn-success btn-xs" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Vender</button>`:``}
-                                            <button class="btn btn-danger btn-xs" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> Cerrar</button>
+                                            
+                                            <button style="widht:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> <br><br> Perdida</button>
+                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> <br><br> Costo</button>
+                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> <br><br> Estado anterior</button>
+                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> <br><br> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br><br> Enviar a Ventas`}</button>
+                                            ${ item['estado_id'] > 33 ? `<button class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <br><br> Vender</button>`:``}
+                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> <br><br> Cerrar</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
