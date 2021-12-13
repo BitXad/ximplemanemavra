@@ -42,14 +42,16 @@ function get_platabandas(produccion_id){
                             let pfecha2 = p['aproducto_dias2'];
                             let dias;
                             let aviso = false;
-                            if (p['estado_id'] == '33') {
-                                dias = parseInt(pfecha1);
-                            } else if(p['estado_id'] == '34') {
-                                dias =  parseInt(pfecha1) + parseInt(pfecha2);
+                            if (p['estado_id'] == '33' || p['estado_id'] == '34') {
+                                if (p['estado_id'] == '33') {
+                                    dias = parseInt(pfecha1);
+                                } else if(p['estado_id'] == '34') {
+                                    dias =  parseInt(pfecha1) + parseInt(pfecha2);
+                                }
+                                let fecha_aviso = (moment(fecha_registro).add(dias, 'days')).toJSON().slice(0,10).replace(/-/g,'/');
+                                var hoy = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+                                aviso = (hoy >= fecha_aviso ? true : false);
                             }
-                            let fecha_aviso = (moment(fecha_registro).add(dias, 'days')).toJSON().slice(0,10).replace(/-/g,'/');
-                            var hoy = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-                            aviso = (hoy >= fecha_aviso ? true : false);
                             let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
@@ -195,8 +197,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <a style="widht:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-long-arrow-down fa-2x" aria-hidden="true"></i> <br> Perdida</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
-                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
-                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Vender"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px; ${ item['estado_id'] == 35 ? `display: none;`:``}" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
+                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i><br> Cerrar</a>
                                         </div>
                                     </div>
