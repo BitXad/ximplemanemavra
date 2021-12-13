@@ -16,6 +16,9 @@ function get_platabandas(produccion_id){
         success:(respuesta)=>{
             var resp = JSON.parse(respuesta);
             let color, boton, info;
+            let eltotal   = Number(0);
+            let laperdida = Number(0);
+            let elsaldo   = Number(0);
             let html = ``;
             resp['respuesta'].forEach(e => {
                 color = "";
@@ -57,6 +60,9 @@ function get_platabandas(produccion_id){
                             let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
+                                    elsaldo   += (parseInt(p['detproduccion_cantidad'])-suma);
+                                    laperdida += suma;
+                                    eltotal   += (parseInt(p['detproduccion_cantidad']));
                                     info += `<a onclick="show_modal_info(${e['controli_id']},${produccion_id})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
                                                 <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ aviso ? `border: red 3px solid;`: ``}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
@@ -101,6 +107,9 @@ function get_platabandas(produccion_id){
                         </div>`;
             });
             
+            $("#elsaldo").html(elsaldo);
+            $("#laperdida").html(laperdida);
+            $("#eltotal").html(eltotal);
             $("#platabandas_produccion").html(html);
         },
         error:()=>{
@@ -194,7 +203,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
-                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
+                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Vender"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i><br> Cerrar</a>
                                         </div>
                                     </div>
@@ -585,8 +594,9 @@ function cerrar_modal(){
 }
 
 function vender_item(detproduccion_id, platabanda){
-    let costo_total = document.getElementById(`costo_total${detproduccion_id}`).value;
-    console.log(detproduccion_id)
+    let costo_total = $('#costo_total'+detproduccion_id).html();
+    //console.log(detproduccion_id);
+    //console.log(costo_total);
     cerrar_modal();
     $('#modal_form_venta').modal('show');
     $('#platabanda').val(platabanda);

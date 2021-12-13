@@ -56,7 +56,7 @@
             <font size='4' face='Arial'><b>PRODUCCION Nro.: <?php echo $produccion['produccion_numeroorden']; ?></b></font><br>
             <font size='4' face='Arial'><b><?php echo $produccion['produccion_descripcion']; ?></b></font>    
         </div>
-        <div  class="col-md-6">
+        <div  class="col-md-4">
             <table>
                 <tr>
                     <td style="width: 15%" class="text-right"><b>Inicio:&nbsp;</b></td>
@@ -75,6 +75,28 @@
                 <tr>
                     <td style="width: 15%" class="text-right"><b>Responsable:&nbsp;</b></td>
                     <td style="width: 85%"><?php echo $produccion['responsable']; ?></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Total:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="eltotal"></span></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Perdida:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="laperdida"></span>
+                        <?php
+                        /*if($produccion['produccion_fin'] != "" && $produccion['produccion_fin'] != null && $produccion['produccion_fin'] != "0000-00-00" ){
+                            echo date("d/m/Y", strtotime($produccion['produccion_fin']));
+                        }*/
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Saldo:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="elsaldo"></span></td>
                 </tr>
             </table>
         </div>
@@ -139,18 +161,18 @@
                                                     <input type="hidden" id="det_produccion">
                                                 </div>
                                             </div>
-                                            <!-- <div class="col-md-3">
+                                            <div class="col-md-3">
                                                 <label for="form_costo">Costo Bs</label>
-                                                <input type="number" id="form_costo" name="form_costo" class="form-control" placeholder="Last name">
+                                                <input type="number" step="any" min="0" id="form_costo" name="form_costo" class="form-control" placeholder="Last name">
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="form_precio">Precio</label>
-                                                <input type="number" id="form_precio" name="form_precio" class="form-control" placeholder="Last name">
+                                                <input type="number" step="any" min="0" id="form_precio" name="form_precio" class="form-control" placeholder="Last name">
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="form_total">Total</label>
-                                                <input type="number" id="form_total" name="form_total" class="form-control" placeholder="Last name">
-                                            </div> -->
+                                                <input type="number" step="any" min="0" id="form_total" name="form_total" class="form-control" placeholder="Last name">
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
