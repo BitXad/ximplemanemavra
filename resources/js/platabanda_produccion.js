@@ -311,9 +311,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
                                 <td style="padding: 0;">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0;">${cost['controli_id']}</td>
-                                <td style="padding: 0;">${cost['costoop_costo']}</td>
+                                <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
+                                <!--<td style="padding: 0;">${cost['controli_id']}</td>
+                                <td style="padding: 0;">${cost['costoop_costo']}</td>-->
                                 <td style="padding: 0;">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     total += Number(cost['costoop_costo']);
