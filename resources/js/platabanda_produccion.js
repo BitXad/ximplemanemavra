@@ -278,8 +278,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     html += `<tr>
                                 <td style="padding: 0; text-align: right">${i}</td>
                                 <td style="padding: 0;">${cost['costoop_descripcion']}</td>
-                                <td style="padding: 0;">${cost['unidad']}</td>
-                                <td style="padding: 0;">${cost['cproducto_costo']}</td>
+                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
                                 <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
                                 <!--<td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>-->
                                 <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
@@ -291,7 +291,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             });
         });
         html += `<tr>
-                    <th colspan="2" style="padding: 0; text-align: right;"><b>Total</b></th>
+                    <th colspan="4" style="padding: 0; text-align: right;"><b>Total</b></th>
                     <!--<th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>-->
                     <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total).toFixed(2))}</b></th>
                     <th style="padding: 0;"></th>
@@ -319,7 +319,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     total += Number(cost['costoop_costo']);
                     i++;
                 });
-                html += `<r>
+                html += `<tr>
                             <th colspan="3" style="padding: 0;text-align: right;"><b>Total</b></th>
                             <th xolspan="2" style="padding: 0;text-align: right;">${parseFloat(total).toFixed(2)}</th>
                             <th style="padding: 0;"></th>

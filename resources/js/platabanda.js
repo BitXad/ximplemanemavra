@@ -203,6 +203,8 @@ function show_modal_info(platabanda_id){
                                             <tr>
                                                 <th style='padding: 2px'>#</th>
                                                 <th style='padding: 2px'>Detalle</th>
+                                                <th style='padding: 2px'>Unidad</th>
+                                                <th style="padding: 0">Prec. Unit</th>
                                                 <!--<th style='padding: 2px'># Pb.</th>-->
                                                 <th style='padding: 2px'>Costo</th>
                                                 <th style='padding: 2px'>Fecha</th>
@@ -256,9 +258,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
                                 <td style='padding: 2px' class='text-center'>${i}</td>
-                                <td style='padding: 2px'>${cost['costoop_descripcion']}</td>
+                                <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
                                 <!--<td style='padding: 2px' class='text-center'>${cost['controli_id']}</td>-->
-                                <td style='padding: 2px' class='text-right'>${cost['costoop_costo']}</td>
+                                <td style='padding: 2px' class='text-right'>${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
                                 <td style='padding: 2px' class='text-center'>${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     i++;
@@ -267,10 +271,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             });
         });
         html += `<tr>
-                    <th style="padding: 2px;"></th>
-                    <!--<th style="padding: 2px;"></th>-->
-                    <th style="padding: 2px; text-align: right;"><b>Total</b></th>
-                    <th style="padding: 2px; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
+                    <th colspan="4" style="padding: 2px; text-align: right;"><b>Total</b></th>
+                    <th style="padding: 2px; text-align: right;"><b>${numberFormat(parseFloat(total).toFixed(2))}</b></th>
                     <th style="padding: 2px;"></th>
                 </tr>`
     }else{
