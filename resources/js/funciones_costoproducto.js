@@ -53,7 +53,7 @@ function mostrar_costos_producto(producto){
                     case '1':
                         html += `<tr>
                                     <th style="padding: 0; text-align:left;" colspan="5"><b>TOTAL MATERIALES</b></th>
-                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total * parseFloat(cat['catcosto_porcentaje'])).toFixed(2)}</th>
+                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total * parseFloat(cat['catcosto_porcentaje'])).toFixed(3)}</th>
                                     <th style="padding: 0" colspan="1"></th>
                                 </tr>`
                         totalMaterial = total;
@@ -63,17 +63,17 @@ function mostrar_costos_producto(producto){
                                     <td style="padding: 0"></td>
                                     <td style="padding: 0">CARGAS SOCIALES</td>
                                     <td style="padding: 0" ></td>
-                                    <td style="text-align:center; padding: 0;">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(2) }%</td>
+                                    <td style="text-align:center; padding: 0;">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(3) }%</td>
                                     <td style="padding: 0" ></td>
-                                    <td colspan="1" style="padding: 0;text-align:center">${parseFloat(total * parseFloat(cat['catcosto_porcentaje'])).toFixed(2)}</td>
+                                    <td colspan="1" style="padding: 0;text-align:center">${parseFloat(total * parseFloat(cat['catcosto_porcentaje'])).toFixed(3)}</td>
                                     <td style="padding: 0" ></td>
                                 </tr>`
                         html += `<tr>
                                     <th style="padding: 0; text-align:left;" colspan="5"><b>TOTAL MANO DE OBRA</b></th>
-                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total + (total * parseFloat(cat['catcosto_porcentaje']))).toFixed(2)}</th>
+                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total + (total * parseFloat(cat['catcosto_porcentaje']))).toFixed(3)}</th>
                                     <th style="padding: 0" colspan="1"></th>
                                 </tr>`
-                        totalManoObra = parseFloat(total + (total * parseFloat(cat['catcosto_porcentaje']))).toFixed(2);
+                        totalManoObra = parseFloat(total + (total * parseFloat(cat['catcosto_porcentaje']))).toFixed(3);
                         break;
                     case '3':
                         total = parseFloat(totalManoObra) * parseFloat(cat['catcosto_porcentaje']);
@@ -81,14 +81,14 @@ function mostrar_costos_producto(producto){
                                     <td style="padding: 0"></td>
                                     <td style="padding: 0">HERRAMIENTAS MENORES</td>
                                     <td style="padding: 0" ></td>
-                                    <td style="text-align:center; padding: 0">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(2) }%</td>
+                                    <td style="text-align:center; padding: 0">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(3) }%</td>
                                     <td style="padding: 0" ></td>
-                                    <td colspan="1" style="text-align:center; padding: 0">${parseFloat(total).toFixed(2)}</td>
+                                    <td colspan="1" style="text-align:center; padding: 0">${parseFloat(total).toFixed(3)}</td>
                                     <td style="padding: 0" ></td>
                                 </tr>`
                         html += `<tr>
                                     <th style="padding: 0; text-align:left;" colspan="5"><b>TOTAL HERRAMIENTAS Y EQUIPOS</b></th>
-                                    <th colspan="1" style="padding: 0;text-align:center;">${parseFloat(total).toFixed(2)}</th>
+                                    <th colspan="1" style="padding: 0;text-align:center;">${parseFloat(total).toFixed(3)}</th>
                                     <th colspan="1" style="padding: 0"></th>
                                 </tr>`
                         totalHerramientaEquipo = total;
@@ -97,15 +97,15 @@ function mostrar_costos_producto(producto){
                         total = parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo);
                         html += `<tr>
                                     <th style="padding: 0; text-align:left;" colspan="5"><b>SUB TOTAL</b></th>
-                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total).toFixed(2)}</th>
+                                    <th colspan="1" style="padding: 0; text-align:center">${parseFloat(total).toFixed(3)}</th>
                                     <th colspan="1" style="padding: 0"></th>
                                 </tr>`
-                        let sub_total = parseFloat(total * cat['catcosto_porcentaje']).toFixed(2);
+                        let sub_total = parseFloat(total * cat['catcosto_porcentaje']).toFixed(3);
                         html += `<tr>
                                     <td style="padding: 0;"></td>
                                     <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVO</td>
                                     <td style="padding: 0;" ></td>
-                                    <td style="padding: 0; text-align:center">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(2) }%</td>
+                                    <td style="padding: 0; text-align:center">${ parseFloat(100*cat['catcosto_porcentaje']).toFixed(3) }%</td>
                                     <td style="padding: 0;" ></td>
                                     <td colspan="1" style="padding: 0; text-align:center">${sub_total}</td>
                                     <td style="padding: 0;" ></td>
@@ -113,7 +113,7 @@ function mostrar_costos_producto(producto){
                         totalAdmin = parseFloat(total)+parseFloat(sub_total);
                         html += `<tr>
                                     <th style="padding: 0; text-align:left;" colspan="5"><b>PARCIAL</b></th>
-                                    <th colspan="1" style="padding: 0; text-align:center"><b>${parseFloat(totalAdmin).toFixed(2)}</b></th>
+                                    <th colspan="1" style="padding: 0; text-align:center"><b>${parseFloat(totalAdmin).toFixed(3)}</b></th>
                                     <th colspan="1" style="padding: 0"></th>
                                 </tr>`
                         break;
@@ -124,11 +124,11 @@ function mostrar_costos_producto(producto){
             let total_producto = totalAdmin;
             html += `<tr>
                         <th style="padding: 0; font-size:14px; text-align:left;" colspan="5">TOTAL PRECIO UNITARIO:</th>
-                        <th colspan="2" style="padding: 0;text-align:center;font-size:14px;font-weight:bold">${parseFloat(total_producto).toFixed(2)}</th>
+                        <th colspan="2" style="padding: 0;text-align:center;font-size:14px;font-weight:bold">${parseFloat(total_producto).toFixed(3)}</th>
                     </tr>`
             $(`#${tabla}`).html(html);
-            document.getElementById('update_costo_producto').setAttribute('onclick',`update_costo_producto(${producto}, ${parseFloat(total_producto).toFixed(2)})`)
-            // update_costo_producto(producto, parseFloat(total_producto).toFixed(2));
+            document.getElementById('update_costo_producto').setAttribute('onclick',`update_costo_producto(${producto}, ${parseFloat(total_producto).toFixed(3)})`)
+            // update_costo_producto(producto, parseFloat(total_producto).toFixed(3));
             modal_show_hidden(modal);
         },
         error:() => {
@@ -235,7 +235,6 @@ function guardar_costo(cproducto_id = 0){
                 cproducto_id:cproducto_id,
             },
             success:()=>{
-                console.log("ok")
                 modal_show_hidden(modal_add);
                 mostrar_costos_producto(form_producto);
                 modal_show_hidden(modal_info);
@@ -254,7 +253,7 @@ function calcular_costoParcial(){
     let form_cantidad = document.getElementById('form_cantidad').value; 
     let form_punitario = document.getElementById('form_punitario').value; 
     let form_pparcial = parseFloat(form_cantidad).toFixed(3) * parseFloat(form_punitario).toFixed(3);
-    $("#form_pparcial").val((parseFloat(form_pparcial).toFixed(2)));
+    $("#form_pparcial").val((parseFloat(form_pparcial).toFixed(3)));
 } 
 
 function volver(){
