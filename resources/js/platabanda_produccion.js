@@ -39,21 +39,14 @@ function get_platabandas(produccion_id){
                             let pfecha2 = p['aproducto_dias2'];
                             let dias;
                             let aviso = false;
-                            console.log(p['estado_id']);
                             if (p['estado_id'] == '33') {
                                 dias = parseInt(pfecha1);
-                                console.log(dias);
                             } else if(p['estado_id'] == '34') {
                                 dias =  parseInt(pfecha1) + parseInt(pfecha2);
-                                console.log(dias);
                             }
                             let fecha_aviso = (moment(fecha_registro).add(dias, 'days')).toJSON().slice(0,10).replace(/-/g,'/');
                             var hoy = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-                            console.log(fecha_registro)
-                            console.log(hoy)
-                            console.log(fecha_aviso);
                             aviso = (hoy >= fecha_aviso ? true : false);
-                            // let fecha_aviso = fecha_registro.setDate(fecha_registro.getDate() + dias);
                             let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
@@ -277,9 +270,9 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
                     html += `<tr>
                                 <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
                                 <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
+                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
                                 <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
                                 <!--<td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>-->
                                 <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
