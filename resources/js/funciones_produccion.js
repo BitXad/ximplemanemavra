@@ -8,6 +8,9 @@ function mostrarproduccion(){
     var base_url = document.getElementById('base_url').value;
     var controlador = base_url+'produccion/mostrarproduccion/';
     var parametro   = document.getElementById('filtrar').value;
+    if(parametro != ""){
+        controlador = base_url+'produccion/mostrarproduccionfiltro/';
+    }
     var fecha_desde = document.getElementById('fecha_desde').value;
     var fecha_hasta = document.getElementById('fecha_hasta').value;
     var buscarestado_id = document.getElementById('buscarestado_id').value;
