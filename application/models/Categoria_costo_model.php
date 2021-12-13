@@ -15,7 +15,8 @@ class Categoria_costo_model extends CI_Model{
         return $this->db->query(
             "SELECT cp.*
             from categoria_costo cp
-            where 1=1"
+            where 1=1
+            and cp.catcosto_id < 3"
         )->result_array();
     }
     

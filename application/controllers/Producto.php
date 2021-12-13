@@ -1142,4 +1142,19 @@ class Producto extends CI_Controller{
             show_404();
         }
     }
+    /**
+     * Actulizar precio_compra de un producto
+     */
+    function update_costo(){
+        if($this->input->is_ajax_request()){
+            $producto_id = $this->input->post('producto_id');
+            $precio_costo = $this->input->post('precio_costo');
+            $params = array(
+                'producto_costo'=> $precio_costo,
+            );
+            $this->Producto_model->update_producto($producto_id, $params);
+        }else{
+            show_404();
+        }
+    }
 }

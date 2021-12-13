@@ -11,6 +11,7 @@ function get_platabandas(produccion_id){
     $.ajax({
         url: controlador,
         type: "POST",
+        cache: false,
         data:{produccion_id:produccion_id},
         success:(respuesta)=>{
             var resp = JSON.parse(respuesta);
@@ -33,11 +34,31 @@ function get_platabandas(produccion_id){
                         let platabanda;
                         let cambiar = true;
                         resp['plantas'].forEach(p => {
+                            let fecha_registro = p['produccion_inicio'];
+                            let pfecha1 = p['aproducto_dias'];
+                            let pfecha2 = p['aproducto_dias2'];
+                            let dias;
+                            let aviso = false;
+                            console.log(p['estado_id']);
+                            if (p['estado_id'] == '33') {
+                                dias = parseInt(pfecha1);
+                                console.log(dias);
+                            } else if(p['estado_id'] == '34') {
+                                dias =  parseInt(pfecha1) + parseInt(pfecha2);
+                                console.log(dias);
+                            }
+                            let fecha_aviso = (moment(fecha_registro).add(dias, 'days')).toJSON().slice(0,10).replace(/-/g,'/');
+                            var hoy = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+                            console.log(fecha_registro)
+                            console.log(hoy)
+                            console.log(fecha_aviso);
+                            aviso = (hoy >= fecha_aviso ? true : false);
+                            // let fecha_aviso = fecha_registro.setDate(fecha_registro.getDate() + dias);
                             let suma = parseInt(p['cant_perdida']) + parseInt(p['cant_compra']);
                             if (e['controli_id'] == p['controli_id']) {
                                 if (p['estado_id'] != '39'){
                                     info += `<a onclick="show_modal_info(${e['controli_id']},${produccion_id})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
-                                                <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ false ? `border: red 3px solid;`: ``}">
+                                                <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ aviso ? `border: red 3px solid;`: ``}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
                                                     <span style="font-size: 7pt;"><b> (${(parseInt(p['detproduccion_cantidad'])-suma)}/${p['detproduccion_cantidad']})</b></span>
@@ -121,8 +142,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
             let costos = result['costos'];
             let perdidas = result['perdidas'];
             let html = ``;
-            let ancho_boton = 100;
-            let alto_boton = 120;
+            let ancho_boton = 65;
+            let alto_boton = 60;
             res.forEach(item => {
                 if(item['estado_id'] != 39){
                     html += `<div class="row">
@@ -168,14 +189,13 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                     </div>
                                     <div class="col-md-12">
                                         
-                                        <div class="form-group mb-12">
-                                            
-                                            <button style="widht:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-floppy-o" aria-hidden="true"></i> <br><br> Perdida</button>
-                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-plus-square-o" aria-hidden="true"></i> <br><br> Costo</button>
-                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left" aria-hidden="true"></i> <br><br> Estado anterior</button>
-                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right" aria-hidden="true"></i> <br><br> Siguiente estado` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br><br> Enviar a Ventas`}</button>
-                                            ${ item['estado_id'] > 33 ? `<button class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <br><br> Vender</button>`:``}
-                                            <button style="width:${ancho_boton}px !important; height:${alto_boton}px !important;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle" aria-hidden="true"></i> <br><br> Cerrar</button>
+                                        <div class="form-group mb-12 text-center" style="padding-top:10px;">
+                                            <a style="widht:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-long-arrow-down fa-2x" aria-hidden="true"></i> <br> Perdida</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` } ${ item['estado_id'] == 35 ? `style="display: none"`:``}>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
+                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i><br> Cerrar</a>
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -203,8 +223,6 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <tr>
                                                 <th style="padding: 0">#</th>
                                                 <th style="padding: 0">Detalle</th>
-                                                <th style="padding: 0">Unidad</th>
-                                                <th style="padding: 0">Prec. Unit</th>
                                                 <!--<th style="padding: 0"># Pb.</th>-->
                                                 <th style="padding: 0">Costo</th>
                                                 <th style="padding: 0">Fecha</th>
@@ -258,10 +276,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     html += `<tr>
                                 <td style="padding: 0; text-align: right">${i}</td>
                                 <td style="padding: 0;">${cost['costoop_descripcion']}</td>
-                                <td style="padding: 0;">${cost['unidad']}</td>
-                                <td style="padding: 0;">${cost['cproducto_costo']}</td>
                                 <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
-                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                <td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>
                                 <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                             </tr>`;
                     i++;
@@ -271,7 +287,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
         });
         html += `<tr>
                     <th colspan="2" style="padding: 0; text-align: right;"><b>Total</b></th>
-                    <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total).toFixed(2))}</b></th>
+                    <th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
     }else{
@@ -348,7 +364,7 @@ function actualizar_informacion(detproduccion_id){
                 });
             }
         }else{
-            alert(`- El campo razón es obligatorio`);
+            alert(`- El campo motivo es obligatorio`);
             $(`#perdida_razon${detproduccion_id}`).focus();
         }
     }else{
@@ -738,9 +754,9 @@ function form_perdida(detproduccion_id, platabanda){
                         <div class="col-sm-6"></div>
                     </div>
                     <div class="form-group row">
-                        <label for="perdida_razon${detproduccion_id}" class="col-sm-2 col-form-label"><span style="color: red;">*</span>Razón</label>
+                        <label for="perdida_razon${detproduccion_id}" class="col-sm-2 col-form-label"><span style="color: red;">*</span>Motivo</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="perdida_razon${detproduccion_id}" name="perdida_razon${detproduccion_id}" placeholder="Motivo/Razón de la perdida">
+                            <input type="text" class="form-control" id="perdida_razon${detproduccion_id}" name="perdida_razon${detproduccion_id}" placeholder="Motivo de la perdida">
                         </div>
                     </div>
                     <div class="form-group row">

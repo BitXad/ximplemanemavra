@@ -127,6 +127,7 @@ function mostrar_costos_producto(producto){
                         <th colspan="2" style="padding: 0;text-align:center;font-size:14px;font-weight:bold">${parseFloat(total_producto).toFixed(2)}</th>
                     </tr>`
             $(`#${tabla}`).html(html);
+            update_costo_producto(producto, parseFloat(total_producto).toFixed(2));
             modal_show_hidden(modal);
         },
         error:() => {
@@ -258,4 +259,23 @@ function calcular_costoParcial(){
 function volver(){
     modal_show_hidden(modal_add);
     modal_show_hidden(modal_info);
+}
+
+function update_costo_producto(producto_id, precio_costo){
+    let controlador =  `${base_url}producto/update_costo`;
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache:false,
+        data:{
+            producto_id: producto_id,
+            precio_costo: precio_costo,
+        },
+        success:()=>{
+            console.log("ok");
+        },
+        error:()=>{
+            alert("Error: Algo salio mal al actualizar el precio del producto");
+        }
+    })
 }

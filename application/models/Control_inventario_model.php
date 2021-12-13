@@ -182,7 +182,7 @@ class Control_inventario_model extends CI_Model
     }
     function get_platabanda_producciont_items($produccion_id){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2, p2.*,c2.*
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2,c2.*,p2.produccion_inicio
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
