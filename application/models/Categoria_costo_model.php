@@ -11,12 +11,12 @@ class Categoria_costo_model extends CI_Model{
     /*
      * Get all categoria_costo
      */
-    function get_all_categorias(){
+    function get_all_categorias($aux = "AND cp.catcosto_id < 3"){
         return $this->db->query(
             "SELECT cp.*
             from categoria_costo cp
             where 1=1
-            and cp.catcosto_id < 3"
+            $aux"
         )->result_array();
     }
     
