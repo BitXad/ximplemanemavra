@@ -498,7 +498,7 @@ echo '<script type="text/javascript">
         <div class="modal-content">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
-                <span class="text-bold">Costos producto</span>
+                <span class="text-bold">COSTOS DE PRODUCTO</span>
             </div>
             <div class="text-right col-md-12 m-3">
                 <a class="btn btn-sm btn-success" onclick="form_costo_producto()" style="margin-top: 5px; margin-bottom:5px;"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Costo</a>
@@ -521,7 +521,7 @@ echo '<script type="text/javascript">
                 </table>
             </div>
             <div class="modal-footer">
-                <!-- <button type="button" id="button_save" class="btn btn-success" onclick="add_aviso()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button> -->
+                <button type="button" id="update_costo_producto" class="btn btn-success"><i class="fa fa-usd" aria-hidden="true"></i> Actualizar costo</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
             </div>
         </div>

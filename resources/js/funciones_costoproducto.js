@@ -127,7 +127,8 @@ function mostrar_costos_producto(producto){
                         <th colspan="2" style="padding: 0;text-align:center;font-size:14px;font-weight:bold">${parseFloat(total_producto).toFixed(2)}</th>
                     </tr>`
             $(`#${tabla}`).html(html);
-            update_costo_producto(producto, parseFloat(total_producto).toFixed(2));
+            document.getElementById('update_costo_producto').setAttribute('onclick',`update_costo_producto(${producto}, ${parseFloat(total_producto).toFixed(2)})`)
+            // update_costo_producto(producto, parseFloat(total_producto).toFixed(2));
             modal_show_hidden(modal);
         },
         error:() => {
@@ -262,20 +263,24 @@ function volver(){
 }
 
 function update_costo_producto(producto_id, precio_costo){
-    let controlador =  `${base_url}producto/update_costo`;
-    $.ajax({
-        url: controlador,
-        type: 'POST',
-        cache:false,
-        data:{
-            producto_id: producto_id,
-            precio_costo: precio_costo,
-        },
-        success:()=>{
-            console.log("ok");
-        },
-        error:()=>{
-            alert("Error: Algo salio mal al actualizar el precio del producto");
-        }
-    })
+    let msj = `¿Está seguo que quiere cambiar el COSTO de este produccto a Bs ${precio_costo}?`
+    if (confirm(msj)) {
+        let controlador =  `${base_url}producto/update_costo`;
+        $.ajax({
+            url: controlador,
+            type: 'POST',
+            cache:false,
+            data:{
+                producto_id: producto_id,
+                precio_costo: precio_costo,
+            },
+            success:()=>{
+                modal_show_hidden(modal_info);
+                location.reload();
+            },
+            error:()=>{
+                alert("Error: Algo salio mal al actualizar el precio del producto");
+            }
+        })
+    }
 }
