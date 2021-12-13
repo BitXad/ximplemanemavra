@@ -273,31 +273,105 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     let html = ``;
     let i = 1;
     var total = 0.00;
+    let totalMaterial = 0;
+    let totalManoObra = 0;
     let fecha;
+    let total_costo_p = 0;
     if (costos != "") {
         costos.forEach(costo => {
             costo.forEach(cost => {
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    html += `<tr>
-                                <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
-                                <!--<td style="padding: 0; text-align: center;">${cost['controli_id']}</td>-->
-                                <!--<td style="padding: 0; text-align: right;">${cost['costoop_costo']}</td>-->
-                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
-                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-                            </tr>`;
+                    if(cost['unidad'] != "HR"){
+                        totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
+                        html += `<tr>
+                                    <td style="padding: 0; text-align: right">${i}</td>
+                                    <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                    <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                    <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                    <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                                </tr>`;
+                    }else{
+                    }
+                    
                     i++;
                     total += Number(cost['costoop_costo']);
                 }
             });
+            html += `<tr>
+                <th colspan="4" style="padding: 0">Total Material</th>
+                <th style="padding: 0">${totalMaterial}</th>
+                <th style="padding: 0"></th>
+            </tr>`
+
+            costo.forEach(cost => {
+                if(produccion == cost['produccion_id']){
+                    fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                    if(cost['unidad'] == "HR"){
+                        totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
+                        html += `<tr>
+                                    <td style="padding: 0; text-align: right">${i}</td>
+                                    <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                    <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                    <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                    <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                                </tr>`;
+                    }
+                    i++;
+                    total += Number(cost['costoop_costo']);
+                }
+            });
+            html += `<tr>
+                        <td style="padding: 0; text-align: right">${i}</td>
+                        <td style="padding: 0;">CARGAS SOCIALES</td>
+                        <td style="padding: 0;" class='text-center'></td>
+                        <td style="padding: 0;" class='text-right'>71.00%</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra)*0.71).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: center"></td>
+                    </tr>`;
+
+            html += `<tr>
+                        <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
+                        <th style="padding: 0">${parseFloat(totalManoObra) + parseFloat(parseFloat(totalManoObra)*0.71)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
+             let aux = parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)
+            html += `<tr>
+                        <td style="padding: 0; text-align: right">${i}</td>
+                        <td style="padding: 0;">HERRAMIENTAS MENORES</td>
+                        <td style="padding: 0;" class='text-center'></td>
+                        <td style="padding: 0;" class='text-right'>5.00%</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: center"></td>
+                    </tr>`;
+            let totalHerramientaEquipo = parseFloat(parseFloat(totalManoObra)*parseFloat(0.05)).toFixed(3);
+            html += `<tr>
+                    <th colspan="4" style="padding: 0">TOTAL HERRAMIENTAS Y EQUIPOS</th>
+                    <th style="padding: 0">${totalHerramientaEquipo}</th>
+                    <th style="padding: 0"></th>
+                </tr>`
+            let aux2 = parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3);
+            html += `<tr>
+                        <td style="padding: 0; text-align: right">${i}</td>
+                        <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
+                        <td style="padding: 0;" class='text-center'></td>
+                        <td style="padding: 0;" class='text-right'>3.00%</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: center"></td>
+                    </tr>`;
+            html += `<tr>
+                    <th colspan="4" style="padding: 0">PARCIAL</th>
+                    <th style="padding: 0">${parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3)}</th>
+                    <th style="padding: 0"></th>
+                </tr>`
+            total_costo_p = parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3);
         });
         html += `<tr>
                     <th colspan="4" style="padding: 0; text-align: right;"><b>Total</b></th>
-                    <!--<th style="padding: 0; text-align: right;"><b>${parseFloat(total).toFixed(2)}</b></th>-->
-                    <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total).toFixed(2))}</b></th>
+                    <!--<th style="padding: 0; text-align: right;"><b>${parseFloat(parseFloat(totalMaterial)+parseFloat(totalManoObra)).toFixed(2)}</b></th>-->
+                    <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total_costo_p).toFixed(3))}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
     }else{
@@ -784,23 +858,119 @@ function form_perdida(detproduccion_id, platabanda){
 }
 
 function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detproduccion_id,bandera = 0){
-    let total = 0;
+    let total_costo_p = 0;
+    let i = 1;
+    let html = ``;
+    var total = 0.00;
+    let totalMaterial = 0;
+    let totalManoObra = 0;
     costos.forEach(costo => {
         costo.forEach(cost => {
             if(produccion == cost['produccion_id']){
+                fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                if(cost['unidad'] != "HR"){
+                    totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
+                    html += `<tr>
+                                <td style="padding: 0; text-align: right">${i}</td>
+                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                            </tr>`;
+                }else{
+                }
+                
+                i++;
                 total += Number(cost['costoop_costo']);
             }
         });
+        html += `<tr>
+            <th colspan="4" style="padding: 0">Total Material</th>
+            <th style="padding: 0">${totalMaterial}</th>
+            <th style="padding: 0"></th>
+        </tr>`
+
+        costo.forEach(cost => {
+            if(produccion == cost['produccion_id']){
+                fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                if(cost['unidad'] == "HR"){
+                    totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
+                    html += `<tr>
+                                <td style="padding: 0; text-align: right">${i}</td>
+                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                            </tr>`;
+                }
+                i++;
+                total += Number(cost['costoop_costo']);
+            }
+        });
+        html += `<tr>
+                    <td style="padding: 0; text-align: right">${i}</td>
+                    <td style="padding: 0;">CARGAS SOCIALES</td>
+                    <td style="padding: 0;" class='text-center'></td>
+                    <td style="padding: 0;" class='text-right'>71.00%</td>
+                    <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra)*0.71).toFixed(3)}</td>
+                    <td style="padding: 0; text-align: center"></td>
+                </tr>`;
+
+        html += `<tr>
+                    <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
+                    <th style="padding: 0">${parseFloat(totalManoObra) + parseFloat(parseFloat(totalManoObra)*0.71)}</th>
+                    <th style="padding: 0"></th>
+                </tr>`
+         let aux = parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)
+        html += `<tr>
+                    <td style="padding: 0; text-align: right">${i}</td>
+                    <td style="padding: 0;">HERRAMIENTAS MENORES</td>
+                    <td style="padding: 0;" class='text-center'></td>
+                    <td style="padding: 0;" class='text-right'>5.00%</td>
+                    <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)}</td>
+                    <td style="padding: 0; text-align: center"></td>
+                </tr>`;
+        let totalHerramientaEquipo = parseFloat(parseFloat(totalManoObra)*parseFloat(0.05)).toFixed(3);
+        html += `<tr>
+                <th colspan="4" style="padding: 0">TOTAL HERRAMIENTAS Y EQUIPOS</th>
+                <th style="padding: 0">${totalHerramientaEquipo}</th>
+                <th style="padding: 0"></th>
+            </tr>`
+        let aux2 = parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3);
+        html += `<tr>
+                    <td style="padding: 0; text-align: right">${i}</td>
+                    <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
+                    <td style="padding: 0;" class='text-center'></td>
+                    <td style="padding: 0;" class='text-right'>3.00%</td>
+                    <td style="padding: 0; text-align: right;">${parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3)}</td>
+                    <td style="padding: 0; text-align: center"></td>
+                </tr>`;
+        html += `<tr>
+                <th colspan="4" style="padding: 0">PARCIAL</th>
+                <th style="padding: 0">${parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3)}</th>
+                <th style="padding: 0"></th>
+            </tr>`
+        total_costo_p = parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3);
     });
-    let costo_operativo = parseFloat(total)/parseFloat(cantidad);
+    // costos.forEach(costo => {
+    //     costo.forEach(cost => {
+            
+    //         if(produccion == cost['produccion_id']){
+    //             total += Number(cost['costoop_costo']);
+    //         }
+    //     });
+    // });
+    let costo_operativo = parseFloat(total_costo_p)/parseFloat(cantidad);
     let costo_total = parseFloat(costo_inicial)+parseFloat(costo_operativo)
-    let html = `
+    let html2 = `
         <td style="padding:0; text-align:center"><span id="costo_inicial${detproduccion_id}">${parseFloat(costo_inicial).toFixed(2)}</span></td>
         <td style="padding:0; text-align:center"><span id="costo_operativo${detproduccion_id}">${parseFloat(costo_operativo).toFixed(2)}</span></td>
         <td style="padding:0; text-align:center"><span id="costo_total${detproduccion_id}">${parseFloat(costo_total).toFixed(2)}</span></td>
     `;
     if(bandera == 0){
-        return html;
+        return html2;
     }else{
         setCosto(costo_total);
     }
