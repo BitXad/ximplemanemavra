@@ -185,7 +185,9 @@ class Costo_operativo extends CI_Controller{
     function get_costos(){
         if ($this->input->is_ajax_request()){
             $detproduccion_id = $this->input->post('detproduccion_id');
-            $costos = $this->Costo_operativo_model->get_costos($detproduccion_id);
+            $produccion_id = $this->input->post('produccion');
+            $costos = $this->Costo_operativo_model->get_costos_produccion($produccion_id);
+            // $costos = $this->Costo_operativo_model->get_costos($detproduccion_id);
             echo json_encode($costos);
         }
     } 

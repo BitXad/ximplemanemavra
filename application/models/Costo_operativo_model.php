@@ -106,7 +106,7 @@ class Costo_operativo_model extends CI_Model
             )
             (SELECT
                 $produccion_id, cp.producto_id, cp.catcosto_id, $usuario_id,
-                1, cp.cproducto_costo*$cantidad_obtenida, now(), cp.cproducto_descripcion,
+                1, (cp.cproducto_costo * (cp.cproducto_cantidad * $cantidad_obtenida)), now(), cp.cproducto_descripcion,
                 cp.cproducto_unidad, cp.cproducto_cantidad*$cantidad_obtenida, cp.cproducto_costoparcial*$cantidad_obtenida
             FROM
               `costo_producto` cp

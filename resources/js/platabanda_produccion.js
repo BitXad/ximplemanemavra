@@ -32,7 +32,7 @@ function get_platabandas(produccion_id){
                         break;
                     case '37':
                         color = `bg-green`;
-                        boton = `<button onclick="show_modal_info(${e['controli_id']})" class="btn btn-sm btn-info" style="width: 100%;z-index:8;"><i class="fa fa-eye" aria-hidden="true"></i></button>`;
+                        boton = `<button onclick="show_modal_info(${e['controli_id']},${produccion_id})" class="btn btn-sm btn-info" style="width: 100%;z-index:8;"><i class="fa fa-eye" aria-hidden="true"></i></button>`;
                         // if(resp['plantas'].count > 0){}
                         let platabanda;
                         let cambiar = true;
@@ -138,7 +138,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
         cache: false,
         data:{
             platabanda_id:platabanda_id,
-            produccion_id:produccion_id
+            produccion_id:produccion_id,
         },
         success:(resultado)=>{
             result = JSON.parse(resultado);
@@ -195,7 +195,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                         
                                         <div class="form-group mb-12 text-center" style="padding-top:10px;">
                                             <a style="widht:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-long-arrow-down fa-2x" aria-hidden="true"></i> <br> Perdida</a>
-                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id},${produccion_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px; ${ item['estado_id'] == 35 ? `display: none;`:``}" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
                                             ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
@@ -215,7 +215,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                                     <th style="padding: 0;">Costo total(Bs)</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="tabla_costos_unitarios${produccion}">
                                                 <tr>`
                     html += get_costos_produccion(item['producto_costo'], item['detproduccion_cantidad'], costos,item['produccion_id'],item['detproduccion_id']);
                     html +=                     `</tr>
@@ -269,7 +269,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
     });
 }
 
-function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
+function 
+get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     let html = ``;
     let i = 1;
     var total = 0.00;
@@ -292,7 +293,6 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                     <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
                                     <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                                 </tr>`;
-                    }else{
                     }
                     
                     i++;
@@ -300,8 +300,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                 }
             });
             html += `<tr>
-                <th colspan="4" style="padding: 0">Total Material</th>
-                <th style="padding: 0">${totalMaterial}</th>
+                <th colspan="4" style="padding: 0">TOTAL MATERIAL</th>
+                <th style="padding: 0">${parseFloat(totalMaterial).toFixed(3)}</th>
                 <th style="padding: 0"></th>
             </tr>`
 
@@ -314,8 +314,8 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                                     <td style="padding: 0; text-align: right">${i}</td>
                                     <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
                                     <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
-                                    <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(3)}</td>
+                                    <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(3))}</td>
                                     <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                                 </tr>`;
                     }
@@ -323,87 +323,193 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
                     total += Number(cost['costoop_costo']);
                 }
             });
+            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
                         <td style="padding: 0;">CARGAS SOCIALES</td>
                         <td style="padding: 0;" class='text-center'></td>
                         <td style="padding: 0;" class='text-right'>71.00%</td>
-                        <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra)*0.71).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat(cargas_sociales).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
-
+            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
             html += `<tr>
                         <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
-                        <th style="padding: 0">${parseFloat(totalManoObra) + parseFloat(parseFloat(totalManoObra)*0.71)}</th>
+                        <th style="padding: 0">${parseFloat(total_mano_obra).toFixed(3)}</th>
                         <th style="padding: 0"></th>
                     </tr>`
-             let aux = parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)
+             let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
                         <td style="padding: 0;">HERRAMIENTAS MENORES</td>
                         <td style="padding: 0;" class='text-center'></td>
                         <td style="padding: 0;" class='text-right'>5.00%</td>
-                        <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat(herramientas_menores).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
-            let totalHerramientaEquipo = parseFloat(parseFloat(totalManoObra)*parseFloat(0.05)).toFixed(3);
+            let totalHerramientaEquipo = parseFloat(herramientas_menores);
             html += `<tr>
                     <th colspan="4" style="padding: 0">TOTAL HERRAMIENTAS Y EQUIPOS</th>
-                    <th style="padding: 0">${totalHerramientaEquipo}</th>
+                    <th style="padding: 0">${parseFloat(totalHerramientaEquipo).toFixed(3)}</th>
                     <th style="padding: 0"></th>
                 </tr>`
-            let aux2 = parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3);
+            let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
+            html += `<tr>
+                    <th colspan="4" style="padding: 0">SUB TOTAL</th>
+                    <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
+                    <th style="padding: 0"></th>
+                </tr>`
+            let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
                         <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
                         <td style="padding: 0;" class='text-center'></td>
                         <td style="padding: 0;" class='text-right'>3.00%</td>
-                        <td style="padding: 0; text-align: right;">${parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3)}</td>
+                        <td style="padding: 0; text-align: right;">${parseFloat(gastos_admin).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
+            let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
             html += `<tr>
                     <th colspan="4" style="padding: 0">PARCIAL</th>
-                    <th style="padding: 0">${parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3)}</th>
+                    <th style="padding: 0">${parseFloat(parcial).toFixed(3)}</th>
                     <th style="padding: 0"></th>
                 </tr>`
-            total_costo_p = parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3);
+            total_costo_p = parcial;
         });
         html += `<tr>
                     <th colspan="4" style="padding: 0; text-align: right;"><b>Total</b></th>
-                    <!--<th style="padding: 0; text-align: right;"><b>${parseFloat(parseFloat(totalMaterial)+parseFloat(totalManoObra)).toFixed(2)}</b></th>-->
                     <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total_costo_p).toFixed(3))}</b></th>
                     <th style="padding: 0;"></th>
                 </tr>`
     }else{
         let controlador = `${base_url}costo_operativo/get_costos`;
+        console.log("go")
         $.ajax({
             url: controlador,
             type: 'POST',
             cache: false,
-            data: {detproduccion_id:detproduccion_id},
+            data: {
+                detproduccion_id:detproduccion_id,
+                produccion:produccion,
+            },
             success: (result)=>{
                 let costos = JSON.parse(result);
                 let html = ``;
                 let i = 1;
                 costos.forEach(cost => {
-                    fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    html += `<tr>
-                                <td style="padding: 0;">${i}</td>
-                                <td style="padding: 0;">${cost['costoop_descripcion']}</td>
-                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
-                                <!--<td style="padding: 0;">${cost['controli_id']}</td>
-                                <td style="padding: 0;">${cost['costoop_costo']}</td>-->
-                                <td style="padding: 0;">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-                            </tr>`;
-                    total += Number(cost['costoop_costo']);
-                    i++;
+                    if(produccion == cost['produccion_id']){
+                        fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                        if(cost['unidad'] != "HR"){
+                            totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
+                            html += `<tr>
+                                        <td style="padding: 0; text-align: right">${i}</td>
+                                        <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                        <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                        <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                        <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
+                                        <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                                    </tr>`;
+                        }
+                        
+                        i++;
+                        total += Number(cost['costoop_costo']);
+                    }
                 });
                 html += `<tr>
-                            <th colspan="3" style="padding: 0;text-align: right;"><b>Total</b></th>
-                            <th xolspan="2" style="padding: 0;text-align: right;">${parseFloat(total).toFixed(2)}</th>
-                            <th style="padding: 0;"></th>
+                    <th colspan="4" style="padding: 0">TOTAL MATERIAL</th>
+                    <th style="padding: 0">${parseFloat(totalMaterial).toFixed(3)}</th>
+                    <th style="padding: 0"></th>
+                </tr>`
+    
+                costos.forEach(cost => {
+                    if(produccion == cost['produccion_id']){
+                        fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                        if(cost['unidad'] == "HR"){
+                            totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
+                            html += `<tr>
+                                        <td style="padding: 0; text-align: right">${i}</td>
+                                        <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                        <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                                        <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(3)}</td>
+                                        <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(3))}</td>
+                                        <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                                    </tr>`;
+                        }
+                        i++;
+                        total += Number(cost['costoop_costo']);
+                    }
+                });
+                let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
+                html += `<tr>
+                            <td style="padding: 0; text-align: right">${i}</td>
+                            <td style="padding: 0;">CARGAS SOCIALES</td>
+                            <td style="padding: 0;" class='text-center'></td>
+                            <td style="padding: 0;" class='text-right'>71.00%</td>
+                            <td style="padding: 0; text-align: right;">${parseFloat(cargas_sociales).toFixed(3)}</td>
+                            <td style="padding: 0; text-align: center"></td>
                         </tr>`;
+                let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
+                html += `<tr>
+                            <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
+                            <th style="padding: 0">${parseFloat(total_mano_obra).toFixed(3)}</th>
+                            <th style="padding: 0"></th>
+                        </tr>`
+                    let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
+                html += `<tr>
+                            <td style="padding: 0; text-align: right">${i}</td>
+                            <td style="padding: 0;">HERRAMIENTAS MENORES</td>
+                            <td style="padding: 0;" class='text-center'></td>
+                            <td style="padding: 0;" class='text-right'>5.00%</td>
+                            <td style="padding: 0; text-align: right;">${parseFloat(herramientas_menores).toFixed(3)}</td>
+                            <td style="padding: 0; text-align: center"></td>
+                        </tr>`;
+                let totalHerramientaEquipo = parseFloat(herramientas_menores);
+                html += `<tr>
+                        <th colspan="4" style="padding: 0">TOTAL HERRAMIENTAS Y EQUIPOS</th>
+                        <th style="padding: 0">${parseFloat(totalHerramientaEquipo).toFixed(3)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
+                let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
+                html += `<tr>
+                        <th colspan="4" style="padding: 0">SUB TOTAL</th>
+                        <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
+                let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
+                html += `<tr>
+                            <td style="padding: 0; text-align: right">${i}</td>
+                            <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
+                            <td style="padding: 0;" class='text-center'></td>
+                            <td style="padding: 0;" class='text-right'>3.00%</td>
+                            <td style="padding: 0; text-align: right;">${parseFloat(gastos_admin).toFixed(3)}</td>
+                            <td style="padding: 0; text-align: center"></td>
+                        </tr>`;
+                let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
+                html += `<tr>
+                        <th colspan="4" style="padding: 0">PARCIAL</th>
+                        <th style="padding: 0">${parseFloat(parcial).toFixed(3)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
+                total_costo_p = parcial;
+            
+                html += `<tr>
+                            <th colspan="4" style="padding: 0; text-align: right;"><b>Total</b></th>
+                            <th style="padding: 0; text-align: right;"><b>${numberFormat(parseFloat(total_costo_p).toFixed(3))}</b></th>
+                            <th style="padding: 0;"></th>
+                        </tr>`
+                    // fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                    // html += `<tr>
+                    //             <td style="padding: 0;">${i}</td>
+                    //             <td style="padding: 0;">${cost['costoop_descripcion']}</td>
+                    //             <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
+                    //             <td style="padding: 0;" class='text-right'>${cost['cproducto_costo']}</td>
+                    //             <!--<td style="padding: 0;">${cost['controli_id']}</td>
+                    //             <td style="padding: 0;">${cost['costoop_costo']}</td>-->
+                    //             <td style="padding: 0;">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
+                    //         </tr>`;
+                    // total += Number(cost['costoop_costo']);
+                    // i++;
+                
                 $(`#tabla_costo${detproduccion_id}`).html('');
                 $(`#tabla_costo${detproduccion_id}`).html(html);
             },error: ()=>{
@@ -521,7 +627,7 @@ function volver_estado(detproduccion_id){
     });
 }
 
-function form_costo(detproduccion_id, platabanda){
+function form_costo(detproduccion_id, platabanda,produccion_id){
     let form = document.getElementById(`formulario-costo-${detproduccion_id}`);
     let id = `formulario-costo-${detproduccion_id}`;
     show_close_form(id);
@@ -559,7 +665,7 @@ function form_costo(detproduccion_id, platabanda){
                         </div>
                         <div class="form-group row">
                             <div class="col-md-12 text-center">
-                                <a class="btn btn-sm btn-success" title="Guardar" onclick="add_form(${detproduccion_id},${platabanda})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
+                                <a class="btn btn-sm btn-success" title="Guardar" onclick="add_form(${detproduccion_id},${platabanda},${produccion_id})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
                                 <a class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form('${id}')"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</a>
                             </div>
                         </div>
@@ -582,7 +688,7 @@ function show_close_form(id) {
     }
 }
 
-function add_form(detproduccion_id,platabanda){
+function add_form(detproduccion_id,platabanda,produccion_id){
     let controlador = `${base_url}costo_operativo/save_costo`
     let id = `formulario-costo-${detproduccion_id}`;
     let costo = document.getElementById(`costo${detproduccion_id}`).value;
@@ -602,7 +708,9 @@ function add_form(detproduccion_id,platabanda){
                 success:()=>{
                     alert("Se guardo correctamente");
                     show_close_form(id);
-                    get_tabla_costo(detproduccion_id);
+                    show_modal_info(platabanda,produccion_id)
+                    // get_tabla_costo(detproduccion_id,"",produccion_id);
+                    // get_costos_produccion()
                 },
                 errocr:()=>{
                     alert("Ha ocurrido un error al guardar el costo");
@@ -861,118 +969,60 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
     let total_costo_p = 0;
     let i = 1;
     let html = ``;
+    let html2 = ``;
     var total = 0.00;
     let totalMaterial = 0;
     let totalManoObra = 0;
-    costos.forEach(costo => {
-        costo.forEach(cost => {
-            if(produccion == cost['produccion_id']){
-                fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                if(cost['unidad'] != "HR"){
-                    totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
-                    html += `<tr>
-                                <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
-                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
-                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-                            </tr>`;
-                }else{
+        costos.forEach(costo => {
+            costo.forEach(cost => {
+                if(produccion == cost['produccion_id']){
+                    fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                    if(cost['unidad'] != "HR"){
+                        totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
+                    }
+                    i++;
+                    total += Number(cost['costoop_costo']);
                 }
+            });
+            costo.forEach(cost => {
+                if(produccion == cost['produccion_id']){
+                    fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
+                    if(cost['unidad'] == "HR"){
+                        totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
+                    }
+                    i++;
+                    total += Number(cost['costoop_costo']);
+                }
+            });
+            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
+            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
+            let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
+            let totalHerramientaEquipo = parseFloat(herramientas_menores);
+            let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
+            let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
+            let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
+            total_costo_p = parcial;
+        });
+        // costos.forEach(costo => {
+        //     costo.forEach(cost => {
                 
-                i++;
-                total += Number(cost['costoop_costo']);
-            }
-        });
-        html += `<tr>
-            <th colspan="4" style="padding: 0">Total Material</th>
-            <th style="padding: 0">${totalMaterial}</th>
-            <th style="padding: 0"></th>
-        </tr>`
-
-        costo.forEach(cost => {
-            if(produccion == cost['produccion_id']){
-                fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                if(cost['unidad'] == "HR"){
-                    totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
-                    html += `<tr>
-                                <td style="padding: 0; text-align: right">${i}</td>
-                                <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
-                                <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
-                                <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
-                                <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
-                            </tr>`;
-                }
-                i++;
-                total += Number(cost['costoop_costo']);
-            }
-        });
-        html += `<tr>
-                    <td style="padding: 0; text-align: right">${i}</td>
-                    <td style="padding: 0;">CARGAS SOCIALES</td>
-                    <td style="padding: 0;" class='text-center'></td>
-                    <td style="padding: 0;" class='text-right'>71.00%</td>
-                    <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra)*0.71).toFixed(3)}</td>
-                    <td style="padding: 0; text-align: center"></td>
-                </tr>`;
-
-        html += `<tr>
-                    <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
-                    <th style="padding: 0">${parseFloat(totalManoObra) + parseFloat(parseFloat(totalManoObra)*0.71)}</th>
-                    <th style="padding: 0"></th>
-                </tr>`
-         let aux = parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)
-        html += `<tr>
-                    <td style="padding: 0; text-align: right">${i}</td>
-                    <td style="padding: 0;">HERRAMIENTAS MENORES</td>
-                    <td style="padding: 0;" class='text-center'></td>
-                    <td style="padding: 0;" class='text-right'>5.00%</td>
-                    <td style="padding: 0; text-align: right;">${parseFloat(parseFloat(totalManoObra) * parseFloat(0.05)).toFixed(3)}</td>
-                    <td style="padding: 0; text-align: center"></td>
-                </tr>`;
-        let totalHerramientaEquipo = parseFloat(parseFloat(totalManoObra)*parseFloat(0.05)).toFixed(3);
-        html += `<tr>
-                <th colspan="4" style="padding: 0">TOTAL HERRAMIENTAS Y EQUIPOS</th>
-                <th style="padding: 0">${totalHerramientaEquipo}</th>
-                <th style="padding: 0"></th>
-            </tr>`
-        let aux2 = parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3);
-        html += `<tr>
-                    <td style="padding: 0; text-align: right">${i}</td>
-                    <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
-                    <td style="padding: 0;" class='text-center'></td>
-                    <td style="padding: 0;" class='text-right'>3.00%</td>
-                    <td style="padding: 0; text-align: right;">${parseFloat((parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo)) * parseFloat(0.03)).toFixed(3)}</td>
-                    <td style="padding: 0; text-align: center"></td>
-                </tr>`;
-        html += `<tr>
-                <th colspan="4" style="padding: 0">PARCIAL</th>
-                <th style="padding: 0">${parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3)}</th>
-                <th style="padding: 0"></th>
-            </tr>`
-        total_costo_p = parseFloat(parseFloat(aux2)+(parseFloat(totalMaterial) + parseFloat(totalManoObra) + parseFloat(totalHerramientaEquipo))).toFixed(3);
-    });
-    // costos.forEach(costo => {
-    //     costo.forEach(cost => {
-            
-    //         if(produccion == cost['produccion_id']){
-    //             total += Number(cost['costoop_costo']);
-    //         }
-    //     });
-    // });
-    let costo_operativo = parseFloat(total_costo_p)/parseFloat(cantidad);
-    let costo_total = parseFloat(costo_inicial)+parseFloat(costo_operativo)
-    let html2 = `
-        <td style="padding:0; text-align:center"><span id="costo_inicial${detproduccion_id}">${parseFloat(costo_inicial).toFixed(2)}</span></td>
-        <td style="padding:0; text-align:center"><span id="costo_operativo${detproduccion_id}">${parseFloat(costo_operativo).toFixed(2)}</span></td>
-        <td style="padding:0; text-align:center"><span id="costo_total${detproduccion_id}">${parseFloat(costo_total).toFixed(2)}</span></td>
-    `;
+        //         if(produccion == cost['produccion_id']){
+        //             total += Number(cost['costoop_costo']);
+        //         }
+        //     });
+        // });
+        let costo_operativo = parseFloat(total_costo_p)/parseFloat(cantidad);
+        let costo_total = (parseFloat(costo_inicial)+parseFloat(costo_operativo))/parseFloat(2)
+        html2 = `
+            <td style="padding:0; text-align:center"><span id="costo_inicial${detproduccion_id}">${parseFloat(costo_inicial).toFixed(2)}</span></td>
+            <td style="padding:0; text-align:center"><span id="costo_operativo${detproduccion_id}">${parseFloat(costo_operativo).toFixed(2)}</span></td>
+            <td style="padding:0; text-align:center"><span id="costo_total${detproduccion_id}">${parseFloat(costo_total).toFixed(2)}</span></td>
+        `;
     if(bandera == 0){
         return html2;
     }else{
         setCosto(costo_total);
+        $(`#tabla_costos_unitarios${produccion}`).html(html2)
     }
 }
 
