@@ -1,4 +1,5 @@
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
+<input type="hidden" name="controli_id" id="controli_id" value="<?= $controli_id ?>" />
 <input type="hidden" name="produccion" id="produccion" value="<?= $produccion_id ?>" />
 <!----------------------------- script buscador --------------------------------------->
 <script type="text/javascript">
@@ -100,17 +101,32 @@
                 </tr>
             </table>
         </div>
+        <div class="col-md-4">
+            <table>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Platabanda:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="platabanda_info"></span><?= $controli_id ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Area:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="area_info"></span><?= $area[0]['area_nombre'] ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%" class="text-right"><b>Descripción:&nbsp;</b></td>
+                    <td style="width: 85%"><span id="descripcion_area"><?= $area[0]['area_descripcion'] ?></span></td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <!-- <button class="btn btn-success btn-sm" style="float: right;">+ Añadir producci&oacute;n</button>  -->
 </div>
 <div class="row">
     <div class="col-md-12">
-        <!--<div class="box-tools"></div>-->
-
-        <!--<div><br><br><br><br><br></div>-->
         <div class="box">
             <div class="box-body">
-                <section id="platabandas_produccion" class="row"></section>
+                <!-- <section id="platabandas_produccion" class="row"></section> -->
+                <section class="col-md-12" id="info_platabanda"></section>
+                <hr class="col-md-12">
+                <a href="<?= base_url("control_inventario/platabandas_produccion/$produccion_id"); ?>" class="btn btn-danger"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Volver</a>
             </div>
         </div>
         <div class="modal fade" id="modal_info_platabanda" tabindex="-1" role="dialog" aria-labelledby="modal_ubicacion" aria-hidden="true" style="font-family: Arial !important;">
@@ -129,6 +145,7 @@
                 </div>
             </div>
         </div>
+        
         <!-------------------------------- modal venta ------------------------------------------->
         <div class="modal fade" id="modal_form_venta" tabindex="-1" role="dialog" aria-labelledby="modal_ubicacion" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -153,25 +170,25 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-3">
                                                 <label for="form_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
                                                 <div class="form-group">
-                                                    <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required/>
+                                                    <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required onchange="calcular_venta()"/>
                                                     <input type="hidden" id="platabanda">
                                                     <input type="hidden" id="det_produccion">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="form_costo">Costo Bs</label>
-                                                <input type="number" step="any" min="0" id="form_costo" name="form_costo" class="form-control" placeholder="Last name">
+                                                <input type="number" step="any" min="0" id="form_costo" name="form_costo" class="form-control" placeholder="">
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="form_precio">Precio</label>
-                                                <input type="number" step="any" min="0" id="form_precio" name="form_precio" class="form-control" placeholder="Last name">
+                                                <input type="number" step="any" min="0" id="form_precio" name="form_precio" class="form-control" placeholder="">
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="form_total">Total</label>
-                                                <input type="number" step="any" min="0" id="form_total" name="form_total" class="form-control" placeholder="Last name">
+                                                <input type="number" step="any" min="0" id="form_total" name="form_total" class="form-control" placeholder="">
                                             </div>
                                         </div>
                                     </form>
@@ -196,9 +213,9 @@
 <script src="<?php echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript(){}"></script>
 <script src="<?php echo base_url('resources/js/platabanda_produccion.js'); ?>"></script>
 <script>
-    $(window).load(function(){ 
-        base_url = document.getElementById("base_url").value;
-        let produccion_id = document.getElementById("produccion").value;
-        get_platabandas(produccion_id);
-    })
+window.addEventListener("load", function(){
+    let controli_id = $("#controli_id").val();
+    let produccion = $("#produccion").val();
+    show_modal_info(controli_id, produccion);
+});
 </script>

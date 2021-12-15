@@ -213,4 +213,14 @@ class Control_inventario_model extends CI_Model
             order by ci.controli_id,dp.estado_id asc"
         )->result_array();
     }
+
+    function getArea($controli_id){
+        return $this->db->query(
+            "SELECT a.area_nombre, a.area_descripcion 
+            from control_inventario ci 
+            left join area a on a.area_id = ci.area_id 
+            where 1=1
+            and ci.controli_id = $controli_id"
+        )->result_array();
+    }
 }

@@ -1,4 +1,4 @@
-var base_url;
+var base_url =  document.getElementById("base_url").value;
 var costo_total_op;
 $(window).load(function(){ 
     base_url = document.getElementById("base_url").value;
@@ -58,7 +58,7 @@ function get_platabandas(produccion_id){
                                     elsaldo   += (parseInt(p['detproduccion_cantidad'])-suma);
                                     laperdida += suma;
                                     eltotal   += (parseInt(p['detproduccion_cantidad']));
-                                    info += `<a onclick="show_modal_info(${e['controli_id']},${produccion_id})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
+                                    info += `<a href="${base_url}control_inventario/platabanda_info/${e['controli_id']}/${produccion_id}" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
                                                 <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ aviso ? `border: red 3px solid;`: ``}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
@@ -70,6 +70,18 @@ function get_platabandas(produccion_id){
                                                 </div>
                                             </a>
                                             `;
+                                    // info += `<a onclick="show_modal_info(${e['controli_id']},${produccion_id})" title="Mostar información" style="cursor:pointer; text-decoration: none; color: black;">
+                                    //             <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ aviso ? `border: red 3px solid;`: ``}">
+                                    //                 <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
+                                    //                 <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
+                                    //                 <span style="font-size: 7pt;"><b> (${(parseInt(p['detproduccion_cantidad'])-suma)}/${p['detproduccion_cantidad']})</b></span>
+                                    //                 <div class="progress" style="height: 4px;border-radius: 10px; color:black; margin: 1px; background: #766;">
+                                    //                     <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
+                                    //                     </div>
+                                    //                 </div>
+                                    //             </div>
+                                    //         </a>
+                                    //         `;
                                     cambiar = false;
                                 }else{
                                     platabanda = e['controli_id'];
@@ -131,7 +143,7 @@ function agregar_platabanda(){
 
 function show_modal_info(platabanda_id,produccion_id = 0){
     let controlador = `${base_url}control_inventario/get_items_platabanda`;
-    $("#modal_info_platabanda").modal('show');
+    // $("#modal_info_platabanda").modal('show');
     $.ajax({
         url: controlador,
         type: "POST",
@@ -194,10 +206,10 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                     <div class="col-md-12">
                                         
                                         <div class="form-group mb-12 text-center" style="padding-top:10px;">
-                                            <a style="widht:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-long-arrow-down fa-2x" aria-hidden="true"></i> <br> Perdida</a>
+                                            <a style="widht:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-success btn-sq-lg" onclick="form_perdida(${item['detproduccion_id']},${platabanda_id},${produccion_id})" title="Guardar información" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-long-arrow-down fa-2x" aria-hidden="true"></i> <br> Perdida</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id},${produccion_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
-                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
-                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px; ${ item['estado_id'] == 35 ? `display: none;`:``}" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']},${platabanda_id})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
+                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px; ${ item['estado_id'] == 35 ? `display: none;`:``}" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']},${platabanda_id})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
                                             ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i><br> Cerrar</a>
                                         </div>
@@ -217,51 +229,57 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             </thead>
                                             <tbody id="tabla_costos_unitarios${produccion}">
                                                 <tr>`
-                    html += get_costos_produccion(item['producto_costo'], item['detproduccion_cantidad'], costos,item['produccion_id'],item['detproduccion_id']);
+                    html += get_costos_produccion(item['producto_costo'], (parseInt(item['detproduccion_cantidad'])-parseInt(item['cant_perdida'])-parseInt(item['cant_compra'])), costos,item['produccion_id'],item['detproduccion_id']);
                     html +=                     `</tr>
                                             </tbody>
                                     </table>
-                                    <span class='text-bold'>Costos:</span>
-                                    <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th style="padding: 0">#</th>
-                                                <th style="padding: 0">Detalle</th>
-                                                <th style="padding: 0">Unidad</th>
-                                                <th style="padding: 0">Prec. Unit</th>
-                                                <!--<th style="padding: 0"># Pb.</th>-->
-                                                <th style="padding: 0">Costo</th>
-                                                <th style="padding: 0">Fecha</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla_costo${ item['detproduccion_id'] }" style="font-size:8pt;">`
-                    html += get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
-                    html +=`            </tbody>
-                                    </table>
-                                </article>
-                                <article class="col-md-5">
-                                    <span class='text-bold'>Perdidas:</span>
-                                    <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th style='padding: 2px'>#</th>
-                                                <th style='padding: 2px'>Fecha</th>
-                                                <th style='padding: 2px'>Perdida</th>
-                                                <th style='padding: 2px's>Observación</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tabla_perdida${ item['detproduccion_id'] }" style="font-size:8pt;">`
-                    html += get_tabla_perdida(item['detproduccion_id'], perdidas);
-                    html +=`            </tbody>
-                                    </table>
+                                    <span class='text-bold' onclick="show_close_form('costos_info')" style="cursor:pointer">Costos: <i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                                    <section id="costos_info" style="display:none">
+                                        <a onclick="imprimir_analisis('tabla_costos_${produccion}')" class="text-right btn btn-xs btn-info no-print"><i class="fa fa-print" aria-hidden="true" title="Imprimir analisis de precios"></i> Imprimir</a>
+                                        <div id="tabla_costos_${produccion}">
+                                            <table class="table table-striped table-condensed" style="font-size: 8pt;" id="mitabla">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th style="padding: 0">#</th>
+                                                        <th style="padding: 0">Insumo/Parametro</th>
+                                                        <th style="padding: 0">Unidad</th>
+                                                        <th style="padding: 0">Prec. Unit</th>
+                                                        <!--<th style="padding: 0"># Pb.</th>-->
+                                                        <th style="padding: 0">Costo</th>
+                                                        <th style="padding: 0">Fecha</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabla_costo${ item['detproduccion_id'] }" style="font-size:8pt;">`
+                            html += get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
+                            html +=`            </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                    <br>
+                                    <span class='text-bold' onclick="show_close_form('perdidas_info')" style="cursor:pointer">Perdidas: <i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                                    <section id="perdidas_info" style="display:none">
+                                        <table class="table table-striped" style="font-size: 8pt;" id='mitabla'>
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th style='padding: 2px'>#</th>
+                                                    <th style='padding: 2px'>Fecha</th>
+                                                    <th style='padding: 2px'>Perdida</th>
+                                                    <th style='padding: 2px's>Observación</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla_perdida${ item['detproduccion_id'] }" style="font-size:8pt;">`
+                        html += get_tabla_perdida(item['detproduccion_id'], perdidas);
+                        html +=`            </tbody>
+                                        </table>
+                                    </section>
                                 </article>
                             </div>`;
                 }
                 get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
             });
-            $('#modal_infor_platabanda').html(html);
+            $('#info_platabanda').html(html);
             $('#platabanda_number').html(platabanda_id);
-            $("#show_modal_info").modal('show');
+            // $("#show_modal_info").modal('show');
         },
         error:()=>{
             alert("algo salio mal para la información")
@@ -522,13 +540,13 @@ get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     }
 }
 
-function actualizar_informacion(detproduccion_id){
+function actualizar_informacion(detproduccion_id,platabanda_id, produccion){
     let controlador = `${base_url}detalle_produccion/update_detproduccion`;
     let saldo = $(`#elsaldo${detproduccion_id}`).val();
     let perdida = document.getElementById(`perdida${detproduccion_id}`).value;
     let perdida_observacion = document.getElementById(`perdida_razon${detproduccion_id}`).value;
     let observacion = $(`#perdida_razon${detproduccion_id}`).val();
-    if(perdida >= 0 && perdida != "" && perdida <= saldo){
+    if(perdida >= 0 && perdida != ""){
         if (observacion != "") {
             console.log(perdida)
             console.log(observacion)
@@ -549,6 +567,7 @@ function actualizar_informacion(detproduccion_id){
                         get_tabla_perdida(detproduccion_id);
                         calcular(detproduccion_id,perdida,0);
                         show_close_form(`formulario-perdida-${detproduccion_id}`);
+                        show_modal_info(platabanda_id, produccion)
                     },
                     error:()=>{
                         alert("Algo salio mal...!!!");
@@ -590,41 +609,49 @@ function cambiar_estado_platabanda(controli_id, estado_id){
     });
 }
 
-function pasar_etapa(detproduccion_id, estado_id, produccion_id){
-    let controlador = `${base_url}detalle_produccion/pasar_siguiente_estado`
-    $.ajax({
-        url: controlador,
-        type: "POST",
-        cache: false,
-        data:{detproduccion_id:detproduccion_id, estado_id:estado_id},
-        success:()=>{
-            $("#modal_info_platabanda").modal('hide');
-            get_platabandas(produccion_id);
-        },
-        error:()=>{
-            alert("Ocurrio un error al cambiar de estado")
-        }
-    });
+function pasar_etapa(detproduccion_id, estado_id, produccion_id, controli_id){
+    let msj = `¿Desea pasar al siguiente estado?`
+    if(confirm(msj)){
+        let controlador = `${base_url}detalle_produccion/pasar_siguiente_estado`
+        $.ajax({
+            url: controlador,
+            type: "POST",
+            cache: false,
+            data:{detproduccion_id:detproduccion_id, estado_id:estado_id},
+            success:()=>{
+                // $("#modal_info_platabanda").modal('hide');
+                // get_platabandas(produccion_id);
+                show_modal_info(controli_id, produccion_id);
+            },
+            error:()=>{
+                alert("Ocurrio un error al cambiar de estado")
+            }
+        });
+    }
 }
 
-function volver_estado(detproduccion_id){
-    let controlador = `${base_url}detalle_produccion/volver_estado_platabanda`;
-    $.ajax({
-        url: controlador,
-        type: 'POST',
-        cache: false,
-        data: {
-            detproduccion_id:detproduccion_id,
-        },
-        success:(respuesta)=>{
-            let produccion = JSON.parse(respuesta);
-            $("#modal_info_platabanda").modal('hide');
-            get_platabandas(produccion);
-        },
-        error:()=>{
-            alert("Error")
-        }
-    });
+function volver_estado(detproduccion_id,controli_id){
+    let msj = `¿Desea regresar al anterior estado?`
+    if(confirm(msj)){
+        let controlador = `${base_url}detalle_produccion/volver_estado_platabanda`;
+        $.ajax({
+            url: controlador,
+            type: 'POST',
+            cache: false,
+            data: {
+                detproduccion_id:detproduccion_id,
+            },
+            success:(respuesta)=>{
+                let produccion = JSON.parse(respuesta);
+                console.log(produccion)
+                // $("#modal_info_platabanda").modal('hide');
+                show_modal_info(controli_id,produccion);
+            },
+            error:()=>{
+                alert("Error")
+            }
+        });
+    }
 }
 
 function form_costo(detproduccion_id, platabanda,produccion_id){
@@ -932,7 +959,7 @@ function numberFormat(numero){
     }
 }
 
-function form_perdida(detproduccion_id, platabanda){
+function form_perdida(detproduccion_id, platabanda,produccion){
     let form = document.getElementById(`formulario-perdida-${detproduccion_id}`);
     let id = `formulario-perdida-${detproduccion_id}`
     show_close_form(id);
@@ -956,7 +983,7 @@ function form_perdida(detproduccion_id, platabanda){
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12 text-center">
-                            <a class="btn btn-sm btn-success" title="Guardar" onclick="actualizar_informacion(${detproduccion_id})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
+                            <a class="btn btn-sm btn-success" title="Guardar" onclick="actualizar_informacion(${detproduccion_id},${platabanda},${produccion})"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</a>
                             <a class="btn btn-sm btn-danger" title="Cancelar" onclick="show_close_form('${id}')"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</a>
                         </div>
                     </div>
@@ -1032,4 +1059,22 @@ function setCosto(costo){
 
 function getCosto(){
     return costo_total_op;
+}
+
+function imprimir_analisis(id){
+    var printContents = document.getElementById(id).innerHTML;
+        w = window.open();
+        w.document.write(printContents);
+        w.document.close(); // necessary for IE >= 10
+        w.focus(); // necessary for IE >= 10
+		w.print();
+		w.close();
+    return true;
+}
+
+function calcular_venta(){
+    let cantidad = $('#form_cantidad').val();
+    let precio = $('#form_precio').val();
+    let total = parseFloat(cantidad) * parseFloat(precio)
+    $('#form_total').val(parseFloat(total).toFixed(2));
 }

@@ -406,4 +406,15 @@ class Control_inventario extends CI_Controller{
             show_404();
         }
     }
+
+    function platabanda_info($controli_id, $produccion_id) {
+        $data['controli_id'] = $controli_id;
+        $data['produccion_id'] = $produccion_id;
+        $data['area'] = $this->Control_inventario_model->getArea($controli_id);
+        $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
+        $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
+        $data['page_title'] = "Control inventario";
+        $data['_view'] = 'control_inventario/platabanda_info';
+        $this->load->view('layouts/main',$data);
+    }
 }
