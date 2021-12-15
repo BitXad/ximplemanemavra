@@ -210,8 +210,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-primary btn-sq-lg" onclick="form_costo(${item['detproduccion_id']},${platabanda_id},${produccion_id})" title="Agregar costo operativo" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-usd fa-2x" aria-hidden="true"></i> <br> Costo</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-info btn-sq-lg" onclick="volver_estado(${item['detproduccion_id']},${platabanda_id})"  title="Volver al estado anterior" ${ item['estado_id'] == '33' ? `disabled`:`` }><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i> <br> Anterior</a>
                                             <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px; ${ item['estado_id'] == 35 ? `display: none;`:``}" class="btn btn-${item['estado_id'] != 35 ? `info`: `success`} btn-sq-lg" ${ item['estado_id'] != 35 ? `onclick="pasar_etapa(${item['detproduccion_id']},${item['estado_id']},${item['produccion_id']},${platabanda_id})"`: `onclick="send_inventario(${item['detproduccion_id']},${item['producto_id']})"` }  title="${ item['estado_id'] != 35 ? `Pasar al siguiente estado` : `Mandar a ventas` }" ${ item['estado_id'] == '39' ? `disabled`:`` }>${ item['estado_id'] != 35 ? `<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i> <br> Siguiente` : `<i class="fa fa-shopping-cart" aria-hidden="true"></i> <br> Enviar a Ventas`}</a>
-                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Cerrar"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
-                                            <a style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" class="btn btn-danger btn-sq-lg" onclick="cerrar_modal(${item['detproduccion_id']})" title="Cerrar" ${ item['estado_id'] == '39' ? `disabled`:`` }><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i><br> Cerrar</a>
+                                            ${ item['estado_id'] > 33 ? `<a class="btn btn-success btn-sq-lg" style="width:${ancho_boton}px !important; height:${alto_boton}px !important; font-size:11px;" onclick="vender_item(${item['detproduccion_id']},${item['controli_id']})" title="Vender"><i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i> <br> Vender</a>`:``}
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-12" id="formulario-costo-${item['detproduccion_id']}" style="display:none;"></div>
@@ -838,6 +838,7 @@ function save_compra(){
     let controlador = `${base_url}compra/add_planta`;
     let form_producto_id = document.getElementById("form_producto_id").value;
     let form_cantidad = document.getElementById("form_cantidad").value;
+    let form_costo = document.getElementById("form_costo").value;
     let platabanda = document.getElementById("platabanda").value;
     let det_produccion = document.getElementById("det_produccion").value;
     $.ajax({
@@ -848,6 +849,7 @@ function save_compra(){
             form_producto_id:form_producto_id,
             form_cantidad:form_cantidad,
             platabanda:platabanda,
+            form_costo:form_costo,
             det_produccion:det_produccion,
         },
         success:()=>{

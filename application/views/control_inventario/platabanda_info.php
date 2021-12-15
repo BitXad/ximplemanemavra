@@ -173,7 +173,7 @@
                                             <div class="col-md-3">
                                                 <label for="form_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
                                                 <div class="form-group">
-                                                    <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required onchange="calcular_venta()"/>
+                                                    <input min="0" type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required onchange="calcular_venta()"/>
                                                     <input type="hidden" id="platabanda">
                                                     <input type="hidden" id="det_produccion">
                                                 </div>
