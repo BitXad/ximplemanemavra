@@ -742,6 +742,14 @@ window.onkeydown = compruebaTecla;
         <div class="col-md-12" style="padding:0;">
 
             <center>
+            <?php if($rolusuario[18-1]['rolusuario_asignado'] == 1){ 
+                if(isset($produccion_id) && isset($platabanda)){?>
+                    <a  href="<?php echo base_url("control_inventario/platabanda_info/$platabanda/$produccion_id"); ?>" class="btn btn-sq-lg btn-default" style="width: <?php echo $ancho_boton; ?>px !important; height: <?php echo $alto_boton; ?>px !important;">
+                        <i class="fa fa-chevron-circle-left fa-4x" aria-hidden="true"></i><br><br>
+                    Volver <br>
+                    </a>    
+                    <?php }
+                } ?>    
             <?php if($rolusuario[14-1]['rolusuario_asignado'] == 1){ ?>
             <a href="#" data-toggle="modal" onclick="focus_efectivo()" data-target="#modalfinalizar" class="btn btn-sq-lg btn-success" style="width: <?php echo $ancho_boton; ?>px !important; height: <?php echo $alto_boton; ?>px !important;">
                 <i class="fa fa-money fa-4x"></i><br><br>Finalizar Venta <br>

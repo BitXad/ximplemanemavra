@@ -167,13 +167,14 @@
                                             <div class="form-group">
                                                 <input type="text" name="form_producto" value="" class="form-control" id="form_producto" disabled/>
                                                 <input type="hidden" name="form_producto_id" value="" class="form-control" id="form_producto_id"/>
+                                                <input type="hidden" name="form_produccion_id value="" class="form-control" id="form_produccion_id"/>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="col-md-3">
                                                 <label for="form_cantidad" class="control-label"><span class="text-danger">*</span>Cantidad</label>
                                                 <div class="form-group">
-                                                    <input type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required onchange="calcular_venta()"/>
+                                                    <input min="0" type="number" name="form_cantidad" value="" class="form-control" id="form_cantidad" placeholder="Ejm. 30" required onchange="calcular_venta()"/>
                                                     <input type="hidden" id="platabanda">
                                                     <input type="hidden" id="det_produccion">
                                                 </div>

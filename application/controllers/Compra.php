@@ -1966,6 +1966,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
         if($this->input->is_ajax_request()){
             $producto_id = $this->input->post("form_producto_id");
             $cantidad = $this->input->post("form_cantidad");
+            $form_costo = $this->input->post("form_costo");
             $controli_id = $this->input->post("platabanda");
             $detproduccion_id = $this->input->post("det_produccion");
             $costo = $this->Detalle_produccion_model->get_costo_producto($detproduccion_id);
@@ -2031,6 +2032,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                 )";
             $this->db->query($detalle);
             $inventario = "update inventario set inventario.existencia=inventario.existencia+".$cantidad." where producto_id=".$producto_id."";
+
             $producto = $this->Producto_model->get_producto($producto_id);
             $this->db->query($inventario);
                 
@@ -2045,18 +2047,18 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                 detalleven_envase,detalleven_nombreenvase,detalleven_costoenvase,
                 detalleven_precioenvase,detalleven_cantidadenvase,detalleven_garantiaenvase,
                 detalleven_devueltoenvase,detalleven_fechadevolucion,detalleven_horadevolucion,
-                detalleven_montodevolucion,detalleven_prestamoenvase,detalleven_fechavenc, promocion_id
+                detalleven_montodevolucion,detalleven_prestamoenvase,detalleven_fechavenc, promocion_id,detalleven_tc,detalleven_unidadfactor
             )values(
-                $producto_id,0,1,94000,
-                $cantidad,0,0,{$producto[0]['producto_precio']},
+                $producto_id,0,1,{$producto[0]['producto_codigo']},
+                $cantidad,0,$form_costo,{$producto[0]['producto_precio']},
                 ".($cantidad*$producto[0]['producto_precio']).",0,".($cantidad*$producto[0]['producto_precio']).",
-                0,0,0,
+                '','','',
                 1,$usuario_id,$cantidad,'{$producto[0]['producto_nombre']}',
                 '{$producto[0]['producto_unidad']}','{$producto[0]['producto_marca']}',{$producto[0]['categoria_id']},{$producto[0]['producto_codigobarra']},
                 0,0,0,
                 0,$cantidad,0,
                 $cantidad,0,0,
-                0,0,".date('Y-m-d').",0
+                0,0,".date('Y-m-d').",'',6.96,'-'
             );";
             $this->db->query($detalle_venta_aux);
             // -------------------------------- detalle_venta_aux --------------------------------------------------------
