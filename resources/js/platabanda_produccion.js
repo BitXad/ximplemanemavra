@@ -818,6 +818,7 @@ function vender_item(detproduccion_id, platabanda){
             let ress = JSON.parse(result);
             $('#form_producto').val(ress[0]['producto_nombre']);
             $('#form_producto_id').val(ress[0]['producto_id']);
+            $('#form_produccion_id').val(ress[0]['produccion_id']);
 
             let costo = getCosto();
             $(`#form_costo`).val(costo_total)
@@ -841,6 +842,7 @@ function save_compra(){
     let form_costo = document.getElementById("form_costo").value;
     let platabanda = document.getElementById("platabanda").value;
     let det_produccion = document.getElementById("det_produccion").value;
+    let produccion_id = document.getElementById("form_produccion_id").value;
     $.ajax({
         url: controlador,
         type: "POST",
@@ -853,7 +855,7 @@ function save_compra(){
             det_produccion:det_produccion,
         },
         success:()=>{
-            window.location =`${base_url}venta/ventas`;
+            window.location =`${base_url}venta/ventas/${produccion_id}/${platabanda}`;
         },
         error:()=>{
             alert("error")
