@@ -167,6 +167,7 @@
                                             <div class="form-group">
                                                 <input type="text" name="form_producto" value="" class="form-control" id="form_producto" disabled/>
                                                 <input type="hidden" name="form_producto_id" value="" class="form-control" id="form_producto_id"/>
+                                                <input type="hidden" name="form_produccion_id value="" class="form-control" id="form_produccion_id"/>
                                             </div>
                                         </div>
                                         <div class="form-row">

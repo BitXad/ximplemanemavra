@@ -80,7 +80,7 @@ class Venta extends CI_Controller{
         
     }
 
-    function ventas()
+    function ventas($produccion_id = 0, $platabanda = 0)
     {    
         
         if($this->acceso(12)){
@@ -109,7 +109,10 @@ class Venta extends CI_Controller{
         $data['tipousuario_id'] = $tipousuario_id;
         
         //$data['venta'] = $this->Venta_model->get_all_venta($usuario_id);
-        
+        if($produccion_id != 0 && $platabanda != 0){
+            $data['produccion_id'] = $produccion_id;
+            $data['platabanda'] = $platabanda;
+        }
         $data['_view'] = 'venta/ventas';
         $this->load->view('layouts/main',$data);
         		
