@@ -547,7 +547,7 @@ function actualizar_informacion(detproduccion_id,platabanda_id, produccion){
     let perdida_observacion = document.getElementById(`perdida_razon${detproduccion_id}`).value;
     let observacion = $(`#perdida_razon${detproduccion_id}`).val();
     if(perdida >= 0 && perdida != ""){
-        if (observacion != "") {
+        if (observacion != "" && observacion != null) {
             console.log(perdida)
             console.log(observacion)
             let msj = `Esta realizando una perdida de ${perdida}, ¿Quiere continuar con la perdida?`;
@@ -967,7 +967,8 @@ function form_perdida(detproduccion_id, platabanda,produccion){
     let form = document.getElementById(`formulario-perdida-${detproduccion_id}`);
     let id = `formulario-perdida-${detproduccion_id}`
     show_close_form(id);
-
+    var perdida_detalle = JSON.parse(document.getElementById('perdida_detalle').value);
+    
     let html = `<div class="col-md-12 mb-2" style="border-radius: 15px;border: 2px solid #AEAEAE; ">
                     <div class="form-inline">
                         <label for="planta_nombre">Registrar perdida</label>
@@ -982,7 +983,25 @@ function form_perdida(detproduccion_id, platabanda,produccion){
                     <div class="form-group row">
                         <label for="perdida_razon${detproduccion_id}" class="col-sm-2 col-form-label"><span style="color: red;">*</span>Motivo</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="perdida_razon${detproduccion_id}" name="perdida_razon${detproduccion_id}" placeholder="Motivo de la perdida">
+                            <select name="perdida_razon${detproduccion_id}" class="form-control" id="perdida_razon${detproduccion_id}" required>`;
+                                var n = perdida_detalle.length;
+                                let lacategoria = ""; 
+                                let selected = "selected";
+                                for (var i = 0; i < n ; i++){
+                                    if (lacategoria != perdida_detalle[i]["perdidaf_id"]){
+                                        html += `<option class='text-bold' value="" disabled ${selected} >${perdida_detalle[i]['perdidaf_descripcion']}</option>`;
+                                        selected = "";
+                                    }
+                                    html += `<option value="${perdida_detalle[i]['perdidad_descripcion']}" >${perdida_detalle[i]['perdidad_descripcion']}</option>`;
+                                    lacategoria = perdida_detalle[i]["perdidaf_id"];
+                                }
+                            
+    html += `
+                            </select>
+    
+    
+    
+                            <!--<input type="text" class="form-control" id="perdida_razon${detproduccion_id}" name="perdida_razon${detproduccion_id}" placeholder="Motivo de la perdida">-->
                         </div>
                     </div>
                     <div class="form-group row">

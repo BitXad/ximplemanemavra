@@ -15,6 +15,7 @@ class Control_inventario extends CI_Controller{
         $this->load->model('Venta_model');
         $this->load->model('Perdida_model');
         $this->load->model('Produccion_model');
+        $this->load->model('Perdida_detalle_model');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
         }else {
@@ -412,6 +413,7 @@ class Control_inventario extends CI_Controller{
         $data['produccion_id'] = $produccion_id;
         $data['area'] = $this->Control_inventario_model->getArea($controli_id);
         $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
+        $data['perdida_detalle'] = $this->Perdida_detalle_model->get_all_perdida_detalle();
         $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
         $data['page_title'] = "Control inventario";
         $data['_view'] = 'control_inventario/platabanda_info';

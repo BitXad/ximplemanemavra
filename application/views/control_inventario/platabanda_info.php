@@ -1,4 +1,5 @@
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
+<input type="hidden" name="perdida_detalle" id="perdida_detalle" value='<?php echo json_encode($perdida_detalle); ?>' />
 <input type="hidden" name="controli_id" id="controli_id" value="<?= $controli_id ?>" />
 <input type="hidden" name="produccion" id="produccion" value="<?= $produccion_id ?>" />
 <!----------------------------- script buscador --------------------------------------->
