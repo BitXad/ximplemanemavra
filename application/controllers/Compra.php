@@ -1678,8 +1678,8 @@ function modificarproveedor()
 }
 
 function ingreso_rapido($cantidad,$producto_id,$producto_costo){
-        if($this->acceso(1)){
-        $usuario_id = $this->session_data['usuario_id'];
+    if($this->acceso(1)){
+    $usuario_id = $this->session_data['usuario_id'];
     $compra_fecha = "now()";
     $compra_hora = "'".date('H:i:s')."'";
     $compra = array(
@@ -1977,13 +1977,18 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
             $costo_total = $costo_inicial + $costo_operativo;
             $producto_costo = $costo_total;
             $usuario_id = $this->session_data['usuario_id'];
-            $compra_fecha = "now()";
-            $compra_hora = "'".date('H:i:s')."'";
+            date_default_timezone_set('America/La_Paz');
+            $parametro = $this->Parametro_model->get_parametros();
+            
+            $compra_fecha = date('Y-m-d');
+            $compra_hora = date('H:i:s');
+            /*$compra_fecha = "now()";
+            $compra_hora = "'".date('H:i:s')."'";*/
             $compra = array(
                         'estado_id' => 1,
                         'tipotrans_id' => 1,
                         'usuario_id' => $usuario_id,
-                        'moneda_id' => 1,
+                        'moneda_id' => $parametro[0]["moneda_id"],
                         'proveedor_id' => 1,
                         'forma_id' => 1,
                         'compra_fecha' => $compra_fecha,
@@ -1992,8 +1997,10 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                         'compra_descuento' => 0,
                         'compra_descglobal' => 0,
                         'compra_total' => $producto_costo*$cantidad,
-                        'compra_efectivo' => $producto_costo*$cantidad,
+                        'compra_totalfinal' => $producto_costo*$cantidad,
+                        'compra_efectivo' => 0,
                         'compra_cambio' => 0,
+                        'compra_caja' => 0,
                         'produccion_id' => $platabanda[0]['produccion_id'],            
                     );
     
@@ -2007,6 +2014,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     detallecomp_costo_operativo,
                     detallecomp_costo_total,
                     detallecomp_cantidad,
+                    detallecomp_costo,
                     detallecomp_precio,
                     detallecomp_descuento,
                     detallecomp_subtotal,
@@ -2023,6 +2031,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     $costo_operativo,
                     $costo_total,
                     $cantidad,
+                    producto_costo,
                     producto_precio,
                     0,
                     ".($producto_costo * $cantidad).",
