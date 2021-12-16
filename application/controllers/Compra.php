@@ -2019,7 +2019,8 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     detallecomp_descuento,
                     detallecomp_subtotal,
                     detallecomp_total,
-                    detproduccion_id
+                    detproduccion_id,
+                    detallecomp_tc
                     )
                     (
                     SELECT
@@ -2036,7 +2037,8 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     0,
                     ".($producto_costo * $cantidad).",
                     ".($producto_costo * $cantidad).",
-                    $detproduccion_id
+                    ".$detproduccion_id.",
+                    6.96
                     from producto where producto_id = ".$producto_id."
                 )";
             $this->db->query($detalle);
