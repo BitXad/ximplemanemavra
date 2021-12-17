@@ -104,7 +104,7 @@ function get_platabandas(produccion_id){
                 html+=`<div class="col-xs-12 col-sm-6 col-md-3">
                             <div class="small-box ${color}">
                                 <div class="inner">
-                                    <span style="font-size: 8pt;"><b>${e['area_nombre']}</b>: <b>Platabanda: </b>${e['controli_id']}<a style="float:right; cursor:pointer; color:${e['estado_id'] == 38 ? "":"#00019E"}" onclick="cambiar_estado_platabanda(${e['controli_id']},${e['estado_id']})"><i class="fa fa-toggle-${estado}" aria-hidden="true"></i></a></span><br>
+                                    <span style="font-size: 8pt;"><b>${e['area_nombre']}</b>(Resp.:<b>${e['usuario_nombre']}</b>)<br> <b>Platabanda: </b>${e['controli_id']}<a style="float:right; cursor:pointer; color:${e['estado_id'] == 38 ? "":"#00019E"}" onclick="cambiar_estado_platabanda(${e['controli_id']},${e['estado_id']})"><i class="fa fa-toggle-${estado}" aria-hidden="true"></i></a></span><br>
                                     ${info}
                                     <br>
                                     <br>

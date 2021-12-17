@@ -2038,7 +2038,7 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                     ".($producto_costo * $cantidad).",
                     ".($producto_costo * $cantidad).",
                     ".$detproduccion_id.",
-                    6.96
+                    ".$parametro[0]["moneda_tc"]."
                     from producto where producto_id = ".$producto_id."
                 )";
             $this->db->query($detalle);

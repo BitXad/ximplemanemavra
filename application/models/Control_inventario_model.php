@@ -169,11 +169,12 @@ class Control_inventario_model extends CI_Model
     
     function get_platabanda_produccion($produccion_id){
         return $this->db->query(
-            "SELECT a.area_nombre ,ci.*,e.*
+            "SELECT a.area_nombre, u.usuario_nombre, ci.*,e.*
             from control_inventario ci
             left join estado e on ci.estado_id = e.estado_id
             left join detalle_produccion dp on dp.controli_id = ci.controli_id
-            left join area a on a.area_id = ci.area_id 
+            left join area a on a.area_id = ci.area_id
+            left join usuario u on a.usuario_id = u.usuario_id
             where 1=1
             and dp.produccion_id = $produccion_id
             and e.estado_tipo = 9
