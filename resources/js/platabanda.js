@@ -185,6 +185,7 @@ function show_modal_info(platabanda_id){
             res.forEach(item => {
                 html = ``;
                 if(item['estado_id'] != 39){
+                    get_info_platabanda_g(item['detproduccion_id'],producciones,item['produccion_id']);
                     html += `<div class="row">
                                 <article class="col-md-7">
                                     <div class="col-md-7">
@@ -289,7 +290,7 @@ function show_modal_info(platabanda_id){
                                     </table>
                                 </article>
                             </div>`;
-                    get_info_platabanda_g(item['detproduccion_id'],producciones,item['produccion_id']);
+                    
                 }
                 get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
                 get_tabla_perdida(item['detproduccion_id'], perdidas, item['produccion_id']);
@@ -912,9 +913,9 @@ function get_info_platabanda_g(detproduccion_id,producciones,produccion_id){
         })
     })
     // console.log("ok")
-    setSaldo(saldo)
     let per = parseInt(compra)+parseInt(perdida)
     saldo = parseInt(cantidad) - parseInt(per);
+    setSaldo(saldo)
     $(`#eltotal_${detproduccion_id}`).html(cantidad)
     $(`#laperdida_${detproduccion_id}`).html(per)
     $(`#elsaldo_${detproduccion_id}`).html(saldo)
