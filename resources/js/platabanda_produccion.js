@@ -1,11 +1,21 @@
 var base_url =  document.getElementById("base_url").value;
 var costo_total_op;
+var saldo_produccion;
+var elsaldo;
 $(window).load(function(){ 
     base_url = document.getElementById("base_url").value;
     let produccion_id = document.getElementById("produccion").value;
     get_platabandas(produccion_id);
 })
-// const base_url = url;
+
+function setSaldo(new_saldo){
+    saldo_produccion = new_saldo;
+}
+
+function getSaldo(){
+    return saldo_produccion;
+}
+
 function get_platabandas(produccion_id){
     var controlador = `${base_url}control_inventario/get_platabanda_produccion`;
     $.ajax({
@@ -62,7 +72,7 @@ function get_platabandas(produccion_id){
                                                 <div class="col-md-10 bg-success" style="border-radius: 10px; color:black; margin: 1px; background:#${p['estado_color']}; ${ aviso ? `border: red 3px solid;`: ``}">
                                                     <img src="${base_url}resources/images/productos/${p['producto_foto']}" width="25px" heigth="25px" class="img-circle img-responsive" style="display: inline-block" alt="${p['producto_nombre']}">
                                                     <span style="font-size: 7pt;"><b>  ${p['producto_nombre']}</b></span>
-                                                    <span style="font-size: 7pt;"><b> (${(parseInt(p['detproduccion_cantidad'])-suma)}/${p['detproduccion_cantidad']})</b></span>
+                                                    <span style="font-size: 7pt;"><b> (${(parseInt(p['detproduccion_cantidad'])-parseInt(suma))}/${p['detproduccion_cantidad']})</b></span>
                                                     <div class="progress" style="height: 4px;border-radius: 10px; color:black; margin: 1px; background: #766;">
                                                         <div class="progress-bar" role="progressbar" aria-valuenow="${p['detproduccion_cantidad']}" aria-valuemin="0" aria-valuemax="${p['detproduccion_cantidad']}" style="width: ${100-(((suma)*100)/p['detproduccion_cantidad'])}%">
                                                         </div>
@@ -114,10 +124,15 @@ function get_platabandas(produccion_id){
                         </div>`;
             });
             
+            console.log(elsaldo)
+            setSaldo(elsaldo);
+            console.log(elsaldo)
             $("#elsaldo").html(elsaldo);
             $("#laperdida").html(laperdida);
             $("#eltotal").html(eltotal);
             $("#platabandas_produccion").html(html);
+            elsaldo = document.getElementById("elsaldo").innerText;
+            console.log(elsaldo)
         },
         error:()=>{
             alert("ocurrio algo malo")
@@ -229,7 +244,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                             </thead>
                                             <tbody id="tabla_costos_unitarios${produccion}">
                                                 <tr>`
-                    html += get_costos_produccion(item['producto_costo'], (parseInt(item['detproduccion_cantidad'])-parseInt(item['cant_perdida'])-parseInt(item['cant_compra'])), costos,item['produccion_id'],item['detproduccion_id']);
+                                                let saldo = document.getElementById("elsaldo").innerText;
+                    html += get_costos_produccion(item['producto_costo'], saldo, costos,item['produccion_id'],item['detproduccion_id']);
                     html +=                     `</tr>
                                             </tbody>
                                     </table>
@@ -287,8 +303,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
     });
 }
 
-function 
-get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
+function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
     let html = ``;
     let i = 1;
     var total = 0.00;
@@ -567,7 +582,9 @@ function actualizar_informacion(detproduccion_id,platabanda_id, produccion){
                         get_tabla_perdida(detproduccion_id);
                         calcular(detproduccion_id,perdida,0);
                         show_close_form(`formulario-perdida-${detproduccion_id}`);
-                        show_modal_info(platabanda_id, produccion)
+                        get_platabandas(produccion);
+                        show_modal_info(platabanda_id, produccion);
+                        console.log("ok")
                     },
                     error:()=>{
                         alert("Algo salio mal...!!!");
@@ -735,6 +752,7 @@ function add_form(detproduccion_id,platabanda,produccion_id){
                 success:()=>{
                     alert("Se guardo correctamente");
                     show_close_form(id);
+                    get_platabandas(produccion_id);
                     show_modal_info(platabanda,produccion_id)
                     // get_tabla_costo(detproduccion_id,"",produccion_id);
                     // get_costos_produccion()
@@ -820,7 +838,7 @@ function vender_item(detproduccion_id, platabanda){
             $('#form_producto_id').val(ress[0]['producto_id']);
             $('#form_produccion_id').val(ress[0]['produccion_id']);
 
-            let costo = getCosto();
+            // let costo = getCosto();
             $(`#form_costo`).val(costo_total)
             $(`#form_precio`).val(ress[0]['producto_precio'])
             
@@ -1017,6 +1035,7 @@ function form_perdida(detproduccion_id, platabanda,produccion){
 
 function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detproduccion_id,bandera = 0){
     let total_costo_p = 0;
+    cantidad = getSaldo();
     let i = 1;
     let html = ``;
     let html2 = ``;
@@ -1062,7 +1081,9 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
         //     });
         // });
         let costo_operativo = parseFloat(total_costo_p)/parseFloat(cantidad);
-        let costo_total = (parseFloat(costo_inicial)+parseFloat(costo_operativo))/parseFloat(2)
+        // let costo_total = (parseFloat(costo_inicial)+parseFloat(costo_operativo))/parseFloat(2)
+        // let costo_total = (parseFloat(costo_inicial)+parseFloat(costo_operativo))
+        let costo_total = parseFloat(costo_operativo)
         html2 = `
             <td style="padding:0; text-align:center"><span id="costo_inicial${detproduccion_id}">${parseFloat(costo_inicial).toFixed(2)}</span></td>
             <td style="padding:0; text-align:center"><span id="costo_operativo${detproduccion_id}">${parseFloat(costo_operativo).toFixed(2)}</span></td>
@@ -1076,13 +1097,7 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
     }
 }
 
-function setCosto(costo){
-    costo_total_op = costo;
-}
 
-function getCosto(){
-    return costo_total_op;
-}
 
 function imprimir_analisis(id){
     var printContents = document.getElementById(id).innerHTML;

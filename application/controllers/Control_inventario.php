@@ -314,10 +314,16 @@ class Control_inventario extends CI_Controller{
     }
     function get_platabanda_area(){
         if($this->input->is_ajax_request()){
+            $producciones = [];
             $area_id = $this->input->post("area_id");
             $data['respuesta'] = $this->Control_inventario_model->get_platabanda($area_id);
             $data['plantas'] = $this->Control_inventario_model->get_platabanda_area($area_id);
-            
+            foreach ($data['plantas'] as $planta) {
+                $produccion = $this->Control_inventario_model->get_platabanda_producciont_items($planta['produccion_id']);
+                array_push($producciones, $produccion);
+            }
+            $data['producciones'] = $producciones;
+            // var_dump($data['producciones']);
             // $mostrar_aviso = ['aviso' => true];
             // $no_mostrar = array('aviso' => false);
             // $fecha_actual = strtotime(date("d-m-Y H:i:00",time()));
@@ -364,11 +370,17 @@ class Control_inventario extends CI_Controller{
             $produccion = ($produccion_id == 0 ? "":"AND dp.produccion_id = $produccion_id");
             $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id, $produccion);
             $data['costos'] = [];
+            $producciones = [];
             $data['perdidas'] = [];
             foreach($data['plantas'] as $a){
                 array_push($data['costos'], $this->Costo_operativo_model->get_costos_produccion($a['produccion_id']));
                 array_push($data['perdidas'], $this->Perdida_model->get_perdidas_platabanda($a['detproduccion_id']));
             }
+            foreach ($data['plantas'] as $planta) {
+                $produccion = $this->Control_inventario_model->get_platabanda_producciont_items($planta['produccion_id']);
+                array_push($producciones, $produccion);
+            }
+            $data['producciones'] = $producciones;
             
             echo json_encode($data);
         }else{
@@ -408,12 +420,19 @@ class Control_inventario extends CI_Controller{
         }
     }
 
-    function platabanda_info($controli_id, $produccion_id) {
+    function platabanda_info($controli_id, $produccion_id = 0,$area = 0) {
         $data['controli_id'] = $controli_id;
         $data['produccion_id'] = $produccion_id;
-        $data['area'] = $this->Control_inventario_model->getArea($controli_id);
-        $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
+        // $data['area'] = $this->Control_inventario_model->getArea($controli_id);
+        // $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
         $data['perdida_detalle'] = $this->Perdida_detalle_model->get_all_perdida_detalle();
+        if($produccion_id != 0 && $area == 0){
+            $data['area'] = $this->Control_inventario_model->getArea($controli_id);
+            $data['produccion'] = $this->Produccion_model->get_produccion($produccion_id);
+        }else{
+            $data['area_id'] = $area;
+            $data['producciones'] = $this->Control_inventario_model->get_productos_platabanda_info($controli_id);
+        }
         $data['tipousuario_id'] = $this->session_data['tipousuario_id'];
         $data['page_title'] = "Control inventario";
         $data['_view'] = 'control_inventario/platabanda_info';

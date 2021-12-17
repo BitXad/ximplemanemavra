@@ -183,7 +183,7 @@ class Control_inventario_model extends CI_Model
     }
     function get_platabanda_producciont_items($produccion_id){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2,c2.*,p2.produccion_inicio
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2,c2.cant_compra,if(c2.cant_perdida is null,0,c2.cant_perdida) as cant_perdida,p2.produccion_inicio
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
@@ -222,6 +222,22 @@ class Control_inventario_model extends CI_Model
             left join area a on a.area_id = ci.area_id 
             where 1=1
             and ci.controli_id = $controli_id"
+        )->result_array();
+    }
+
+    function get_productos_platabanda_info($controli_id){
+        return $this->db->query(
+            "SELECT
+                pr.*, u.usuario_nombre, en.usuario_nombre as responsable,dp.detproduccion_id,a.area_nombre,a.area_descripcion
+            from produccion pr
+            left join usuario u on pr.usuario_id = u.usuario_id
+            left join usuario en on pr.acargode_id = en.usuario_id
+            left join detalle_produccion dp on dp.produccion_id = pr.produccion_id 
+            left join control_inventario ci on ci.controli_id = dp.controli_id 
+            left join area a on a.area_id = ci.area_id 
+            where 1=1
+            and dp.controli_id = $controli_id
+            and (dp.estado_id = 33 or dp.estado_id = 34 or dp.estado_id = 35) "
         )->result_array();
     }
 }
