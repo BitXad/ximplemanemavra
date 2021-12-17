@@ -124,12 +124,12 @@ function get_platabandas(produccion_id){
                         </div>`;
             });
             
-            console.log(elsaldo)
+            // console.log(elsaldo)
             setSaldo(elsaldo);
-            console.log(elsaldo)
-            $("#elsaldo").html(elsaldo);
-            $("#laperdida").html(laperdida);
-            $("#eltotal").html(eltotal);
+            // console.log(elsaldo)
+            // $("#elsaldo").html(elsaldo);
+            // $("#laperdida").html(laperdida);
+            // $("#eltotal").html(eltotal);
             $("#platabandas_produccion").html(html);
             elsaldo = document.getElementById("elsaldo").innerText;
             console.log(elsaldo)
@@ -172,11 +172,13 @@ function show_modal_info(platabanda_id,produccion_id = 0){
             let res = result['plantas'];
             let costos = result['costos'];
             let perdidas = result['perdidas'];
+            let producciones = result['producciones'];
             let html = ``;
             let ancho_boton = 65;
             let alto_boton = 60;
             res.forEach(item => {
                 if(item['estado_id'] != 39){
+                    get_info_platabanda_g(item['detproduccion_id'],producciones,item['produccion_id']);
                     html += `<div class="row">
                                 <article class="col-md-7">
                                     <div class="col-md-7">
@@ -1115,4 +1117,27 @@ function calcular_venta(){
     let precio = $('#form_precio').val();
     let total = parseFloat(cantidad) * parseFloat(precio)
     $('#form_total').val(parseFloat(total).toFixed(2));
+}
+
+function get_info_platabanda_g(detproduccion_id,producciones,produccion_id){
+    let saldo = 0;
+    let perdida = 0;
+    let compra = 0;
+    let cantidad = 0;
+    producciones.forEach(produccion => {
+        produccion.forEach(p => {
+            if (produccion_id == p['produccion_id']) {
+                cantidad += parseInt(p['detproduccion_cantidad'])
+                perdida += parseInt(p['cant_perdida'])
+                compra += parseInt(p['cant_compra'])
+            }
+        })
+    })
+    // console.log("ok")
+    let per = parseInt(compra)+parseInt(perdida)
+    saldo = parseInt(cantidad) - parseInt(per);
+    setSaldo(saldo)
+    $(`#eltotal`).html(cantidad)
+    $(`#laperdida`).html(per)
+    $(`#elsaldo`).html(saldo)
 }

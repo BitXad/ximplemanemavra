@@ -924,8 +924,6 @@ function get_info_platabanda_g(detproduccion_id,producciones,produccion_id){
 function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detproduccion_id,bandera = 0){
     let total_costo_p = 0;
     cantidad = getSaldo();
-    console.log("cantidad")
-    console.log(cantidad)
     let i = 1;
     let html = ``;
     let html2 = ``;
@@ -954,26 +952,12 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
                 }
             });
             let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
-            console.log("cargas_sociales")
-            console.log(cargas_sociales)
             let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
-            console.log("total_mano_obra")
-            console.log(total_mano_obra)
             let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
-            console.log("herramientas_menores")
-            console.log(herramientas_menores)
             let totalHerramientaEquipo = parseFloat(herramientas_menores);
-            console.log("totalHerramientaEquipo")
-            console.log(totalHerramientaEquipo)
             let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
-            console.log("sub_total")
-            console.log(sub_total)
             let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
-            console.log("gastos_admin")
-            console.log(gastos_admin)
             let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
-            console.log("parcial")
-            console.log(parcial)
             total_costo_p = parcial;
         });
         // costos.forEach(costo => {
