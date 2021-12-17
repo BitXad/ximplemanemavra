@@ -55,7 +55,7 @@
 </style>
 <?php if($produccion_id != 0){ ?>
 
-    <div class="box-header">
+<div class="box-header" style="font-family: Arial !important">
         <div class="col-md-12">
             <div  class="col-md-12 text-bold text-center">
                 <font size='4' face='Arial'><b>PRODUCCION Nro.: <?php echo $produccion['produccion_numeroorden']; ?></b></font><br>
@@ -116,6 +116,10 @@
                         <td style="width: 85%"><span id="area_info"></span><?= $area[0]['area_nombre'] ?></td>
                     </tr>
                     <tr>
+                        <td style="width: 15%" class="text-right"><b>Responsable:&nbsp;</b></td>
+                        <td style="width: 85%"><span id="area_info"></span><?= $area[0]['usuario_nombre'] ?></td>
+                    </tr>
+                    <tr>
                         <td style="width: 15%" class="text-right"><b>Descripción:&nbsp;</b></td>
                         <td style="width: 85%"><span id="descripcion_area"><?= $area[0]['area_descripcion'] ?></span></td>
                     </tr>
@@ -123,7 +127,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+<div class="row" style="font-family: Arial !important">
     <div class="col-md-12">
         <div class="box">
             <div class="box-body">
