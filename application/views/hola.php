@@ -252,7 +252,7 @@
               <div class="inner" >
 
                 <h3><b><fa class="fa fa-cart-plus"></fa></b></h3>
-                <h5><b><?php echo number_format($ventas[0]['total_ventas'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?></b></h5>
+                <h5><b><?php echo "Ventas: ".number_format($ventas[0]['total_ventas'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?></b></h5>
             </div>
               
             <div class="icon">
@@ -268,7 +268,7 @@
               <div class="inner" >
 
                 <h3><b><fa class="fa fa-wrench"></fa></b></h3>
-                <h5><b><?php echo number_format($servicios['cantidad_servicios'],0,'.',',')." Produciendo"; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h5><b><?php echo number_format($servicios['cantidad_servicios'],0,'.',',')." en Produccion"; ?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">
@@ -292,7 +292,7 @@
             <div class="icon">
               <i class="fa fa-cubes"></i>              
             </div>
-                <a href="<?php echo base_url('producto'); ?>" class="small-box-footer"><?php echo "Productos"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('producto'); ?>" class="small-box-footer"><?php echo "Catalogo productos"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         
@@ -303,13 +303,13 @@
               <div class="inner" >
 
                 <h3><b><i class="fa fa-leaf" aria-hidden="true"></i></b></h3>
-                <h5><b><?php echo number_format($pedidos[0]['total_pedidos'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h5><b><?php echo "Platabandas"?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">
               <i class="fa fa-leaf" aria-hidden="true"></i>              
             </div>
-                <a href="<?php echo base_url('control_inventario'); ?>" class="small-box-footer"><?php echo "En ".$pedidos[0]['cantidad_pedidos']." Platabandas"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('control_inventario'); ?>" class="small-box-footer"><?php echo " Platabandas"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         
@@ -326,7 +326,7 @@
             <div class="icon">
               <i class="fa fa-users"></i>              
             </div>
-                <a href="<?php echo base_url('cliente'); ?>" class="small-box-footer"><?php echo "En ventas/serv.."; //$clientes[0]['total_clientes']." Clientes"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('cliente'); ?>" class="small-box-footer"><?php echo "Clientes "; //$clientes[0]['total_clientes']." Clientes"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
        
@@ -338,13 +338,13 @@
               <div class="inner" >
 
                 <h3><b><fa class="fa fa-cube"></fa></b></h3>
-                <h5><b><?php echo number_format($productos['cantidad'],0,'.',',')." Productos"; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h5><b><?php echo " Inventario"; ?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">
               <i class="fa fa-cube"></i>              
             </div>
-                <a href="<?php echo base_url('producto'); ?>" class="small-box-footer"><?php echo "En Inventario"; ?> <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url('inventario'); ?>" class="small-box-footer"><?php echo "En Inventario"; ?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         
@@ -355,7 +355,7 @@
               <div class="inner" >
 
                 <h3><b><fa class="fa fa-pie-chart"></fa></b></h3>
-                <h5><b><?php echo number_format($compras[0]['total_compras'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
+                <h5><b>Compras: <?php echo number_format($compras[0]['total_compras'],2,'.',',')." ".$parametro[0]["moneda_descripcion"]; ?><sup style="font-size: 20px"></sup></b></h5>
             </div>
               
             <div class="icon">

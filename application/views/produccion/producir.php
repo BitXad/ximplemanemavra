@@ -80,6 +80,12 @@
 </div>
 <div class="col-md-4">
     <table style="width: 100%">
+        <tr style="padding-top: 5px">
+            <td style="width: 40%" class="text-right"><label for="produccion_cantidaesperada"><span class="text-danger">*</span>Cantidad Esperada:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" min="0" name="produccion_cantidaesperada" value="<?php echo ($this->input->post('produccion_cantidaesperada') ? $this->input->post('produccion_cantidaesperada') : ""); ?>" class="form-control" id="produccion_cantidaesperada" required />
+            </td>
+        </tr>
         <tr>
             <td style="width: 40%" class="text-right"><label for="produccion_metodoreproduccion"><span class="text-danger">*</span>Metodo de Reproducción:</label></td>
             <td style="width:60%">
@@ -99,12 +105,6 @@
             <td style="width: 40%" class="text-right"><label for="produccion_tiempoestimadog"><span class="text-danger">*</span>Tiempo Estimado de Germinación:</label></td>
             <td style="width:60%">
                 <input style="width: 100%" type="number" min="0" name="produccion_tiempoestimadog" value="<?php echo ($this->input->post('produccion_tiempoestimadog') ? $this->input->post('produccion_tiempoestimadog') : ""); ?>" class="form-control" id="produccion_tiempoestimadog" placeholder="en dias" required />
-            </td>
-        </tr>
-        <tr style="padding-top: 5px">
-            <td style="width: 40%" class="text-right"><label for="produccion_cantidaesperada"><span class="text-danger">*</span>Cantidad Esperada:</label></td>
-            <td style="width: 60%">
-                <input style="width: 100%" type="number" min="0" name="produccion_cantidaesperada" value="<?php echo ($this->input->post('produccion_cantidaesperada') ? $this->input->post('produccion_cantidaesperada') : ""); ?>" class="form-control" id="produccion_cantidaesperada" required />
             </td>
         </tr>
     </table>

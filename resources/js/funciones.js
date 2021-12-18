@@ -411,7 +411,7 @@ html += "        <div class='row clearfix'> ";
 html += "           <div class='col-md-3' style='padding:1;'>";
 
 if (tipousuario_id == 1){
-    html += "               <label for='producto_costo' class='control-label  text-uppercase'>Precio Costo</label>";
+    html += "               <label for='producto_costo' class='control-label  text-uppercase'>Costo produccion</label>";
     html += "               <div class='form-group'>"
     html += "               <input type='text' name='detalleven_preferencia' value='"+registros[i]['detalleven_costo']+"' class='btn btn-xs btn-default form-control' style='text-align:left;' id='detalleven_costo"+registros[i]["detalleven_id"]+"' />";
     html += "               </div>";
@@ -1820,7 +1820,7 @@ function tablaresultados(opcion)
                     if(! esMobil()) { //si no es dispositivo mobil
                         mensajeboton = "";
                         html += "                <th>Precio</th>";
-                        html += "                <th> </th>";
+                        html += "                <th>Saldo</th>";
                     }
                     else{
                         mensajeboton = " Añadir al detalle"; //mensaje para el boton del carrito
@@ -2031,6 +2031,7 @@ function tablaresultados(opcion)
                         html += "<br><br>";
                         html += "<div class='modal-content'>";
                         html += "  <div class='modal-header'>";
+                        html += "       <h4>CANTIDAD A VENDER</h4>";
                         html += "       <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>x</span></button>";
                         html += "  </div>";                        
                         html += "  <div class='modal-body' >";
