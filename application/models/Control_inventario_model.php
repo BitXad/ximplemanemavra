@@ -183,15 +183,21 @@ class Control_inventario_model extends CI_Model
     }
     function get_platabanda_producciont_items($produccion_id){
         return $this->db->query(
-            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias, ap.aproducto_dias2,c2.cant_compra,if(c2.cant_perdida is null,0,c2.cant_perdida) as cant_perdida,p2.produccion_inicio
+            "SELECT p.producto_nombre, p.producto_foto, dp.*,e.estado_color, ap.aproducto_dias,
+                    ap.aproducto_dias2, if(c2.cant_compra is NULL, 0, `c2`.cant_compra) as cant_compra, 
+                    if(c2.cant_perdida is null,0,c2.cant_perdida) as cant_perdida,p2.produccion_inicio
             from control_inventario ci
             left join detalle_produccion dp on ci.controli_id = dp.controli_id 
             left join estado e on dp.estado_id = e.estado_id
             left join producto p on dp.producto_id = p.producto_id
             left join aviso_producto ap on ap.producto_id = dp.producto_id
             left join produccion p2 on p2.produccion_id = dp.produccion_id
-            left join (            
-                select dp2.detproduccion_id, if(sum(dc.detallecomp_cantidad) > 0,sum(dc.detallecomp_cantidad),0) as cant_compra, p2.cant_perdida
+            left join (
+                select dp2.detproduccion_id, (
+                	select SUM(`dc2`.`detallecomp_cantidad`)
+                    	from detalle_compra dc2
+                        where dc2.`detproduccion_id` = dp2.`detproduccion_id`
+                )as cant_compra, p2.cant_perdida
                 from detalle_produccion dp2 
                 left join compra c on c.produccion_id = dp2.produccion_id 
                 left join detalle_compra dc on dc.detproduccion_id = dp2.detproduccion_id 
