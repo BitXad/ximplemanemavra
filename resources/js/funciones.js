@@ -4921,10 +4921,14 @@ function descprecio(){
     let subtotal = 0;
     let total = $('#venta_totalfinal').val();
     let diferencia = parseFloat(venta_total) - parseFloat(total);
-    if(tipo_descuento == 1){
-        $('#venta_descuento').val(parseFloat(diferencia).toFixed(2));
-        var venta_efectivo = document.getElementById('venta_efectivo').value;      
-        var venta_cambio = venta_efectivo - total;
-        $("#venta_cambio").val(parseFloat(venta_cambio).toFixed(2));
+    if(diferencia > 0){
+        if(tipo_descuento == 1){
+            $('#venta_descuento').val(parseFloat(diferencia).toFixed(2));
+            var venta_efectivo = document.getElementById('venta_efectivo').value;      
+            var venta_cambio = venta_efectivo - total;
+            $("#venta_cambio").val(parseFloat(venta_cambio).toFixed(2));
+        }
+    }else{
+        $('#venta_totalfinal').val(venta_total);
     }
 }
