@@ -41,6 +41,7 @@ function mostrar_costos_producto(producto){
                                     <td style="text-align:center;padding: 0;">${costo['cproducto_costoparcial']}</td>
                                     <td style="padding: 0">
                                         <button class="btn btn-xs btn-info" onclick="form_costo_producto(${costo['cproducto_id']})" title="Editar"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button class="btn btn-xs btn-danger" onclick="delete_costo_producto(${costo['cproducto_id']},${producto})" title="Borrar"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>`;
                         i++;
@@ -281,5 +282,27 @@ function update_costo_producto(producto_id, precio_costo){
                 alert("Error: Algo salio mal al actualizar el precio del producto");
             }
         })
+    }
+}
+
+function delete_costo_producto(costo_producto, producto){
+    let controlador = `${base_url}costo_producto/delete_costo_producto`
+    let msj = `¿Desea borrar el costo de este producto?`
+    if(confirm(msj)){
+        $.ajax({
+            url: controlador,
+            type: "POST",
+            cache: false,
+            data:{
+                costo_producto:costo_producto,
+            },
+            success:()=>{
+                console.log("ok");
+                mostrar_costos_producto(producto);
+            },
+            error:()=>{
+                alert("Error: No se pudo borrar el costo")
+            }
+        });
     }
 }

@@ -40,4 +40,8 @@ class Costo_producto_model extends CI_Model{
             where cp.cproducto_id = $costop_id"
         )->result_array();
     }
+
+    function delete_costo_producto($costo_producto){
+        return $this->db->delete('costo_producto',array('cproducto_id'=>$costo_producto));
+    }
 }

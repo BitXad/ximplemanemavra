@@ -981,7 +981,8 @@ window.onkeydown = compruebaTecla;
                         <td style="padding: 0"><b>Total Final <?php echo $parametro[0]['moneda_descripcion']; ?></b></td>
                         <td align="right" style="padding: 0">
 
-                              <input class="btn btn-foursquarexs" style="font-size: 20px; padding: 0;" id="venta_totalfinal" size="<?php echo $ancho_boton; ?>" name="venta_totalfinal" value="<?php echo $totalfinal; ?>" readonly="true">
+                              <!-- <input class="btn btn-foursquarexs" style="font-size: 20px; padding: 0;" id="venta_totalfinal" size="<?php echo $ancho_boton; ?>" name="venta_totalfinal" value="<?php echo $totalfinal; ?>" readonly="true"> -->
+                              <input class="btn btn-foursquarexs" style="font-size: 20px; padding: 0;" id="venta_totalfinal" size="<?php echo $ancho_boton; ?>" name="venta_totalfinal" value="<?php echo $totalfinal; ?>" onKeyUp="descprecio()">
 
                         </td>
                 </tr>

@@ -166,4 +166,12 @@ class Costo_producto extends CI_Controller{
         }
     } 
     
+    function delete_costo_producto(){
+        if($this->input->is_ajax_request()){
+            $costo_producto = $this->input->post('costo_producto');
+            $this->Costo_producto_model->delete_costo_producto($costo_producto);
+        }else{
+            show_404();
+        }
+    }
 }

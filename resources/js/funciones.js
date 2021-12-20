@@ -4914,3 +4914,16 @@ function registrarpuntos(cliente_id, venta_total){
         }
     });
 }
+
+function descprecio(){
+    let tipo_descuento = $('#tipo_descuento').val();
+    let venta_total = $('#venta_total').val();
+    // let venta_descuento = $('#venta_descuento').val();
+    let total = $('#venta_totalfinal').val();
+    let diferencia = parseFloat(venta_total) - parseFloat(total);
+    if(tipo_descuento == 1){
+        $('#venta_descuento').val(parseFloat(diferencia).toFixed(2));
+        console.log(diferencia);
+        calcularcambio(diferencia)
+    }
+}
