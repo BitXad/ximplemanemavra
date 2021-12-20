@@ -61,7 +61,7 @@ function calcularcambio(e){
    
    var venta_cambio = Number(venta_efectivo) - Number(venta_totalfinal);
    //alert(venta_cambio);
-   $("#venta_cambio").val(venta_cambio);
+   $("#venta_cambio").val(parseFloat(venta_cambio).toFixed(2));
    
    if (tecla==13){ 
         $("#boton_finalizar").click();
@@ -4918,12 +4918,13 @@ function registrarpuntos(cliente_id, venta_total){
 function descprecio(){
     let tipo_descuento = $('#tipo_descuento').val();
     let venta_total = $('#venta_total').val();
-    // let venta_descuento = $('#venta_descuento').val();
+    let subtotal = 0;
     let total = $('#venta_totalfinal').val();
     let diferencia = parseFloat(venta_total) - parseFloat(total);
     if(tipo_descuento == 1){
         $('#venta_descuento').val(parseFloat(diferencia).toFixed(2));
-        console.log(diferencia);
-        calcularcambio(diferencia)
+        var venta_efectivo = document.getElementById('venta_efectivo').value;      
+        var venta_cambio = venta_efectivo - total;
+        $("#venta_cambio").val(parseFloat(venta_cambio).toFixed(2));
     }
 }
