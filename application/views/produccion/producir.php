@@ -28,6 +28,7 @@
 <link href="<?php echo base_url('resources/css/mitabla.css'); ?>" rel="stylesheet">
 
 <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />
+<input type="hidden" name="ultimo_costo" id="ultimo_costo" />
 <!--<input type="hidden" name="laformula" id="laformula" value='<?php //echo json_encode($all_formula); ?>' />-->
 <div class="box-header">
     <font size='4' face='Arial'><b>PRODUCCION</b></font>
@@ -83,7 +84,13 @@
         <tr style="padding-top: 5px">
             <td style="width: 40%" class="text-right"><label for="produccion_cantidaesperada"><span class="text-danger">*</span>Cantidad Esperada:</label></td>
             <td style="width: 60%">
-                <input style="width: 100%" type="number" min="0" name="produccion_cantidaesperada" value="<?php echo ($this->input->post('produccion_cantidaesperada') ? $this->input->post('produccion_cantidaesperada') : ""); ?>" class="form-control" id="produccion_cantidaesperada" required />
+                <input style="width: 100%" type="number" min="0" name="produccion_cantidaesperada" onchange="calcular_preciototal()" value="<?php echo ($this->input->post('produccion_cantidaesperada') ? $this->input->post('produccion_cantidaesperada') : ""); ?>" class="form-control" id="produccion_cantidaesperada" required />
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 40%" class="text-right"><label for="produccion_cantidadobtenida"><span class="text-danger">*</span>Cantidad Obtenida:</label></td>
+            <td style="width: 60%">
+                <input style="width: 100%" type="number" min="0" name="produccion_cantidadobtenida" value="<?php echo ($this->input->post('produccion_cantidadobtenida') ? $this->input->post('produccion_cantidadobtenida') : ""); ?>" class="form-control" id="produccion_cantidadobtenida" required />
             </td>
         </tr>
         <tr>
@@ -101,30 +108,25 @@
                 <input style="width: 100%" type="number" step="any" min="0" name="produccion_semillaprecio" value="<?php echo ($this->input->post('produccion_semillaprecio') ? $this->input->post('produccion_semillaprecio') : ""); ?>" class="form-control" id="produccion_semillaprecio" required />
             </td>
         </tr>
+        
+    </table>
+</div>
+<div class="col-md-4">
+    <table style="width: 100%">
         <tr style="padding-top: 5px">
             <td style="width: 40%" class="text-right"><label for="produccion_tiempoestimadog"><span class="text-danger">*</span>Tiempo Estimado de Germinación:</label></td>
             <td style="width:60%">
                 <input style="width: 100%" type="number" min="0" name="produccion_tiempoestimadog" value="<?php echo ($this->input->post('produccion_tiempoestimadog') ? $this->input->post('produccion_tiempoestimadog') : ""); ?>" class="form-control" id="produccion_tiempoestimadog" placeholder="en dias" required />
             </td>
         </tr>
-    </table>
-</div>
-<div class="col-md-4">
-    <table style="width: 100%">
-        <tr>
-            <td style="width: 40%" class="text-right"><label for="produccion_cantidadobtenida"><span class="text-danger">*</span>Cantidad Obtenida:</label></td>
-            <td style="width: 60%">
-                <input style="width: 100%" type="number" min="0" name="produccion_cantidadobtenida" value="<?php echo ($this->input->post('produccion_cantidadobtenida') ? $this->input->post('produccion_cantidadobtenida') : ""); ?>" class="form-control" id="produccion_cantidadobtenida" required />
-            </td>
-        </tr>
         <tr style="padding-top: 5px">
             <td style="width: 40%" class="text-right"><label for="produccion_costototalxgermin"><span class="text-danger">*</span>Costos Operativos Totales x Germinación:</label></td>
             <td style="width: 60%">
-                <input style="width: 100%" type="number" step="any" min="0" onchange="calcular_costoxunidad()" name="produccion_costototalxgermin" value="<?php echo ($this->input->post('produccion_costototalxgermin') ? $this->input->post('produccion_costototalxgermin') : ""); ?>" class="form-control" id="produccion_costototalxgermin" required />
+                <input style="width: 100%" type="number" step="any" min="0" name="produccion_costototalxgermin" value="<?php echo ($this->input->post('produccion_costototalxgermin') ? $this->input->post('produccion_costototalxgermin') : ""); ?>" class="form-control" id="produccion_costototalxgermin" required />
             </td>
         </tr>
         <tr style="padding-top: 5px">
-            <td style="width: 40%" class="text-right"><label for="produccion_costounidefectiva"><span class="text-danger">*</span>Costo x Unidad Efectiva:</label></td>
+            <td style="width: 40%" class="text-right"><label for="produccion_costounidefectiva"><span class="text-danger">*</span>Costo x Unidad:</label></td>
             <td style="width: 60%">
                 <input style="width: 100%" type="number" step="any" min="0" name="produccion_costounidefectiva" value="<?php echo ($this->input->post('produccion_costounidefectiva') ? $this->input->post('produccion_costounidefectiva') : ""); ?>" class="form-control" id="produccion_costounidefectiva" required />
             </td>

@@ -355,7 +355,7 @@ function numberFormat(numero){
     }
 }
 
-/* recupera el tiempo estiamdo de germinación de una especie.*/
+/* recupera el tiempo estimado de germinación de una especie.*/
 function elegir_tiempoestimado(){
     var base_url = document.getElementById('base_url').value;
     var producto_id = document.getElementById('producto_id').value;
@@ -369,7 +369,12 @@ function elegir_tiempoestimado(){
                 type:"POST",
                 data:{producto_id:producto_id},
                 success:function(respuesta){
-                    var registros =  JSON.parse(respuesta);
+                    var datos = JSON.parse(respuesta);
+                    var ultimo_costo = datos.producto;
+                    var registros  = datos.dias;
+                    if (ultimo_costo != null){
+                        $('#ultimo_costo').val(ultimo_costo);
+                    }
                     if (registros != null){
                         $('#produccion_tiempoestimadog').val(registros);
                     }
@@ -390,4 +395,13 @@ function calcular_costoxunidad(){
     var prod_total = Number(produccion_semillaprecio)+Number(produccion_costototalxgermin);
     var costoxunidad = Number(Number(prod_total)/Number(produccion_cantidadobtenida)).toFixed(2);
     $('#produccion_costounidefectiva').val(costoxunidad);
+}
+
+function calcular_preciototal(){
+    let ultimo_costo = $('#ultimo_costo').val();
+    if(ultimo_costo != null && ultimo_costo != ""){
+        let cantidad = $('#produccion_cantidaesperada').val();
+        $('#produccion_semillaprecio').val(ultimo_costo*cantidad);
+        $('#produccion_costounidefectiva').val(ultimo_costo);
+    }
 }

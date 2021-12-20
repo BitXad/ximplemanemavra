@@ -498,9 +498,16 @@ class Produccion extends CI_Controller{
                 $avisos = $this->Producto_model->buscar_avisos($this->input->post('producto_id'));
                 $dias = 0;
                 foreach ($avisos as $aviso){
-                    $dias += $aviso["aproducto_dias"];
+                    $dias = $aviso["aproducto_dias"];
                 }
-                echo json_encode($dias);
+                $productos = $this->Producto_model->get_producto($this->input->post('producto_id'));
+                $elproducto = "";
+                foreach ($productos as $producto){
+                    $elproducto = $producto["producto_ultimocosto"];
+                }
+                
+                $data=array("producto"=>$elproducto, "dias" =>$dias);
+                echo json_encode($data);
             }else{                 
                 show_404();
             }
