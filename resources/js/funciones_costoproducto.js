@@ -158,8 +158,9 @@ function form_costo_producto(costop_id = 0, categoria = 0){
             let insumo = ``;
             let html2 = ``;
             let i = true;
-            let item = ress['costo_producto'][0];
+            let aux;
             if(costop_id != 0){
+                let item = ress['costo_producto'][0];
                 html2 += ``;
                 // $('#form_unidad').val(item['cproducto_unidad']);
                 $('#form_producto').val(item['producto_id']);
@@ -183,9 +184,10 @@ function form_costo_producto(costop_id = 0, categoria = 0){
                     }
                 });
                 $('#form_insumo').html(insumo);
-
+                aux = item['catcosto_id'];
                 document.getElementById('button_save_costo').setAttribute('onclick',`guardar_costo(${item['cproducto_id']})`);
             }else{
+                
                 let insumo=``;
                 let i = true;
                 ress['costos'].forEach(c => {
@@ -205,7 +207,7 @@ function form_costo_producto(costop_id = 0, categoria = 0){
             $("#form_unidad").html(html);
             
             ress['categorias'].forEach(categoria => {
-                let select = (categoria['catcosto_id'] == item['catcosto_id'] ? 'selected' :'')
+                let select = (categoria['catcosto_id'] == aux ? 'selected' :'')
                 html2 += `<option value="${categoria['catcosto_id']}" ${select}>${categoria['catcosto_descripcion']}</option>`;
             });
             if(costop_id == 0){

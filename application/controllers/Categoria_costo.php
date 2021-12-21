@@ -76,7 +76,7 @@ class Categoria_costo extends CI_Controller{
             $categoria = $this->input->post('categoria');
             $data['categorias'] = $this->Categoria_costo_model->get_all_categorias();
             $data['unidades'] = $this->Unidad_model->get_all_unidad();
-            $data['costos'] = $this->Costo_model->get_costo_categoria( ($categoria != 0 ? $categoria : 1));
+            $data['costos'] = $this->Costo_model->get_costo_categoria(($categoria != 0 ? $categoria : 1));
             $costop_id = $this->input->post('costop_id');
             // if ($costop_id != 0) {
             $data['costo_producto'] = $this->Costo_producto_model->get_costos($costop_id);
