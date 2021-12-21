@@ -12,6 +12,7 @@ class Costo extends CI_Controller{
         $this->load->model('Costo_model');
         $this->load->model('Estado_model');
         $this->load->model('Categoria_costo_model');
+        $this->load->model('Costo_producto_model');
         $this->load->library('form_validation');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
@@ -72,7 +73,7 @@ class Costo extends CI_Controller{
     /*
      * Editing a unidad
      */
-    function edit($costo_id){   
+    function edit($costo_id){
         if($this->acceso(136)){
             // check if the tipo_servicio exists before trying to edit it
             $data['costo'] = $this->Costo_model->get_costo($costo_id);
@@ -87,7 +88,17 @@ class Costo extends CI_Controller{
                         'catcosto_id' => $this->input->post('costcategoria'),
                         'estado_id' => $this->input->post('estado'),
                     );
-                    $this->Costo_model->update_costo($costo_id,$params);            
+                    $this->Costo_model->update_costo($costo_id,$params);
+                    if($data['costo']['costo_punitario'] != $this->input->post('costo_unitario')){
+                        $all_costo_producto = $this->Costo_producto_model->get_costos_pordescripcion($this->input->post('costo_descripcion'));
+                        foreach($all_costo_producto as $costo_producto){
+                            $elparams = array(
+                                'cproducto_costo' => $this->input->post('costo_unitario'),
+                                'cproducto_costoparcial' => $costo_producto['cproducto_cantidad']*$this->input->post('costo_unitario'),
+                            );
+                            $this->Costo_producto_model->edit_costo_producto($costo_producto['cproducto_id'],$elparams);
+                        }
+                    }
                     redirect('costo/index');
                 }else{
                     $estado_tipo = 1;

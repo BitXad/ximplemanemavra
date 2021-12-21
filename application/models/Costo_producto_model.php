@@ -44,4 +44,13 @@ class Costo_producto_model extends CI_Model{
     function delete_costo_producto($costo_producto){
         return $this->db->delete('costo_producto',array('cproducto_id'=>$costo_producto));
     }
+    
+    /* obtiene los costos dado una descripción */
+    function get_costos_pordescripcion($descripcion){
+        return $this->db->query(
+            "select cp.*
+            from costo_producto cp
+            where cp.cproducto_descripcion = '$descripcion'"
+        )->result_array();
+    }
 }
