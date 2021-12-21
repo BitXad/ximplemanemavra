@@ -309,6 +309,9 @@
                         <li>
                             <a href="<?php echo site_url('proveedor');?>"><i class="fa fa-truck"></i>Proveedores</a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url('costo');?>"><i class="fa fa-money"></i>Costo productos</a>
+                        </li>
                         <?php
                         }
                         ?>
