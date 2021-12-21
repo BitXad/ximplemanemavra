@@ -20,4 +20,8 @@ class Categoria_costo_model extends CI_Model{
         )->result_array();
     }
     
+    function edit_costo($id,$params){
+        $this->db->where('catcosto_id',$id);
+        return $this->db->update('categoria_costo',$params);
+    }
 }

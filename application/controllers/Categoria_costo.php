@@ -37,7 +37,7 @@ class Categoria_costo extends CI_Controller{
             $data['page_title'] = "Categoria Egreso";
             $data['categoria_egreso'] = $this->Categoria_egreso_model->get_all_categoria_egreso();
 
-            $data['_view'] = 'categoria_egreso/index';
+            $data['_view'] = 'categoria_costo/index';
             $this->load->view('layouts/main',$data);
         }
     }
@@ -95,4 +95,20 @@ class Categoria_costo extends CI_Controller{
             show_404();
         }
     } 
+
+    function edit_catcosto(){
+        if($this->input->is_ajax_request()){
+            $descripcion = $this->input->post("descripcion");
+            $id = $this->input->post("id");
+            $porcentaje = $this->input->post("porcentaje");
+            $porcentaje = $porcentaje/100;
+            $params = array(
+                'catcosto_descripcion' => $descripcion,
+                'catcosto_porcentaje' => $porcentaje,
+            );
+            $this->Categoria_costo_model->edit_costo($id,$params);
+        }else{
+            show_404();
+        }
+    }
 }
