@@ -87,7 +87,7 @@
         
     function calcularporc(){
         var estecosto   = $("#producto_costo").val();
-        var esteporcent = $("#porcentaje").val();
+        var esteporcent = ($("#porcentaje").val())/100;
         $("#producto_precio").val(Number(estecosto*esteporcent)+Number(estecosto));
     }
 </script>
