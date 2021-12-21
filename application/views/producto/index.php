@@ -540,14 +540,15 @@ echo '<script type="text/javascript">
                 <div class="col-md-8">
                     <div class="form-group">
                         <label for="form_insumo"><span style="color:red">*</span>Insumo / Parametro</label>
-                        <input type="text" class="form-control" id="form_insumo" name="form_insumo" placeholder="Lama" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" >
+                        <!-- <input type="text" class="form-control" id="form_insumo" name="form_insumo" placeholder="Lama" required onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" > -->
+                        <select class="form-control" name="form_insumo" id="form_insumo" onchange="valores()" required></select>
                         <input type="hidden" id="form_producto" name="form_producto">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="form-group">
                         <label for="form_catcosto">Categoria costo</label>    
-                        <select class="form-control" name="form_catcosto" id="form_catcosto"></select>
+                        <select class="form-control" name="form_catcosto" id="form_catcosto" onchange="get_costos_categoria()"></select>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
@@ -559,13 +560,13 @@ echo '<script type="text/javascript">
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="form_cantidad">Cantidad</label>    
-                        <input type="number" step="any" class="form-control" placeholder="1" id="form_cantidad" name="form_cantidad" value="0" onchange="calcular_costoParcial()">
+                        <input type="number" step="any" class="form-control" placeholder="1" id="form_cantidad" name="form_cantidad" value="" onchange="calcular_costoParcial()">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="form-group">
                         <label for="form_punitario">Precio Unitario(Bs)</label>    
-                        <input type="number" step="any" id="form_punitario" name="form_punitario" class="form-control" placeholder="" value="0" onchange="calcular_costoParcial()">
+                        <input type="number" step="any" id="form_punitario" name="form_punitario" class="form-control" placeholder="" value="" onchange="calcular_costoParcial()">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">

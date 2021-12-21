@@ -58,6 +58,7 @@ class Costo_producto extends CI_Controller{
                 'cproducto_cantidad' => $this->input->post('form_cantidad'),
                 'cproducto_costo' => $this->input->post('form_punitario'),
                 'cproducto_costoparcial' => $this->input->post('form_pparcial'),
+                'costo_id' => $this->input->post('form_insumo'),
             );
             if($cproducto_id == 0){
                 $cproducto_id = $this->Costo_producto_model->add_costo_producto($params);

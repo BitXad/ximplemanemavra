@@ -34,13 +34,13 @@ function mostrar_costos_producto(producto){
                     if(cat['catcosto_id'] == costo['catcosto_id']){
                         html += `<tr>
                                     <td style="text-align:center; padding: 0">${i}</td>
-                                    <td style="padding: 0">${costo['cproducto_descripcion']}</td>
+                                    <td style="padding: 0">${costo['costo_descripcion']}</td>
                                     <td style="text-align:center;padding: 0;">${costo['cproducto_unidad']}</td>
                                     <td style="text-align:center;padding: 0;">${costo['cproducto_cantidad']}</td>
                                     <td style="text-align:center;padding: 0;">${costo['cproducto_costo']}</td>
                                     <td style="text-align:center;padding: 0;">${costo['cproducto_costoparcial']}</td>
                                     <td style="padding: 0">
-                                        <button class="btn btn-xs btn-info" onclick="form_costo_producto(${costo['cproducto_id']})" title="Editar"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button class="btn btn-xs btn-info" onclick="form_costo_producto(${costo['cproducto_id']},${cat['catcosto_id']})" title="Editar"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                         <button class="btn btn-xs btn-danger" onclick="delete_costo_producto(${costo['cproducto_id']},${producto})" title="Borrar"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>`;
@@ -138,7 +138,7 @@ function mostrar_costos_producto(producto){
     });
 }
 
-function form_costo_producto(costop_id = 0){
+function form_costo_producto(costop_id = 0, categoria = 0){
     let producto_costo = $("#producto_costo").val();
     let controlador;
     controlador = `${base_url}categoria_costo/get_all_costos`;
@@ -148,28 +148,56 @@ function form_costo_producto(costop_id = 0){
         cache: false,
         data:{
             costop_id:costop_id,
+            categoria:categoria,
         },
         success: (result)=>{
             ress = JSON.parse(result);
             limpiar_campos()
             $('#form_insumo').css('border','2px solid #d5d9e0');
             let html = ``;
+            let insumo = ``;
             let html2 = ``;
+            let i = true;
+            let item = ress['costo_producto'][0];
             if(costop_id != 0){
-                let item = ress['costo_producto'][0];
-                html2 += `<option value="${item['catcosto_id']}">${item['catcosto_descripcion']}</option>`;
-                $('#form_unidad').val(item['cproducto_unidad']);
-                $('#form_insumo').val(item['cproducto_descripcion']);
+                html2 += ``;
+                // $('#form_unidad').val(item['cproducto_unidad']);
                 $('#form_producto').val(item['producto_id']);
                 $('#form_cantidad').val(item['cproducto_cantidad']);
-                $('#form_punitario').val(item['cproducto_costo']);
-                $('#form_pparcial').val(item['cproducto_costoparcial']);
+                // $('#form_insumo').val(item['cproducto_descripcion']);
+                // $('#form_punitario').val(item['cproducto_costo']);
+                // $('#form_pparcial').val(item['cproducto_costoparcial']);
+                
+                ress['costos'].forEach(c => {
+                    let select = (c['costo_id'] == item['costo_id'] ? 'selected' : '')
+                    
+                    insumo += `<option value="${c['costo_id']}" ${select}>${c['costo_descripcion']}</option>`;
+                    if(i){
+                        llenar_form(c, 1);
+                        i = false;
+                    }
+                    if(select != ''){
+                        $('#form_insumo').val(item['cproducto_descripcion']);
+                        $('#form_punitario').val(item['cproducto_costo']);
+                        $('#form_pparcial').val(item['cproducto_costoparcial']);
+                    }
+                });
+                $('#form_insumo').html(insumo);
 
                 document.getElementById('button_save_costo').setAttribute('onclick',`guardar_costo(${item['cproducto_id']})`);
             }else{
+                let insumo=``;
+                let i = true;
+                ress['costos'].forEach(c => {
+                    insumo += `<option value="${c['costo_id']}">${c['costo_descripcion']}</option>`;
+                    if(i){
+                        llenar_form(c);
+                        i = false;
+                    }
+                });
+                $('#form_insumo').html(insumo);
                 document.getElementById('button_save_costo').setAttribute('onclick',`guardar_costo()`);
             }
-            
             
             ress['unidades'].forEach(unidad => {
                 html += `<option value="${unidad['unidad_id']}">${unidad['unidad_nombre']}</option>`
@@ -177,12 +205,13 @@ function form_costo_producto(costop_id = 0){
             $("#form_unidad").html(html);
             
             ress['categorias'].forEach(categoria => {
-                html2 += `<option value="${categoria['catcosto_id']}">${categoria['catcosto_descripcion']}</option>`;
+                let select = (categoria['catcosto_id'] == item['catcosto_id'] ? 'selected' :'')
+                html2 += `<option value="${categoria['catcosto_id']}" ${select}>${categoria['catcosto_descripcion']}</option>`;
             });
             if(costop_id == 0){
-                $('#form_cantidad').val(0);
-                $('#form_punitario').val(0);
-                $('#form_pparcial').val(0);
+                // $('#form_cantidad').val(0);
+                // $('#form_punitario').val(0);
+                // $('#form_pparcial').val(0);
             }
             $('#form_producto').val(producto_costo);    
             $("#form_catcosto").html(html2);
@@ -305,4 +334,71 @@ function delete_costo_producto(costo_producto, producto){
             }
         });
     }
+}
+
+function get_costos_categoria(){
+    let insumo = ``;
+    let categoria = $('#form_catcosto').val();
+    let controlador = `${base_url}costo/get_costos_categoria`;
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache:false,
+        data:{
+            categoria: categoria,
+        },
+        success:(result)=>{
+            let costos = JSON.parse(result);
+            let i = true;
+            costos.forEach(costo => {
+                insumo += `<option value="${costo['costo_id']}">${costo['costo_descripcion']}</option>`
+                if(i){
+                    llenar_form(costo);
+                    i = false;
+                }
+            });
+            $('#form_insumo').html(insumo);
+        },error:()=>{
+            alert("Error: No se pudieron obtener los costos")
+        }
+    });
+}
+
+function llenar_form(costo, cantidad = 0){
+    let form_cantidad;
+    if(cantidad != 1){
+        form_cantidad = 1.00
+        $('#form_cantidad').val(form_cantidad)
+    }else{
+        form_cantidad = $('#form_cantidad').val();
+    }
+    $('#form_unidad').val(costo['costo_unidad'])
+    $('#form_punitario').val(costo['costo_punitario'])
+    let total = parseFloat(costo['costo_punitario'])*parseFloat(form_cantidad)
+    $('#form_pparcial').val(total.toFixed(2))
+}
+
+function valores(){
+    let insumo = $('#form_insumo').val();
+    let controlador = `${base_url}costo/get_costo`
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data:{
+            insumo: insumo,
+        },
+        success: (result)=>{
+            let costo = JSON.parse(result)
+            let form_cantidad = $('#form_cantidad').val();
+            $('#form_cantidad').val((form_cantidad == 1 ? '1' : form_cantidad));
+            $('#form_unidad').val(costo['costo_unidad'])
+            $('#form_punitario').val(costo['costo_punitario'])
+            let total = parseFloat(costo['costo_punitario'])*parseFloat(form_cantidad)
+            $('#form_pparcial').val(total.toFixed(2))
+        },
+        error: ()=>{
+            alert("Error: No se pudieron encontrar los valores del insumo")
+        }
+    });
 }

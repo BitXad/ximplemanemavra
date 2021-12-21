@@ -14,9 +14,10 @@ class Costo_producto_model extends CI_Model{
      */
     function get_all_costos($producto){
         return $this->db->query(
-            "SELECT cp.* , cc.catcosto_descripcion 
+            "SELECT cp.* , cc.catcosto_descripcion, c.costo_descripcion 
             from costo_producto cp
-            left join categoria_costo cc on cc.catcosto_id = cp.catcosto_id 
+            left join categoria_costo cc on cc.catcosto_id = cp.catcosto_id
+            left join costo c on c.costo_id = cp.costo_id 
             where 1 = 1
             and cp.producto_id = $producto"
         )->result_array();
@@ -34,9 +35,10 @@ class Costo_producto_model extends CI_Model{
 
     function get_costos($costop_id){
         return $this->db->query(
-            "select cp.*,cc.catcosto_descripcion
+            "SELECT cp.*,cc.*, c.costo_descripcion 
             from costo_producto cp
             left join categoria_costo cc on cp.catcosto_id = cc.catcosto_id 
+            left join costo c on c.costo_id = cp.costo_id 
             where cp.cproducto_id = $costop_id"
         )->result_array();
     }

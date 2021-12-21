@@ -38,6 +38,19 @@ class Costo_model extends CI_Model{
             where c.costo_id = $costo_id"
         )->row_array();
     }
+    /**
+     * retorna costos de una categoria
+     */
+    function get_costo_categoria($categoria_id = 1){
+        return $this->db->query(
+            "SELECT c.*
+            from costo c 
+            left join categoria_costo cc on cc.catcosto_id = c.catcosto_id 
+            where 1=1
+            and c.estado_id = 1
+            and c.catcosto_id = $categoria_id"
+        )->result_array();
+    }
 
     function delete_costo_producto($costo_producto){
         return $this->db->delete('costo_producto',array('cproducto_id'=>$costo_producto));

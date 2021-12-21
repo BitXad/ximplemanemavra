@@ -11,6 +11,7 @@ class Categoria_costo extends CI_Controller{
         parent::__construct();
         $this->load->model('Categoria_costo_model');
         $this->load->model('Costo_producto_model');
+        $this->load->model('Costo_model');
         $this->load->model('Unidad_model');
         if ($this->session->userdata('logged_in')) {
             $this->session_data = $this->session->userdata('logged_in');
@@ -72,14 +73,16 @@ class Categoria_costo extends CI_Controller{
      */
     function get_all_costos(){
         if($this->input->is_ajax_request()){
+            $categoria = $this->input->post('categoria');
             $data['categorias'] = $this->Categoria_costo_model->get_all_categorias();
             $data['unidades'] = $this->Unidad_model->get_all_unidad();
+            $data['costos'] = $this->Costo_model->get_costo_categoria( ($categoria != 0 ? $categoria : 1));
             $costop_id = $this->input->post('costop_id');
-            if ($costop_id != 0) {
-                $data['costo_producto'] = $this->Costo_producto_model->get_costos($costop_id);
-            }else{
-                $data['costo_producto'] = [0];
-            }
+            // if ($costop_id != 0) {
+            $data['costo_producto'] = $this->Costo_producto_model->get_costos($costop_id);
+            // }else{
+                // $data['costo_producto'] = [0];
+            // }
             echo json_encode($data);
         }else{
             show_404();

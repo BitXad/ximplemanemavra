@@ -260,4 +260,23 @@ class Costo extends CI_Controller{
             show_404();
         }
     }
+    function get_costos_categoria(){
+        if($this->input->is_ajax_request()){
+            $categoria = $this->input->post('categoria');
+            $costos = $this->Costo_model->get_costo_categoria($categoria);
+            echo json_encode($costos);
+        }else{
+            show_404();
+        }
+    }
+
+    function get_costo(){
+        if($this->input->is_ajax_request()){
+            $insumo = $this->input->post("insumo");
+            $result = $this->Costo_model->get_costo($insumo);
+            echo json_encode($result);
+        }else{
+            show_404();
+        }
+    }
 }
