@@ -90,7 +90,7 @@ class Costo extends CI_Controller{
                     );
                     $this->Costo_model->update_costo($costo_id,$params);
                     if($data['costo']['costo_punitario'] != $this->input->post('costo_unitario')){
-                        $all_costo_producto = $this->Costo_producto_model->get_costos_pordescripcion($this->input->post('costo_descripcion'));
+                        $all_costo_producto = $this->Costo_producto_model->get_costos_porid($costo_id);
                         foreach($all_costo_producto as $costo_producto){
                             $elparams = array(
                                 'cproducto_costo' => $this->input->post('costo_unitario'),
