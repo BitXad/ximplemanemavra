@@ -42,6 +42,7 @@
                             <th>unidad</th>
                             <th>costo unitario<br>Bs</th>
                             <th>Estado</th>
+                            <th>Fecha actualización</th>
                             <th class="no-print"></th>
                         </tr>
                     </thead>
@@ -51,7 +52,7 @@
                             foreach($categoria_costos as $cc){
                                 $porcentaje = ($cc['catcosto_porcentaje'])*(100);
                                 echo "<tr>
-                                        <th colspan='5' style='text-align: left'><b><span>{$cc['catcosto_descripcion']}</span></b> - <span>{$porcentaje}%</span></th>
+                                        <th colspan='6' style='text-align: left'><b><span>{$cc['catcosto_descripcion']}</span></b> - <span>{$porcentaje}%</span></th>
                                         <th><button class='btn btn-xs btn-info' title='Editar porcentaje' onclick='show_form({$cc['catcosto_id']},`{$cc['catcosto_descripcion']}`,$porcentaje)'><i class='fa fa-pencil' aria-hidden='true'></i></button></th>
                                     </tr>";
                                 foreach($costos as $c){
@@ -63,6 +64,7 @@
                                 <td><?= $c['costo_unidad']; ?></td>
                                 <td class="text-center"><?= $c['costo_punitario']; ?></td>
                                 <td><?= $c['estado_descripcion']; ?></td>
+                                <td class="text-center"><?= (isset($c['costo_fecha']) ? date('d/m/Y',strtotime($c['costo_fecha'])) : '') ?></td>
                                 <td class="no-print">
                                     <a href="<?php echo site_url('costo/edit/'.$c['costo_id']); ?>" class="btn btn-info btn-xs" title="Editar"><span class="fa fa-pencil"></span></a>
                                 </td>

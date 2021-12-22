@@ -87,6 +87,7 @@ class Costo extends CI_Controller{
                         'costo_punitario' => $this->input->post('costo_unitario'),
                         'catcosto_id' => $this->input->post('costcategoria'),
                         'estado_id' => $this->input->post('estado'),
+                        'costo_fecha' => date('Y-m-d'),
                     );
                     $this->Costo_model->update_costo($costo_id,$params);
                     if($data['costo']['costo_punitario'] != $this->input->post('costo_unitario')){
