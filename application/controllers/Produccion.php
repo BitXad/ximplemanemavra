@@ -320,7 +320,7 @@ class Produccion extends CI_Controller{
                 $elconotrol = $this->Control_inventario_model->get_control_inventario($controli_id);
                 $encargado_id = $elconotrol["encargado_id"];
                 $usuario_id = $this->session_data['usuario_id'];
-                $estado_id = 33;
+                $estado_id = 34;
                 $params = array(
                     'usuario_id' => $usuario_id,
                     'estado_id' => $estado_id,
