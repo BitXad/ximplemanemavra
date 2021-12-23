@@ -36,7 +36,7 @@ class Costo extends CI_Controller{
         if($this->acceso(118)){
             $data['page_title'] = "Costo Operativo";
             
-            $data['costos'] = $this->Costo_model->get_all_costos();
+            //$data['costos'] = $this->Costo_model->get_all_costos();
             $data['categoria_costos'] = $this->Categoria_costo_model->get_all_categorias("");
             $data['_view'] = 'costo/index';
             $this->load->view('layouts/main',$data);
@@ -275,6 +275,16 @@ class Costo extends CI_Controller{
         if($this->input->is_ajax_request()){
             $insumo = $this->input->post("insumo");
             $result = $this->Costo_model->get_costo($insumo);
+            echo json_encode($result);
+        }else{
+            show_404();
+        }
+    }
+    
+    function mostrarcosto(){
+        if($this->input->is_ajax_request()){
+            $catcosto_id = $this->input->post("catcosto_id");
+            $result = $this->Costo_model->get_allcosto_categoria($catcosto_id);
             echo json_encode($result);
         }else{
             show_404();

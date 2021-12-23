@@ -55,4 +55,19 @@ class Costo_model extends CI_Model{
     function delete_costo_producto($costo_producto){
         return $this->db->delete('costo_producto',array('cproducto_id'=>$costo_producto));
     }
+    
+    /*
+     * retorna todos los costos de una categoria
+     */
+    function get_allcosto_categoria($catcosto_id){
+        return $this->db->query(
+            "SELECT c.*, cc.catcosto_descripcion, cc.catcosto_porcentaje,
+                    e.estado_color, e.estado_descripcion
+            from costo c 
+            left join categoria_costo cc on c.catcosto_id = cc.catcosto_id 
+            left join estado e on c.estado_id = e.estado_id 
+            where
+                c.catcosto_id = $catcosto_id"
+        )->result_array();
+    }
 }
