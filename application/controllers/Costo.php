@@ -37,7 +37,8 @@ class Costo extends CI_Controller{
             $data['page_title'] = "Costo Operativo";
             
             //$data['costos'] = $this->Costo_model->get_all_costos();
-            $data['categoria_costos'] = $this->Categoria_costo_model->get_all_categorias("");
+            $aux = "AND catcosto_tipo = 2";
+            $data['categoria_costos'] = $this->Categoria_costo_model->get_all_categorias($aux);
             $data['_view'] = 'costo/index';
             $this->load->view('layouts/main',$data);
         }

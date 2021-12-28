@@ -10,6 +10,7 @@ class Categoria_costo extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Categoria_costo_model');
+        // $this->load->model('Categoria_egreso_model');
         $this->load->model('Costo_producto_model');
         $this->load->model('Costo_model');
         $this->load->model('Unidad_model');
@@ -30,21 +31,46 @@ class Categoria_costo extends CI_Controller{
         }
     }
     /*
-     * Listing of categoria_egreso
+     * Listing of categoria_costo
      */
     function index()
     {
         if($this->acceso(116)){
-            $data['page_title'] = "Categoria Egreso";
-            $data['categoria_egreso'] = $this->Categoria_egreso_model->get_all_categoria_egreso();
+            $data['page_title'] = "Categoria Costos";
+            $data['categoria_costos'] = $this->Categoria_costo_model->get_all_categoria_costo();
 
             $data['_view'] = 'categoria_costo/index';
             $this->load->view('layouts/main',$data);
         }
     }
 
+    /**
+     * edit categoria costo
+     */
+    function edit($catcosto_id){
+        $data['catcosto'] = $this->Categoria_costo_model->get_catcosto($catcosto_id);
+        if(isset($data['catcosto']['catcosto_id'])){
+            if(isset($_POST) && count($_POST) > 0){
+                $catcosto_tipo = 1;
+                $porcentaje = ($this->input->post('catcosto_porcentaje')/100);
+                $params = array(    
+                    'catcosto_tipo' => $catcosto_tipo,
+                    'catcosto_descripcion' => $this->input->post('catcosto_descripcion'),
+                    'catcosto_porcentaje' => $porcentaje,
+                );
+
+                $this->Categoria_costo_model->edit_costo($catcosto_id,$params);            
+                redirect('categoria_costo/index');
+            }else{
+                $data['_view'] = 'categoria_costo/edit';
+                $this->load->view('layouts/main',$data);
+            }
+        }else
+            show_error('The produccion you are trying to edit does not exist.');
+    }
+
     /*
-     * Adding a new categoria_egreso
+     * Adding a new categoria_costo
      */
     function add()
     {
@@ -110,6 +136,15 @@ class Categoria_costo extends CI_Controller{
                 'catcosto_porcentaje' => $porcentaje,
             );
             $this->Categoria_costo_model->edit_costo($id,$params);
+        }else{
+            show_404();
+        }
+    }
+
+    function get_categoria_costos(){
+        if($this->input->is_ajax_request()){
+            $catcostos = $this->Categoria_costo_model->get_catcostos_porcentajes();
+            echo json_encode($catcostos);
         }else{
             show_404();
         }

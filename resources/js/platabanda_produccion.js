@@ -132,7 +132,7 @@ function get_platabandas(produccion_id){
             // $("#eltotal").html(eltotal);
             $("#platabandas_produccion").html(html);
             elsaldo = document.getElementById("elsaldo").innerText;
-            console.log(elsaldo)
+            // console.log(elsaldo)
         },
         error:()=>{
             alert("ocurrio algo malo")
@@ -168,11 +168,12 @@ function show_modal_info(platabanda_id,produccion_id = 0){
             produccion_id:produccion_id,
         },
         success:(resultado)=>{
-            result = JSON.parse(resultado);
+            let result = JSON.parse(resultado);
             let res = result['plantas'];
             let costos = result['costos'];
             let perdidas = result['perdidas'];
             let producciones = result['producciones'];
+            let catcostos = result['catcostos'];
             let html = ``;
             let ancho_boton = 65;
             let alto_boton = 60;
@@ -267,7 +268,8 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                                         <th style="padding: 0">Fecha</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="tabla_costo${ item['detproduccion_id'] }" style="font-size:8pt;">`
+                                                <tbody id="tabla_costo${item['detproduccion_id']}" style="font-size:8pt;">`
+                                                // console.log(catcostos)
                             html += get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
                             html +=`            </tbody>
                                             </table>
@@ -293,7 +295,7 @@ function show_modal_info(platabanda_id,produccion_id = 0){
                                 </article>
                             </div>`;
                 }
-                get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id']);
+                // get_tabla_costo(item['detproduccion_id'],costos,item['produccion_id'], catcostos);
             });
             $('#info_platabanda').html(html);
             $('#platabanda_number').html(platabanda_id);
@@ -305,14 +307,21 @@ function show_modal_info(platabanda_id,produccion_id = 0){
     });
 }
 
-function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
+function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
     let html = ``;
     let i = 1;
     var total = 0.00;
     let totalMaterial = 0;
     let totalManoObra = 0;
     let fecha;
+    let catcostos = [];
+    catcostos = get_categoria_costos(catcostos);
+    // catcostos = catcostos[0];
     let total_costo_p = 0;
+    console.log(catcostos);
+    catcostos.forEach(cc => {
+        console.log(cc.catcosto_id);
+    });
     if (costos != "") {
         costos.forEach(costo => {
             costo.forEach(cost => {
@@ -552,9 +561,9 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ``){
             }
         });
     }
-    if (id === ``) {
+    // if (id == '') {
         return html;
-    }
+    // }
 }
 
 function actualizar_informacion(detproduccion_id,platabanda_id, produccion){
@@ -745,6 +754,7 @@ function add_form(detproduccion_id,platabanda,produccion_id){
             $.ajax({
                 url: controlador,
                 type: "POST",
+                cache:false,
                 data: {
                         detproduccion_id:detproduccion_id,
                         costo:costo,
@@ -756,6 +766,8 @@ function add_form(detproduccion_id,platabanda,produccion_id){
                     show_close_form(id);
                     get_platabandas(produccion_id);
                     show_modal_info(platabanda,produccion_id)
+                    // console.log(`costos_info`)
+                    show_close_form(`costos_info`)
                     // get_tabla_costo(detproduccion_id,"",produccion_id);
                     // get_costos_produccion()
                 },
@@ -1140,4 +1152,24 @@ function get_info_platabanda_g(detproduccion_id,producciones,produccion_id){
     $(`#eltotal`).html(cantidad)
     $(`#laperdida`).html(per)
     $(`#elsaldo`).html(saldo)
+}
+
+function get_categoria_costos(cat_costo){
+    let controlador = `${base_url}categoria_costo/get_categoria_costos`;
+    $.ajax({
+        url: controlador,
+        type: 'POST',
+        cache: false,
+        data:{},
+        success:(result) => {
+            let res = JSON.parse(result);
+            res.forEach(e => {
+                cat_costo.push(e)
+            });
+        },
+        error:()=>{
+            alert("No se pudo obtener los porcentajes")
+        }
+    });
+    return cat_costo;
 }

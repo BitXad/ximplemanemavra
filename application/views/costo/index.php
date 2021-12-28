@@ -55,8 +55,8 @@
                         <tr>
                             <th>#</th>
                             <th>Insumo</th>
-                            <th>unidad</th>
-                            <th>costo unitario<br>Bs</th>
+                            <th>Unidad</th>
+                            <th>Costo unitario<br>(Bs)</th>
                             <th>Estado</th>
                             <th>Fecha actualización</th>
                             <th class="no-print"></th>

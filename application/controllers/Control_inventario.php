@@ -6,6 +6,7 @@ class Control_inventario extends CI_Controller{
         
         $this->load->model('Control_inventario_model');
         $this->load->model('Control_ubicacion_model');
+        $this->load->model('Categoria_costo_model');
         $this->load->model('Costo_operativo_model');
         $this->load->model('Ubicacion_model');
         $this->load->model('Area_model');
@@ -369,6 +370,7 @@ class Control_inventario extends CI_Controller{
             $produccion_id = $this->input->post("produccion_id");
             $produccion = ($produccion_id == 0 ? "":"AND dp.produccion_id = $produccion_id");
             $data['plantas'] = $this->Control_inventario_model->get_items_platabanda($controli_id, $produccion);
+            $data['catcostos'] = $this->Categoria_costo_model->get_catcostos_porcentajes();
             $data['costos'] = [];
             $producciones = [];
             $data['perdidas'] = [];

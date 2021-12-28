@@ -25,8 +25,9 @@ function mostrar_costos(){
                         if(categoria_costos[j]["catcosto_id"] == catcosto_id){
                             html += "<tr>";
                             var porcentaje = Number(categoria_costos[j]['catcosto_porcentaje'])*(100);
-                            html += "<th colspan='6' style='text-align: left'><b><span>"+categoria_costos[j]['catcosto_descripcion']+"</span></b> - <span>"+porcentaje+"%</span></th>";
-                            html += "<th><button class='btn btn-xs btn-info' title='Editar porcentaje' onclick='show_form("+categoria_costos[j]['catcosto_id']+",`"+categoria_costos[j]['catcosto_descripcion']+"`,"+porcentaje+")'><i class='fa fa-pencil' aria-hidden='true'></i></button></th>";
+                            html += "<th colspan='7' style='text-align: left'><b><span>"+categoria_costos[j]['catcosto_descripcion']+"</span></b></th>";
+                            // html += "<th colspan='7' style='text-align: left'><b><span>"+categoria_costos[j]['catcosto_descripcion']+"</span></b> - <span>"+porcentaje+"%</span></th>";
+                            // html += "<th><button class='btn btn-xs btn-info' title='Editar porcentaje' onclick='show_form("+categoria_costos[j]['catcosto_id']+",`"+categoria_costos[j]['catcosto_descripcion']+"`,"+porcentaje+")'><i class='fa fa-pencil' aria-hidden='true'></i></button></th>";
                             html += "</tr>";
                             for (var i = 0; i < n ; i++){
                                 html += "<tr>";
