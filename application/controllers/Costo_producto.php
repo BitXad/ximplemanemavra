@@ -36,9 +36,11 @@ class Costo_producto extends CI_Controller{
     function get_costos_producto(){
         if($this->input->is_ajax_request()){
             $producto = $this->input->post("producto");
-            $aux = "AND 1=1";
+            $aux = "AND cp.catcosto_tipo = 2";
+            $aux2 = "AND cp.catcosto_tipo = 1";
             $data['result'] = $this->Costo_producto_model->get_all_costos($producto);
             $data['categoria_costos'] = $this->Categoria_costo_model->get_all_categorias($aux);
+            $data['porcentajes'] = $this->Categoria_costo_model->get_all_categorias($aux2);
             echo json_encode($data);
         }else{
             show_404();

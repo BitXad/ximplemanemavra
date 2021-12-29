@@ -1148,9 +1148,11 @@ class Producto extends CI_Controller{
     function update_costo(){
         if($this->input->is_ajax_request()){
             $producto_id = $this->input->post('producto_id');
+            $precio_venta = $this->input->post('precio_venta');
             $precio_costo = $this->input->post('precio_costo');
             $params = array(
                 'producto_costo'=> $precio_costo,
+                'producto_precio'=> $precio_venta,
             );
             $this->Producto_model->update_producto($producto_id, $params);
         }else{

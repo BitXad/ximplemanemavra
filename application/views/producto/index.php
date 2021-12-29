@@ -521,7 +521,7 @@ echo '<script type="text/javascript">
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" id="update_costo_producto" class="btn btn-success"><i class="fa fa-usd" aria-hidden="true"></i> Actualizar costo</button>
+                <button type="button" id="update_costo_producto" class="btn btn-success"><i class="fa fa-usd" aria-hidden="true"></i> Actualizar</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
             </div>
         </div>

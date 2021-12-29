@@ -314,14 +314,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
     let totalMaterial = 0;
     let totalManoObra = 0;
     let fecha;
-    let catcostos = [];
-    catcostos = get_categoria_costos(catcostos);
+    let catcostos;
+    catcostos = get_categoria_costos();
     // catcostos = catcostos[0];
     let total_costo_p = 0;
-    console.log(catcostos);
-    catcostos.forEach(cc => {
-        console.log(cc.catcosto_id);
-    });
+    console.log(catcostos)
     if (costos != "") {
         costos.forEach(costo => {
             costo.forEach(cost => {
@@ -367,12 +364,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                     total += Number(cost['costoop_costo']);
                 }
             });
-            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
+            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']))
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
-                        <td style="padding: 0;">CARGAS SOCIALES</td>
+                        <td style="padding: 0;">${catcostos[0]['catcosto_descripcion']}</td>
                         <td style="padding: 0;" class='text-center'></td>
-                        <td style="padding: 0;" class='text-right'>71.00%</td>
+                        <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[0]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                         <td style="padding: 0; text-align: right;">${parseFloat(cargas_sociales).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
@@ -382,12 +379,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                         <th style="padding: 0">${parseFloat(total_mano_obra).toFixed(3)}</th>
                         <th style="padding: 0"></th>
                     </tr>`
-             let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
+             let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(catcostos[1]['catcosto_porcentaje'])
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
-                        <td style="padding: 0;">HERRAMIENTAS MENORES</td>
+                        <td style="padding: 0;">${catcostos[1]['catcosto_descripcion']}</td>
                         <td style="padding: 0;" class='text-center'></td>
-                        <td style="padding: 0;" class='text-right'>5.00%</td>
+                        <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[1]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                         <td style="padding: 0; text-align: right;">${parseFloat(herramientas_menores).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
@@ -403,12 +400,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                     <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
                     <th style="padding: 0"></th>
                 </tr>`
-            let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
+            let gastos_admin = parseFloat(sub_total) * parseFloat(catcostos[2]['catcosto_porcentaje']);
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
-                        <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
+                        <td style="padding: 0;">${catcostos[2]['catcosto_descripcion']}</td>
                         <td style="padding: 0;" class='text-center'></td>
-                        <td style="padding: 0;" class='text-right'>3.00%</td>
+                        <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[2]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                         <td style="padding: 0; text-align: right;">${parseFloat(gastos_admin).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
@@ -483,12 +480,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                         total += Number(cost['costoop_costo']);
                     }
                 });
-                let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
+                let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']))
                 html += `<tr>
                             <td style="padding: 0; text-align: right">${i}</td>
-                            <td style="padding: 0;">CARGAS SOCIALES</td>
+                            <td style="padding: 0;">${catcostos[0]['catcosto_descripcion']}</td>
                             <td style="padding: 0;" class='text-center'></td>
-                            <td style="padding: 0;" class='text-right'>71.00%</td>
+                            <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[0]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                             <td style="padding: 0; text-align: right;">${parseFloat(cargas_sociales).toFixed(3)}</td>
                             <td style="padding: 0; text-align: center"></td>
                         </tr>`;
@@ -498,12 +495,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                             <th style="padding: 0">${parseFloat(total_mano_obra).toFixed(3)}</th>
                             <th style="padding: 0"></th>
                         </tr>`
-                    let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
+                    let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(catcostos[1]['catcosto_porcentaje'])
                 html += `<tr>
                             <td style="padding: 0; text-align: right">${i}</td>
-                            <td style="padding: 0;">HERRAMIENTAS MENORES</td>
+                            <td style="padding: 0;">${catcostos[1]['catcosto_descripcion']}</td>
                             <td style="padding: 0;" class='text-center'></td>
-                            <td style="padding: 0;" class='text-right'>5.00%</td>
+                            <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[1]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                             <td style="padding: 0; text-align: right;">${parseFloat(herramientas_menores).toFixed(3)}</td>
                             <td style="padding: 0; text-align: center"></td>
                         </tr>`;
@@ -519,12 +516,12 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                         <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
                         <th style="padding: 0"></th>
                     </tr>`
-                let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
+                let gastos_admin = parseFloat(sub_total) * parseFloat(catcosto[2]['catcosto_porcentaje']);
                 html += `<tr>
                             <td style="padding: 0; text-align: right">${i}</td>
-                            <td style="padding: 0;">GASTOS GENERALES Y ADMINISTRATIVOS</td>
+                            <td style="padding: 0;">${catcostos[2]['catcosto_descripcion']}</td>
                             <td style="padding: 0;" class='text-center'></td>
-                            <td style="padding: 0;" class='text-right'>3.00%</td>
+                            <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[2]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
                             <td style="padding: 0; text-align: right;">${parseFloat(gastos_admin).toFixed(3)}</td>
                             <td style="padding: 0; text-align: center"></td>
                         </tr>`;
@@ -1053,6 +1050,7 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
     let i = 1;
     let html = ``;
     let html2 = ``;
+    let catcostos = get_categoria_costos();
     var total = 0.00;
     let totalMaterial = 0;
     let totalManoObra = 0;
@@ -1077,12 +1075,12 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
                     total += Number(cost['costoop_costo']);
                 }
             });
-            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(0.71))
+            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']))
             let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
-            let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(0.05)
+            let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(catcostos[1]['catcosto_porcentaje'])
             let totalHerramientaEquipo = parseFloat(herramientas_menores);
             let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
-            let gastos_admin = parseFloat(sub_total) * parseFloat(0.03);
+            let gastos_admin = parseFloat(sub_total) * parseFloat(catcostos[2]['catcosto_porcentaje']);
             let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
             total_costo_p = parcial;
         });
@@ -1154,9 +1152,11 @@ function get_info_platabanda_g(detproduccion_id,producciones,produccion_id){
     $(`#elsaldo`).html(saldo)
 }
 
-function get_categoria_costos(cat_costo){
+function get_categoria_costos(){
     let controlador = `${base_url}categoria_costo/get_categoria_costos`;
+    let cat_costo = [];
     $.ajax({
+        async: false,
         url: controlador,
         type: 'POST',
         cache: false,
@@ -1166,10 +1166,13 @@ function get_categoria_costos(cat_costo){
             res.forEach(e => {
                 cat_costo.push(e)
             });
+            // console.log(cat_costo.length)
+            // alert(cat_costo);
         },
         error:()=>{
             alert("No se pudo obtener los porcentajes")
         }
     });
+    // console.log(cat_costo.length)
     return cat_costo;
 }
