@@ -229,15 +229,16 @@ class Costo_operativo_model extends CI_Model
      */
     function get_costos_produccion($produccion_id){
         return $this->db->query(
-            "SELECT co.costoop_id,co.produccion_id,co.costoop_costo,co.costoop_fecha,if(co.costoop_descripcion is null, cd.costodesc_descripcion ,co.costoop_descripcion) as costodesc_descripcion 
+            "SELECT co.costoop_id,co.produccion_id,co.catcosto_id ,co.costoop_costo,co.costoop_fecha,if(co.costoop_descripcion is null, cd.costodesc_descripcion ,co.costoop_descripcion) as costodesc_descripcion
             , u.usuario_nombre, e.estado_descripcion, (co.costoop_costo/dp.detproduccion_cantidad) as costo_unitario
-            , if(co.unidad is null,'',co.unidad) as unidad
+            , if(co.unidad is null,'',co.unidad) as unidad, c.costo_descripcion as costo
             from costo_operativo co
             left join costo_producto cp on co.producto_id = cp.producto_id 
             left join costo_descripcion cd on co.costodesc_id = cd.costodesc_id
             left join detalle_produccion dp on dp.produccion_id = co.produccion_id 
             left join usuario u on co.usuario_id = u.usuario_id
             left join estado e on co.estado_id = e.estado_id
+            left join costo c on c.costo_id = co.costoop_descripcion 
             where 1=1
             and co.produccion_id = $produccion_id
             group by co.costoop_id "

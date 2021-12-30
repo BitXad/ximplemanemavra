@@ -2,9 +2,6 @@ const base_url = document.getElementById("base_url").value;
 const modal_info = "costo_producto_modal";
 const modal_add = "form_costo_producto_modal";
 
-// solo para probar
-window.onload = mostrar_costos_producto(3191); 
-
 function mostrar_costos_producto(producto){
     let modal = "costo_producto_modal"; 
     let tabla = "costos_producto";
@@ -141,7 +138,7 @@ function mostrar_costos_producto(producto){
                                     <th colspan="1" style="padding: 0; text-align:center"><b>${parseFloat(parcial).toFixed(3)}</b></th>
                                     <th colspan="1" style="padding: 0"></th>
                                 </tr>`
-                        iva = parseFloat(totalManoObra) * parseFloat(porcentajes[4]['catcosto_porcentaje']);
+
                         html += `<tr>
                                     <td style="padding: 0"></td>
                                     <td style="padding: 0">${porcentajes[4]['catcosto_descripcion']}</td>

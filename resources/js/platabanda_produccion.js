@@ -324,13 +324,13 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
             costo.forEach(cost => {
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    if(cost['unidad'] != "HR"){
+                    if(cost['catcosto_id'] != 2){
                         totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
                         html += `<tr>
                                     <td style="padding: 0; text-align: right">${i}</td>
-                                    <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                    <td style="padding: 0;">${cost['costo']}</td>
                                     <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
-                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(2)}</td>
+                                    <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(3)}</td>
                                     <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(2))}</td>
                                     <td style="padding: 0; text-align: center">${moment(cost["costoop_fecha"]).format("DD/MM/YYYY")}</td>
                                 </tr>`;
@@ -349,11 +349,11 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
             costo.forEach(cost => {
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    if(cost['unidad'] == "HR"){
+                    if(cost['catcosto_id'] == 2){
                         totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
                         html += `<tr>
                                     <td style="padding: 0; text-align: right">${i}</td>
-                                    <td style="padding: 0;">${cost['costodesc_descripcion']}</td>
+                                    <td style="padding: 0;">${cost['costo']}</td>
                                     <td style="padding: 0;" class='text-center'>${cost['unidad']}</td>
                                     <td style="padding: 0;" class='text-right'>${parseFloat(cost['costo_unitario']).toFixed(3)}</td>
                                     <td style="padding: 0; text-align: right;">${numberFormat(parseFloat(cost['costoop_costo']).toFixed(3))}</td>
@@ -361,19 +361,23 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                                 </tr>`;
                     }
                     i++;
-                    total += Number(cost['costoop_costo']);
+                    total = parseFloat(total) + parseFloat(cost['costoop_costo']);
                 }
             });
-            let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']))
+
+            let cargas_sociales = parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']);
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
                         <td style="padding: 0;">${catcostos[0]['catcosto_descripcion']}</td>
                         <td style="padding: 0;" class='text-center'></td>
-                        <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[0]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2)}%</td>
+                        <td style="padding: 0;" class='text-right'>${ parseFloat(parseFloat(catcostos[0]['catcosto_porcentaje'])*parseFloat(100)).toFixed(2) }%</td>
                         <td style="padding: 0; text-align: right;">${parseFloat(cargas_sociales).toFixed(3)}</td>
                         <td style="padding: 0; text-align: center"></td>
                     </tr>`;
-            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
+            
+            let iva = parseFloat(parseFloat(totalManoObra) + parseFloat(cargas_sociales)) * parseFloat(catcostos[4]['catcosto_porcentaje']);
+            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales) + parseFloat(iva);
+
             html += `<tr>
                         <th colspan="4" style="padding: 0">TOTAL MANO DE OBRA</th>
                         <th style="padding: 0">${parseFloat(total_mano_obra).toFixed(3)}</th>
@@ -396,10 +400,10 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                 </tr>`
             let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
             html += `<tr>
-                    <th colspan="4" style="padding: 0">SUB TOTAL</th>
-                    <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
-                    <th style="padding: 0"></th>
-                </tr>`
+                        <th colspan="4" style="padding: 0">SUB TOTAL</th>
+                        <th style="padding: 0">${parseFloat(sub_total).toFixed(3)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
             let gastos_admin = parseFloat(sub_total) * parseFloat(catcostos[2]['catcosto_porcentaje']);
             html += `<tr>
                         <td style="padding: 0; text-align: right">${i}</td>
@@ -411,10 +415,10 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                     </tr>`;
             let parcial = parseFloat(sub_total) + parseFloat(gastos_admin);
             html += `<tr>
-                    <th colspan="4" style="padding: 0">PARCIAL</th>
-                    <th style="padding: 0">${parseFloat(parcial).toFixed(3)}</th>
-                    <th style="padding: 0"></th>
-                </tr>`
+                        <th colspan="4" style="padding: 0">PARCIAL</th>
+                        <th style="padding: 0">${parseFloat(parcial).toFixed(3)}</th>
+                        <th style="padding: 0"></th>
+                    </tr>`
             total_costo_p = parcial;
         });
         html += `<tr>
@@ -424,7 +428,7 @@ function get_tabla_costo(detproduccion_id,costos="",produccion, id = ''){
                 </tr>`
     }else{
         let controlador = `${base_url}costo_operativo/get_costos`;
-        console.log("go")
+        // console.log("go")
         $.ajax({
             url: controlador,
             type: 'POST',
@@ -1058,7 +1062,7 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
             costo.forEach(cost => {
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    if(cost['unidad'] != "HR"){
+                    if(cost['catcosto_id'] != 2){
                         totalMaterial = parseFloat(totalMaterial) + parseFloat(cost['costoop_costo']);
                     }
                     i++;
@@ -1068,7 +1072,7 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
             costo.forEach(cost => {
                 if(produccion == cost['produccion_id']){
                     fecha = cost['costoop_fecha'].split(" ")[0].split("-").reverse().join("-");
-                    if(cost['unidad'] == "HR"){
+                    if(cost['catcosto_id'] == 2){
                         totalManoObra = parseFloat(totalManoObra) + parseFloat(cost['costoop_costo']);
                     }
                     i++;
@@ -1076,7 +1080,8 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
                 }
             });
             let cargas_sociales = parseFloat(parseFloat(totalManoObra) * parseFloat(catcostos[0]['catcosto_porcentaje']))
-            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales);
+            let iva = parseFloat(parseFloat(totalManoObra) + parseFloat(cargas_sociales)) * parseFloat(catcostos[4]['catcosto_porcentaje'])
+            let total_mano_obra = parseFloat(totalManoObra) + parseFloat(cargas_sociales) + parseFloat(iva);
             let herramientas_menores = parseFloat(total_mano_obra) * parseFloat(catcostos[1]['catcosto_porcentaje'])
             let totalHerramientaEquipo = parseFloat(herramientas_menores);
             let sub_total = parseFloat(totalMaterial) + parseFloat(total_mano_obra) + parseFloat(totalHerramientaEquipo);
