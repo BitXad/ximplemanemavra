@@ -37,7 +37,7 @@ function ponercursornuevaplatabanda(){
 function buscar_platabanda(){
     var base_url  = document.getElementById('base_url').value;
     var area_id  = document.getElementById('area_id').value;
-    var controlador = base_url+'produccion/buscar_platabanda';
+    var controlador = base_url+'produccion/get_platabanda_activa';
     if(area_id == ""){
         $("#paraplatabanda").html("");
     }else{
