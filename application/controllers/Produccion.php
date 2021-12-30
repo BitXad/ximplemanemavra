@@ -231,6 +231,20 @@ class Produccion extends CI_Controller{
             }
         //}
     }
+    /**
+     * Platabandas activas
+     */
+    function get_platabanda_activa(){
+        if ($this->input->is_ajax_request()) {
+            $area_id = $this->input->post('area_id');
+            $this->load->model('Control_inventario_model');
+            $activo = "AND ci.estado_id <> 38";
+            $datos = $this->Control_inventario_model->get_platabanda($area_id,$activo);
+            echo json_encode($datos);
+        }else{
+            show_404();
+        }
+    }
     /* registra un nuevo detalle de una producción */
     function nuevodetalle()
     {

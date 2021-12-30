@@ -350,7 +350,7 @@ function modificardetalleproduccion(masproduccion, produccion_descripcion){
 function buscar_platabandamodif(area_id, controli_id){
     var base_url  = document.getElementById('base_url').value;
     //var area_id  = document.getElementById('elarea_id').value;
-    var controlador = base_url+'produccion/buscar_platabanda';
+    var controlador = base_url+'produccion/get_platabanda_activa';
     if(area_id == ""){
         $("#paraplatabandam").html("");
     }else{
@@ -389,7 +389,7 @@ function buscar_platabandamodif(area_id, controli_id){
 function buscar_platabandamodif2(){
     var base_url  = document.getElementById('base_url').value;
     var area_id  = document.getElementById('elarea_id').value;
-    var controlador = base_url+'produccion/buscar_platabanda';
+    var controlador = base_url+'produccion/get_platabanda_activa';
     if(area_id == ""){
         $("#paraplatabandam").html("");
     }else{
