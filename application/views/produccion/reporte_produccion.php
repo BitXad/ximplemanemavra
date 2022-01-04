@@ -176,7 +176,7 @@
                             ?>
                             <tr>
                                 <td style="padding: 2px" class="text-center"><?php echo $i+1; ?></td>
-                                <td style="padding: 2px"><?php echo $costo['costodesc_descripcion']; ?></td>
+                                <td style="padding: 2px"><?php echo $costo['costo']; ?></td>
                                 <td style="padding: 2px" class="text-right"><?php echo $costo['costoop_costo']; ?></td>
                                 <td style="padding: 2px" class="text-center"><?php echo date("d/m/Y", strtotime($costo['costoop_fecha'])); ?></td>
                                 <td style="padding: 2px" class="text-center"><?php echo $costo['usuario_nombre']; ?></td>
