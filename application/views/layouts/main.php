@@ -312,6 +312,9 @@
                         <li>
                             <a href="<?php echo site_url('costo');?>"><i class="fa fa-money"></i>Costo productos</a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url('categoria_costo');?>"><i class="fa fa-percent" aria-hidden="true"></i> Incidencias</a>
+                        </li>
                         <?php
                         }
                         ?>
