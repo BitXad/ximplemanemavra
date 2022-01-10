@@ -260,4 +260,20 @@ class Inventario extends CI_Controller{
         }
 			
     }
+    /*
+     * muestra el inventario Fisico - Valorado
+     */
+    function mostrar_fvalorado()
+    {
+        if($this->acceso(25)){
+            //**************** inicio contenido ***************
+            $parametro = $this->input->post("parametro");
+            if ($parametro=="" || $parametro==null)
+                $resultado = $this->Inventario_model->getinventario_fvalorado();                
+            else
+                $resultado = $this->Inventario_model->get_inventario_parametro($parametro);
+            echo json_encode($resultado);            
+            //**************** fin contenido ***************
+        }
+    }
 }
