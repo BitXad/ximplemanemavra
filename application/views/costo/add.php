@@ -54,7 +54,7 @@
                     <button type="submit" class="btn btn-success">
             		<i class="fa fa-check"></i> Guardar
                     </button>
-                    <a href="<?php echo site_url('area'); ?>" class="btn btn-danger">
+                    <a href="<?php echo site_url('costo'); ?>" class="btn btn-danger">
                         <i class="fa fa-times"></i> Cancelar
                     </a>
           	</div>
