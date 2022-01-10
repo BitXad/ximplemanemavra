@@ -271,6 +271,9 @@
                         <li>
                             <a href="<?php echo site_url('control_inventario');?>"><i class="fa fa-book" aria-hidden="true"></i> Platabandas</a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url('area');?>"><i class="fa fa-square-o" aria-hidden="true"></i> Área</a>
+                        </li>
                         <?php
                         } ?>
                         
@@ -653,6 +656,9 @@
                         </li>
                         <li>
                             <a href="<?php echo site_url('inventario/realizable');?>"><i class="fa fa-money"></i> Inventario Realizable</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('inventario/fvalorado');?>"><i class="fa fa-book" aria-hidden="true"></i> Inventario Fisico/valorado</a>
                         </li>
                         <li>
                             <a href="<?php echo site_url('venta/inventario_envases');?>"><i class="fa fa-glass"></i> Inventario de Envases</a>
