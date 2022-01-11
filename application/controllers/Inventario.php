@@ -271,7 +271,7 @@ class Inventario extends CI_Controller{
             if ($parametro=="" || $parametro==null)
                 $resultado = $this->Inventario_model->getinventario_fvalorado();                
             else
-                $resultado = $this->Inventario_model->get_inventario_parametro($parametro);
+                $resultado = $this->Inventario_model->get_inventario_fvaloradoparametro($parametro);
             echo json_encode($resultado);            
             //**************** fin contenido ***************
         }
