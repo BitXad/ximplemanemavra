@@ -279,84 +279,25 @@ function tabla_inventario(){
                             html2 += "<th>FISICO</th>";
                             html2 += "<th>VALORADO</th>";
                         html2 += "</tr>";
-                        /*  html2 += "<tr>";
-                            html2 += "<th colspan='19' style='padding: 1px; text-align: left'>CATEGORIA?</th>";
-                        html2 += "</tr>";*/
-                        /*html2 += "<tr>";
-                            html2 += "<td>1</td>";
-                            html2 += "<td>ACACIA ESPAÑOLA</td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td></td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td>90.52911</td>";
-                            html2 += "<td>25,800.79</td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>90.5291</td>";
-                            html2 += "<td>0.00</td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td>25,800.79</td>";
-                        html2 += "</tr>";
-                        /*html2 += "<tr>";
-                            html2 += "<td>1</td>";
-                            html2 += "<td>ACACIA FLORIBUNDA</td>";
-                            html2 += "<td>3</td>";
-                            html2 += "<td> </td>";
-                            html2 += "<td>3.00</td>";
-                            html2 += "<td>90.52911</td>";
-                            html2 += "<td>271.59</td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>90.5291</td>";
-                            html2 += "<td>0.00</td>";
-                            html2 += "<td>3</td>";
-                            html2 += "<td>271.59</td>";
-                        html2 += "</tr>";*/
-                        
-                    //html2 += "</table>";
-                    html += html2;
-                    //html += "<table class='table table-striped table-bordered' id='mitabla' >";
-                    /*html += "<tr>";
-                    html += "	<th>#</th>";
-//                    html += "	<th>Imagen</th>";
-                    html += "	<th>Descripción</th>";
-                    html += "	<th>Código</th>";
-                    html += "	<th>Categoría</th>";                    
-                    html += "	<th>Unidad</th>";
-                    html += "	<th>Costo ("+nombre_moneda+")</th>";
-//                    html += "	<th>Compras</th>";
-//                    html += "	<th>Ventas</th>";
-//                    html += "	<th>Pedidos</th>";
-                    html += "	<th>Saldo</th>";
-                    html += "	<th>Total ("+nombre_moneda+")</th>";
-                    html += "	<th>Total (";
-                                            if(lamoneda_id == 1){
-                                                html += lamoneda[1]['moneda_descripcion'];
-                                            }else{
-                                                html += lamoneda[0]['moneda_descripcion'];
-                                            }
-                    html += ")</th>";
-                    html += "	<th colspan='6'>Saldos/Presentaciones</th>";
-                    html += "</tr>";
-                    */
+                    html += html2;                   
                     html += "<tbody class='buscar'>";
-                           
+            var totalfinal_saldo = Number(0);
+            var totalfinal_produccion = Number(0);
+            var totalfinal_ingresototal = Number(0);
+            var totalfinal_importetotal = Number(0);
+            var totalfinal_mantenimiento = Number(0);
+            var totalfinal_proyectos = Number(0);
+            var totalfinal_parques = Number(0);
+            var totalfinal_venta = Number(0);
+            var totalfinal_traspaso = Number(0);
+            var totalfinal_mortandad = Number(0);
+            var totalfinal_egresototal = Number(0);
+            var totalfinal_importeegreso = Number(0);
+            var totalfinal_importetotalvalorado = Number(0);
+            var totalfinal_saldofisico = Number(0);
+            var totalfinal_saldovalorado = Number(0);               
 
             if (inv != null){
-            
-                    
                     var total = 0;
                     var total_final = 0;
                     var existencia = 0;
@@ -364,28 +305,41 @@ function tabla_inventario(){
                     var categoria = "";
                     
                 for (var i = 0; i < tamanio ; i++){
-                   
                     //alert('dentra aqui: '+i+"/"+tamanio);
-                    if (categoria != inv[i]["categoria_nombre"]){                        
+                    if (categoria != inv[i]["categoria_nombre"]){
                         html += "<tr><td colspan='19'><b>"+inv[i]["categoria_nombre"]+"<b></tr>";
                     }
-
                         html += "<tr "+margen+">";
-
                                     total = inv[i]["producto_costo"]*inv[i]["existencia"]; 
                                     total_final += total;
-                                    existencia = parseFloat(inv[i]["existencia"]);                                                    
+                                    existencia = parseFloat(inv[i]["existencia"]);
+                        
+                        producto_total = Number(Number(existencia)+Number(inv[i]["cantidad"]));
+                        
+                        totalfinal_saldo += Number(inv[i]["existencia"]);
+                        totalfinal_produccion += Number(inv[i]["cantidad"]);
+                        totalfinal_ingresototal += Number(Number(inv[i]["existencia"])+Number(inv[i]["cantidad"]));
+                        totalfinal_importetotal += Number(Number(inv[i]["producto_costo"])*Number(Number(inv[i]["existencia"])+Number(inv[i]["cantidad"])));
+                        totalfinal_mantenimiento += Number(inv[i]["cantidad_mantenimiento"]);
+                        totalfinal_proyectos += Number(inv[i]["cantidad_proyecto"]);
+                        totalfinal_parques += Number(inv[i]["cantidad_parque"]);
+                        totalfinal_venta += Number(inv[i]["cantidad_venta"]);
+                        totalfinal_traspaso += Number(inv[i]["cantidad_traspaso"]);
+                        totalfinal_mortandad += Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"]));
+                        total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
+                        totalfinal_egresototal += Number(total_egreso);
+                        totalfinal_importeegreso += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
+                        totalfinal_importetotalvalorado += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
+                        totalfinal_saldofisico += Number(Number(producto_total)-Number(total_egreso));
+                        totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(total_egreso))*Number(inv[i]["producto_costo"]));
+                                    
                         html += "             	<td "+margen+">"+(i+1)+"</td>";
                         html += "             	<td "+margen+"><font size='0.5'>"+ inv[i]["producto_nombre"]+"</font>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ existencia.toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>";
-                                                    if(inv[i]["cantidad"] > 0){
-                                                        html += inv[i]["cantidad"];
-                                                    }else{
-                                                        html += "0";
-                                                    }
+                                                html += Number(inv[i]["cantidad"]);
                                         html += "</b></font></td>";
-                                        producto_total = Number(Number(existencia)+Number(inv[i]["cantidad"]));
+                                        
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ producto_total+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ inv[i]["producto_costo"]+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(Number(inv[i]["producto_costo"])*Number(Number(existencia)+Number(inv[i]["cantidad"]))).toFixed(2)+"</b></font></td>";
@@ -394,8 +348,8 @@ function tabla_inventario(){
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_parque"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_venta"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_traspaso"]).toFixed(0)+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_mortandad"]).toFixed(0)+"</b></font></td>";
-                        total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])).toFixed(0);
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0)+"</b></font></td>";
+                        
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+total_egreso+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(inv[i]["producto_costo"])+"</b></font></td>";
@@ -411,49 +365,27 @@ function tabla_inventario(){
                    categoria = inv[i]["categoria_nombre"];     
                 } // end for (i = 0 ....)
             } //end if (inv != null){
-                
                 html += "</tbody>";
                 html += "<tr>";
                             html += "<th style='padding: 1px;' colspan='2' class='text-center'>TOTALES</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_saldo.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_produccion.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_ingresototal.toFixed(0))+"</th>";
                             html += "<th style='padding: 1px;'></th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_importetotal.toFixed(2))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_mantenimiento.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_proyectos.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_parques.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_venta.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_traspaso.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_mortandad.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_egresototal.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_importeegreso.toFixed(2))+"</th>";
                             html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
-                            html += "<th style='padding: 1px;'></th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_importetotalvalorado.toFixed(2))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_saldofisico.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_saldovalorado.toFixed(2))+"</th>";
                         html += "</tr>";
-                /*
-                html += "<tr>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-//                html += "	<th> </th>";
-//                html += "	<th></th>";
-//                html += "	<th></th>";
-                html += "	<th>"+formato_numerico(total_final)+"</th>";
-                html += "	<th>"+formato_numerico(total_otramoneda)+"</th>";
-                html += "	<th></th>";
-                html += "	<th></th>";
-                html += "	<th></th>";
-                html += "	<th></th>";
-                html += "	<th></th>";
-                html += "</tr>    ";
-                */
                 html += "</table>";            
                 $("#tabla_inventario").html(html);   
                              
