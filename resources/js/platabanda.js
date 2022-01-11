@@ -1110,3 +1110,30 @@ function get_categoria_costos(){
     // console.log(cat_costo.length)
     return cat_costo;
 }
+function save_compra(){
+    let controlador = `${base_url}compra/add_planta`;
+    let form_producto_id = document.getElementById("form_producto_id").value;
+    let form_cantidad = document.getElementById("form_cantidad").value;
+    let form_costo = document.getElementById("form_costo").value;
+    let platabanda = document.getElementById("platabanda").value;
+    let det_produccion = document.getElementById("det_produccion").value;
+    let produccion_id = document.getElementById("form_produccion_id").value;
+    $.ajax({
+        url: controlador,
+        type: "POST",
+        cache: false,
+        data:{
+            form_producto_id:form_producto_id,
+            form_cantidad:form_cantidad,
+            platabanda:platabanda,
+            form_costo:form_costo,
+            det_produccion:det_produccion,
+        },
+        success:()=>{
+            window.location =`${base_url}venta/ventas/${produccion_id}/${platabanda}`;
+        },
+        error:()=>{
+            alert("error")
+        }
+    })
+}

@@ -2060,12 +2060,12 @@ $inventario = "update inventario set inventario.existencia=inventario.existencia
                 detalleven_devueltoenvase,detalleven_fechadevolucion,detalleven_horadevolucion,
                 detalleven_montodevolucion,detalleven_prestamoenvase,detalleven_fechavenc, promocion_id,detalleven_tc,detalleven_unidadfactor
             )values(
-                $producto_id,0,1,{$producto[0]['producto_codigo']},
+                $producto_id,0,1,'{$producto[0]['producto_codigo']}',
                 $cantidad,0,$form_costo,{$producto[0]['producto_precio']},
                 ".($cantidad*$producto[0]['producto_precio']).",0,".($cantidad*$producto[0]['producto_precio']).",
                 '','','',
                 1,$usuario_id,$cantidad,'{$producto[0]['producto_nombre']}',
-                '{$producto[0]['producto_unidad']}','{$producto[0]['producto_marca']}',{$producto[0]['categoria_id']},{$producto[0]['producto_codigobarra']},
+                '{$producto[0]['producto_unidad']}','{$producto[0]['producto_marca']}',{$producto[0]['categoria_id']},'{$producto[0]['producto_codigobarra']}',
                 0,0,0,
                 0,$cantidad,0,
                 $cantidad,0,0,
