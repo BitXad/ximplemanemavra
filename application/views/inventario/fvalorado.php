@@ -86,20 +86,31 @@
 </table>
 <div class="box-header no-print">
             <h3 class="box-title"></h3>
-            <div class="box-tools no-print">
-                
-                <!--<button class="btn btn-success btn-sm" onclick="actualizar_inventario()" type="button"><span class="fa fa-cubes"></span> Actualizar</button>-->
-                <?php if($rolusuario[27-1]['rolusuario_asignado'] == 1){ ?>
-                <button class="btn btn-primary btn-sm" onclick="tabla_inventario()" type="button"><span class="fa fa-list"></span> Mostrar todo</button>
-
-                <!--<button class="btn btn-info btn-sm" onclick="tabla_inventario_existencia()" type="button"><span class="fa fa-list-ol" title="Ver Produtos con Existencia"></span> Con Existencia</button>-->
-                <?php } if($rolusuario[28-1]['rolusuario_asignado'] == 1){ ?>
-                <!--<button class="btn btn-facebook btn-sm" onclick="mostrar_duplicados()" type="button"><span class="fa fa-copy"></span> Prod. Duplicados</button>-->
-                
-                <button class="btn btn-danger btn-sm" id="excel" onclick="generarexcel()"  type="button"><span class="fa fa-file-excel-o"></span> Exportar Excel</button>
-                <?php } ?>
-              
+            <!--<div class="box-tools no-print">-->
+            <div class="col-md-2">
+                Desde: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_desde" value="<?php echo date("Y-m-d");?>" name="fecha_desde" required="true">
             </div>
+            <div class="col-md-2">
+                Hasta: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_hasta" value="<?php echo date("Y-m-d");?>"  name="fecha_hasta" required="true">
+            </div>
+            <!--<button class="btn btn-success btn-sm" onclick="actualizar_inventario()" type="button"><span class="fa fa-cubes"></span> Actualizar</button>-->
+            <?php if($rolusuario[27-1]['rolusuario_asignado'] == 1){ ?>
+            <div class="col-md-2">&nbsp;
+                <button class="btn btn-primary btn-sm form-control" onclick="tabla_inventario()" type="button"><span class="fa fa-list"></span> Mostrar todo</button>
+            </div>
+            <div class="col-md-2">&nbsp;
+                <button class="btn btn-success btn-sm form-control" onclick="imprimir_inventario()" type="button"><span class="fa fa-print"></span> Imprimir</button>
+            </div>
+            <!--<button class="btn btn-info btn-sm" onclick="tabla_inventario_existencia()" type="button"><span class="fa fa-list-ol" title="Ver Produtos con Existencia"></span> Con Existencia</button>-->
+            <?php } if($rolusuario[28-1]['rolusuario_asignado'] == 1){ ?>
+            <!--<button class="btn btn-facebook btn-sm" onclick="mostrar_duplicados()" type="button"><span class="fa fa-copy"></span> Prod. Duplicados</button>-->
+
+            <div class="col-md-2">&nbsp;
+            <button class="btn btn-danger btn-sm form-control" id="excel" onclick="generarexcel()"  type="button"><span class="fa fa-file-excel-o"></span> Exportar Excel</button>
+            </div>
+            <?php } ?>
+              
+            <!--</div>-->
 </div>
 
 
