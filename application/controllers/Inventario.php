@@ -268,10 +268,12 @@ class Inventario extends CI_Controller{
         if($this->acceso(25)){
             //**************** inicio contenido ***************
             $parametro = $this->input->post("parametro");
+            $desde = $this->input->post('fecha_desde');
+            $hasta = $this->input->post('fecha_hasta');
             if ($parametro=="" || $parametro==null)
-                $resultado = $this->Inventario_model->getinventario_fvalorado();                
+                $resultado = $this->Inventario_model->getinventario_fvalorado($desde, $hasta);                
             else
-                $resultado = $this->Inventario_model->get_inventario_fvaloradoparametro($parametro);
+                $resultado = $this->Inventario_model->get_inventario_fvaloradoparametro($desde, $hasta, $parametro);
             echo json_encode($resultado);            
             //**************** fin contenido ***************
         }

@@ -6,6 +6,8 @@ function inicio(){
 function tabla_inventario(){
     var base_url = document.getElementById("base_url").value;
     var parametro = document.getElementById("filtrar").value;
+    var fecha_desde = document.getElementById("fecha_desde").value;
+    var fecha_hasta = document.getElementById("fecha_hasta").value;
     var controlador = base_url+"inventario/mostrar_fvalorado";
     
     document.getElementById('loader').style.display = 'block'; //muestra el bloque del loader
@@ -15,216 +17,6 @@ function tabla_inventario(){
     var total_otramoneda = Number(0);
     var total_otram = Number(0);
     var tipo_reporte = 2;
-    
-    if (tipo_reporte == 1){
-        $.ajax({
-        url: controlador,
-        type:"POST",
-        data:{parametro:parametro},
-        success: function(resultado){
-            
-            var inv = JSON.parse(resultado);
-            var tamanio = inv.length;
-            //alert(tamanio);
-
-            html = "";
-            html2 = "";
-            html2 += "<table class='table table-striped table-bordered' id='mitabla'>";
-                        html2 += "<tr>";
-                            html2 += "<th style='padding: 1px;' colspan='2' class='text-center'></th>";
-                            html2 += "<th style='padding: 1px;' colspan='5' class='text-center'>INGRESOS</th>";
-                            html2 += "<th style='padding: 1px;' colspan='10' class='text-center'>EGRESOS</th>";
-                            html2 += "<th style='padding: 1px;' colspan='2' class='text-center'>SALDOS</th>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<th style='padding: 1px;' colspan='2' class='text-center'></th>";
-                            html2 += "<th style='padding: 1px;' colspan='3' class='text-center'>FISICO</th>";
-                            html2 += "<th style='padding: 1px;' colspan='2' class='text-center'>VALORADO</th>";
-                            html2 += "<th style='padding: 1px;' colspan='7' class='text-center'>FISICO</th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;' colspan='2'>VALORADO</th>";
-                            html2 += "<th style='padding: 1px;'>FISICO</th>";
-                            html2 += "<th style='padding: 1px;'>VALORADO</th>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<th>N°</th>";
-                            html2 += "<th>ESPECIES FLORALES Y ARBUSTIVAS</th>";
-                            html2 += "<th>SALDO DE</th>";
-                            html2 += "<th>PRODUCCION</th>";
-                            html2 += "<th>TOTAL</th>";
-                            html2 += "<th>COSTO DE PRODUCCION(BS)</th>";
-                            html2 += "<th>IMPORTE TOLTAL Bs PROD.</th>";
-                            html2 += "<th>MANTENIMIENTO</th>";
-                            html2 += "<th>PROYECTOS</th>";
-                            html2 += "<th>PARQUES</th>";
-                            html2 += "<th>VENTA</th>";
-                            html2 += "<th>TRASPASO V. PARQUE ESCUELA</th>";
-                            html2 += "<th>MORTANDAD</th>";
-                            html2 += "<th>TOTAL</th>";
-                            html2 += "<th>IMPORTE TOTAL Bs EGRESOS(Bs)</th>";
-                            html2 += "<th>COSTO UNITARIO (Bs)</th>";
-                            html2 += "<th>IMPORTE TOTAL Bs PROD. (Bs)</th>";
-                            html2 += "<th>FISICO</th>";
-                            html2 += "<th>VALORADO</th>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<th colspan='19' style='padding: 1px; text-align: left'>CATEGORIA?</th>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<td>1</td>";
-                            html2 += "<td>ACACIA ESPAÑOLA</td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td> </td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td>90.52911</td>";
-                            html2 += "<td>25,800.79</td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>90.5291</td>";
-                            html2 += "<td>0.00</td>";
-                            html2 += "<td>285</td>";
-                            html2 += "<td>25,800.79</td>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<td>1</td>";
-                            html2 += "<td>ACACIA FLORIBUNDA</td>";
-                            html2 += "<td>3</td>";
-                            html2 += "<td> </td>";
-                            html2 += "<td>3.00</td>";
-                            html2 += "<td>90.52911</td>";
-                            html2 += "<td>271.59</td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td></td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>0</td>";
-                            html2 += "<td>90.5291</td>";
-                            html2 += "<td>0.00</td>";
-                            html2 += "<td>3</td>";
-                            html2 += "<td>271.59</td>";
-                        html2 += "</tr>";
-                        html2 += "<tr>";
-                            html2 += "<th style='padding: 1px;' colspan='2' class='text-center'>TOTALES</th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                            html2 += "<th style='padding: 1px;'></th>";
-                        html2 += "</tr>";
-                    html2 += "</table>";
-                    html += html2;
-                    html += "<table class='table table-striped table-bordered' id='mitabla'>";
-                    html += "<tr>";
-                    html += "	<th>#</th>";
-                    html += "	<th>Imagen</th>";
-                    html += "	<th>Descripción</th>";
-                    html += "	<th>Código</th>";
-                    html += "	<th>Costo</th>";
-                    html += "	<th>Compras</th>";
-                    html += "	<th>Ventas</th>";
-                    html += "	<th>Pedidos</th>";
-                    html += "	<th>Existencia</th>";
-                    html += "	<th>Total</th>";
-                    html += "</tr>";
-                    html += "<tbody class='buscar'>";
-                           
-
-            if (inv != null){
-            
-                    
-                    var total = 0;
-                    var total_final = 0;
-                    var existencia = 0;
-                
-                for (var i = 0; i < tamanio ; i++){
-                   
-                    //alert('dentra aqui: '+i+"/"+tamanio);
-                    
-                                total = inv[i]["producto_costo"]*inv[i]["existencia"]; 
-                                total_final += total;
-                                existencia = parseFloat(inv[i]["existencia"]);
-                                
-                    html += "             	<td>"+(i+1)+"</td>";
-                    html += "             	<td><img src='"+ base_url+"resources/images/productos/thumb_"+inv[i]["producto_foto"]+"' width='50' height='50' class='img-circle'</td>";
-                    html += "             	<td><font size='3'><b>"+ inv[i]["producto_nombre"]+"</b></font> <sub>";
-                    
-                    html += "             	<a href='"+base_url+"producto/edit2/"+inv[i]["producto_id"]+"' target='_blank' class='no-print'>["+inv[i]["producto_id"]+"] </a></sub>";
-                    html += "    <br>";
-                    html += "    <small>" + inv[i]["producto_unidad"]+" | "+inv[i]["producto_marca"]+" | "+inv[i]["producto_industria"];
-                    
-                    html += "   <span class='badge span-alert no-print'> <a href='"+base_url+"inventario/kardex/"+inv[i]["producto_id"]+"' target='_blank' class='no-print'> Kardex</a> </span></small>";
-                    
-                    //html += "     <button type='button' class='btn btn-info btn-xs' data-toggle='modal' data-target='#myModal"+inv[i]["producto_id"]+"'>Kardex</button>";
-                    
-                    html += "             	</td>";
-                    html += "             	<td><center><font size='2'><b>"+inv[i]["producto_codigobarra"]+"</b><br> </font>";
-                    html += "	"+ inv[i]["producto_codigo"]+"</center></td>";
-                    html += "	<td><center>"+ inv[i]["producto_costo"]+"</center></td>";
-
-                    html += "             	<td><center>"+ inv[i]["compras"]+"</center></td>";
-                    html += "	<td><center>"+ inv[i]["ventas"]+"</center></td>";
-                    html += "	<td><center>"+ inv[i]["pedidos"]+"</center></td>";
-                    
-                    html += "             	<td><center> <font size='3'><b>"+ existencia.toFixed(2)+"</b></font></center></td>";
-                    html += "             	<td><center> <font size='2'><b>"+ total.toFixed(2)+"</b></font></center></td>";
-                    
-
-                    html += "</tr>";
-                } // end for (i = 0 ....)
-            } //end if (inv != null){
-                
-                html += "</tbody>";
-                html += "<tr>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th> </th>";
-                html += "	<th></th>";
-                html += "	<th></th>";
-                html += "	<th>"+formato_numerico(total_final)+"</th>";
-
-                html += "</tr>    ";
-                html += "</table>";            
-                $("#tabla_inventario").html(html);
-                              
-                
-            }, // end succes: function(resultados){
-            error:function(resultado){
-                //alert('ocurrio un error..!!');
-            },
-            complete: function (jqXHR, textStatus) {
-                document.getElementById('loader').style.display = 'none'; //muestra el bloque del loader 
-            }
-            
-         }); // close ajax                 
-        
-    }
-    
-    
    //*********************** tipo_reporte 2 ************************************** 
     if (tipo_reporte == 2){
         
@@ -232,7 +24,7 @@ function tabla_inventario(){
     $.ajax({
         url: controlador,
         type:"POST",
-        data:{parametro:parametro},
+        data:{parametro:parametro, fecha_desde:fecha_desde, fecha_hasta:fecha_hasta},
         success: function(resultado){
             
             var inv = JSON.parse(resultado);

@@ -603,8 +603,9 @@ class Inventario_model extends CI_Model
     /*
      * Get inventariofisico valorado +produccion
      */
-    function getinventario_fvalorado()
+    function getinventario_fvalorado($desde, $hasta)
     {
+        $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
 		d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta, d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
                 d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida
