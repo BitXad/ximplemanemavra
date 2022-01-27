@@ -608,62 +608,90 @@ class Inventario_model extends CI_Model
         $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
 		d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta, d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
-                d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida
+                d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
+                d_compradetalle.cantidad_compraant, d_ventadetalleant.cantidad_ventaant
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
                 left join (select
-                				 sum(dp.detproduccion_cantidad) as cantidad, dp.producto_id as prod_id
+                                sum(dp.detproduccion_cantidad) as cantidad, dp.producto_id as prod_id
                            from detalle_produccion dp
                            left join produccion pr on dp.`produccion_id` = pr.produccion_id
                            where `dp`.`estado_id` = 34
                            group by dp.`producto_id`) as d_prod on p.producto_id = d_prod.prod_id
                 left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'MANTENIMIENTO'
+                           where c.cliente_nombre  = 'MANTENIMIENTO' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventam on p.producto_id = `d_ventam`.dv_prodid
                 left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'PROYECTOS'
+                           where c.cliente_nombre  = 'PROYECTOS' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventap on p.producto_id = d_ventap.dv_prodidproy
                 left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'SALIDA A PARQUES'
+                           where c.cliente_nombre  = 'SALIDA A PARQUES' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
                 left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'VENTAS'
+                           where c.cliente_nombre  = 'VENTAS' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventaventas on p.producto_id = d_ventaventas.producto_idventa
                 left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'MORTANDAD'
+                           where c.cliente_nombre  = 'MORTANDAD' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventamortandad on p.producto_id = d_ventamortandad.producto_idmortandad
                 left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso
-                		   from `detalle_venta` d
+                           from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'PARQUE ESCUELA'
+                           where c.cliente_nombre  = 'PARQUE ESCUELA' and
+                                v.venta_fecha >= '".$desde."' and 
+                                v.venta_fecha < '".$hasta."'
                            group by d.producto_id) as d_ventatraspaso on p.producto_id = d_ventatraspaso.producto_idtraspaso
                 left join (select sum(per.perdida_cantidad) as cantidad_perdida, dp.producto_id as producto_idperdida
-                		   from `perdida` per
+                           from `perdida` per
                            left join `detalle_produccion` dp on per.detproduccion_id = dp.`detproduccion_id`
                            left join producto pro on dp.`producto_id` = `pro`.`producto_id`
                            group by dp.producto_id) as d_produccionperdida on p.producto_id = d_produccionperdida.producto_idperdida
+                left join (select
+                                sum(dc.detallecomp_cantidad) as cantidad_compraant, dc.producto_id as producto_idcompra
+                           from detalle_compra dc
+                           left join compra c on dc.`compra_id` = c.compra_id
+                           where
+                                c.compra_fecha >= '".$inicio."' and 
+                                c.compra_fecha < '".$desde."'
+                           group by dc.`producto_id`) as d_compradetalle on p.producto_id = d_compradetalle.producto_idcompra
+                left join (select sum(d.detalleven_cantidad) as cantidad_ventaant, d.producto_id as producto_idventaant
+                           from `detalle_venta` d
+                           left join venta v on d.venta_id = v.venta_id
+                           where
+                                v.venta_fecha >= '".$inicio."' and 
+                                v.venta_fecha < '".$desde."'
+                           group by d.producto_id) as d_ventadetalleant on p.producto_id = `d_ventadetalleant`.producto_idventaant
                 where p.estado_id = 1
                 group by p.categoria_id, p.producto_id order by c.categoria_nombre, p.producto_nombre asc";
 

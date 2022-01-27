@@ -96,7 +96,7 @@
             <!--<button class="btn btn-success btn-sm" onclick="actualizar_inventario()" type="button"><span class="fa fa-cubes"></span> Actualizar</button>-->
             <?php if($rolusuario[27-1]['rolusuario_asignado'] == 1){ ?>
             <div class="col-md-2">&nbsp;
-                <button class="btn btn-primary btn-sm form-control" onclick="tabla_inventario()" type="button"><span class="fa fa-list"></span> Mostrar todo</button>
+                <button class="btn btn-primary btn-sm form-control" onclick="tabla_inventario()" type="button"><span class="fa fa-search"></span> Buscar</button>
             </div>
             <div class="col-md-2">&nbsp;
                 <button class="btn btn-success btn-sm form-control" onclick="imprimir_inventario()" type="button"><span class="fa fa-print"></span> Imprimir</button>

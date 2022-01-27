@@ -93,6 +93,7 @@ function tabla_inventario(){
                     var total = 0;
                     var total_final = 0;
                     var existencia = 0;
+                    var inicial = 0;
                     var margen = " style='padding:0'";
                     var categoria = "";
                     
@@ -105,8 +106,8 @@ function tabla_inventario(){
                                     total = inv[i]["producto_costo"]*inv[i]["existencia"]; 
                                     total_final += total;
                                     existencia = parseFloat(inv[i]["existencia"]);
-                        
-                        producto_total = Number(Number(existencia)+Number(inv[i]["cantidad"]));
+                        inicial =  Number(Number(inv[i]["cantidad_compraant"])-Number(inv[i]["cantidad_ventaant"]));
+                        producto_total = Number(Number(inicial)+Number(inv[i]["cantidad"]));
                         
                         totalfinal_saldo += Number(inv[i]["existencia"]);
                         totalfinal_produccion += Number(inv[i]["cantidad"]);
@@ -127,14 +128,14 @@ function tabla_inventario(){
                                     
                         html += "             	<td "+margen+">"+(i+1)+"</td>";
                         html += "             	<td "+margen+"><font size='0.5'>"+ inv[i]["producto_nombre"]+"</font>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ existencia.toFixed(2)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ inicial+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>";
                                                 html += Number(inv[i]["cantidad"]);
                                         html += "</b></font></td>";
                                         
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ producto_total+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ inv[i]["producto_costo"]+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(Number(inv[i]["producto_costo"])*Number(Number(existencia)+Number(inv[i]["cantidad"]))).toFixed(2)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(Number(inv[i]["producto_costo"])*Number(Number(inicial)+Number(inv[i]["cantidad"]))).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_mantenimiento"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_proyecto"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_parque"]).toFixed(0)+"</b></font></td>";
