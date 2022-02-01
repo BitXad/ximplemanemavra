@@ -148,8 +148,8 @@ function tabla_inventario(){
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(inv[i]["producto_costo"])+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(producto_total)-Number(total_egreso))+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(Number(producto_total)-Number(total_egreso))*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         
                         html += "</tr>";
                    
