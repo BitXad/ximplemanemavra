@@ -119,12 +119,13 @@ function tabla_inventario(){
                         totalfinal_venta += Number(inv[i]["cantidad_venta"]);
                         totalfinal_traspaso += Number(inv[i]["cantidad_traspaso"]);
                         totalfinal_mortandad += Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"]));
-                        total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
+                        //total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
+                        total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])).toFixed(0);
                         totalfinal_egresototal += Number(total_egreso);
                         totalfinal_importeegreso += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
                         totalfinal_importetotalvalorado += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
-                        totalfinal_saldofisico += Number(Number(producto_total)-Number(total_egreso));
-                        totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(total_egreso))*Number(inv[i]["producto_costo"]));
+                        totalfinal_saldofisico += Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])));
+                        totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))*Number(inv[i]["producto_costo"]));
                                     
                         html += "             	<td "+margen+">"+(i+1)+"</td>";
                         html += "             	<td "+margen+"><font size='0.5'>"+ inv[i]["producto_nombre"]+"</font>";
