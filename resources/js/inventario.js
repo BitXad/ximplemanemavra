@@ -1836,7 +1836,7 @@ function mostrar_kardex(producto_id){
                     html += "</td>";
                         
                     html += "            <td style='padding:0'>";
-                        if (k[i]['num_salida']!=0)  html += Number(k[i]['num_salida']).toFixed(2);
+                        if (k[i]['num_salida']!=0)  html += `${Number(k[i]['num_salida']).toFixed(2)}`;
                     html += "</td>";
                         
                     html += "            <td style='padding:0; background-color: #E9FC00 !important; -webkit-print-color-adjust: exact;'><b>";
@@ -1873,7 +1873,7 @@ function mostrar_kardex(producto_id){
                     }
                     html += numberFormat(Number(total_otram).toFixed(2));
                     html += "</td>";
-                    html +="            <td style='padding:0'>"+k[i]['detalleobs']+"</td>";
+                    html +="            <td style='padding:0'>"+k[i]['detalleobs']+" "+k[i]['cliente_nombre']+"</td>";
                     html +="            ";
                     html +="        </tr>";
                 

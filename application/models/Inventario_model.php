@@ -382,7 +382,7 @@ class Inventario_model extends CI_Model
                   c.compra_hora as hora,
                   '' as detalleobs,
                   d.detallecomp_tc as tipo_cambio,
-                  d.detallecomp_id as id
+                  d.detallecomp_id as id, '' as cliente_nombre
                 from
                   compra c,
                   detalle_compra d
@@ -408,11 +408,14 @@ class Inventario_model extends CI_Model
                   v.venta_hora as hora,
                   '' as detalleobs,
                   t.detalleven_tc as tipo_cambio,
-                  t.detalleven_id as id
+                  t.detalleven_id as id, 
+                  c.cliente_nombre
                 from
                   venta v,
-                  detalle_venta t
+                  detalle_venta t,
+                  cliente c
                 where
+                c.cliente_id = v.cliente_id and
                   t.producto_id = ".$producto_id." and 
                   v.venta_id = t.venta_id and 
                   v.venta_fecha >= '".$desde."' and 
@@ -433,7 +436,7 @@ class Inventario_model extends CI_Model
                   ds.detalleserv_horaterminado as hora,
                   concat('SERV. TECNICO N° ', ds.servicio_id) as detalleobs,
                   t.detalleven_tc as tipo_cambio,
-                  t.detalleven_id as id
+                  t.detalleven_id as id, '' as cliente_nombre
                 from
                   detalle_serv ds,
                   detalle_venta t
