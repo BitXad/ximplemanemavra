@@ -8,7 +8,7 @@ function tabla_inventario(){
     var parametro = document.getElementById("filtrar").value;
     var fecha_desde = document.getElementById("fecha_desde").value;
     var fecha_hasta = document.getElementById("fecha_hasta").value;
-    var controlador = base_url+"inventario/mostrar_fvalorado";
+    var controlador = base_url+"inventario/mostrar_fvaloradope";
     
     document.getElementById('loader').style.display = 'block'; //muestra el bloque del loader
     var nombre_moneda = document.getElementById('nombre_moneda').value;
@@ -37,14 +37,14 @@ function tabla_inventario(){
                         html2 += "<tr>";
                             html2 += "<th style='padding: 1px;' colspan='2' class='text-center'></th>";
                             html2 += "<th style='padding: 1px;' colspan='5' class='text-center'>INGRESOS</th>";
-                            html2 += "<th style='padding: 1px;' colspan='10' class='text-center'>EGRESOS</th>";
+                            html2 += "<th style='padding: 1px;' colspan='11' class='text-center'>EGRESOS</th>";
                             html2 += "<th style='padding: 1px;' colspan='2' class='text-center'>SALDOS</th>";
                         html2 += "</tr>";
                         html2 += "<tr>";
                             html2 += "<th style='padding: 1px;' colspan='2' class='text-center'></th>";
                             html2 += "<th style='padding: 1px;' colspan='3' class='text-center'>FISICO</th>";
                             html2 += "<th style='padding: 1px;' colspan='2' class='text-center'>VALORADO</th>";
-                            html2 += "<th style='padding: 1px;' colspan='7' class='text-center'>FISICO</th>";
+                            html2 += "<th style='padding: 1px;' colspan='8' class='text-center'>FISICO</th>";
                             html2 += "<th style='padding: 1px;'></th>";
                             html2 += "<th style='padding: 1px;' colspan='2'>VALORADO</th>";
                             html2 += "<th style='padding: 1px;'>FISICO</th>";
@@ -64,6 +64,7 @@ function tabla_inventario(){
                             html2 += "<th>VENTA</th>";
                             html2 += "<th>TRASPASO V. PARQUE ESCUELA</th>";
                             html2 += "<th>MORTANDAD</th>";
+                            html2 += "<th>CAMBIO PORTE</th>";
                             html2 += "<th>TOTAL</th>";
                             html2 += "<th>IMPORTE TOTAL Bs EGRESOS(Bs)</th>";
                             html2 += "<th>COSTO UNITARIO (Bs)</th>";
@@ -83,6 +84,7 @@ function tabla_inventario(){
             var totalfinal_venta = Number(0);
             var totalfinal_traspaso = Number(0);
             var totalfinal_mortandad = Number(0);
+            var totalfinal_cambioporte = Number(0);
             var totalfinal_egresototal = Number(0);
             var totalfinal_importeegreso = Number(0);
             var totalfinal_importetotalvalorado = Number(0);
@@ -100,7 +102,7 @@ function tabla_inventario(){
                 for (var i = 0; i < tamanio ; i++){
                     //alert('dentra aqui: '+i+"/"+tamanio);
                     if (categoria != inv[i]["categoria_nombre"]){
-                        html += "<tr style='background-color: #bcc2c4;'><td colspan='19' style='padding: 1px'><b>"+inv[i]["categoria_nombre"]+"<b></tr>";
+                        html += "<tr style='background-color: #bcc2c4;'><td colspan='20' style='padding: 1px'><b>"+inv[i]["categoria_nombre"]+"<b></tr>";
                     }
                         html += "<tr "+margen+">";
                                     total = inv[i]["producto_costo"]*inv[i]["existencia"]; 
@@ -119,13 +121,14 @@ function tabla_inventario(){
                         totalfinal_venta += Number(inv[i]["cantidad_venta"]);
                         totalfinal_traspaso += Number(inv[i]["cantidad_traspaso"]);
                         totalfinal_mortandad += Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"]));
+                        totalfinal_cambioporte += Number(inv[i]["cantidad_cambioporte"]);
                         //total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
                         total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])).toFixed(0);
                         totalfinal_egresototal += Number(total_egreso);
                         totalfinal_importeegreso += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
                         totalfinal_importetotalvalorado += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
-                        totalfinal_saldofisico += Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])));
-                        totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))*Number(inv[i]["producto_costo"]));
+                        totalfinal_saldofisico += Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])));
+                        totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))*Number(inv[i]["producto_costo"]));
                                     
                         html += "             	<td "+margen+">"+(i+1)+"</td>";
                         html += "             	<td "+margen+"><font size='0.5'>"+ inv[i]["producto_nombre"]+"</font>";
@@ -143,13 +146,14 @@ function tabla_inventario(){
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_venta"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_traspaso"]).toFixed(0)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_cambioporte"]).toFixed(0)+"</b></font></td>";
                         
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+total_egreso+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(inv[i]["producto_costo"])+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])))*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         
                         html += "</tr>";
                    
@@ -173,6 +177,7 @@ function tabla_inventario(){
                             html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_venta.toFixed(0))+"</th>";
                             html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_traspaso.toFixed(0))+"</th>";
                             html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_mortandad.toFixed(0))+"</th>";
+                            html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_cambioporte.toFixed(0))+"</th>";
                             html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_egresototal.toFixed(0))+"</th>";
                             html += "<th style='padding: 1px; text-align: right'>"+numberFormat(totalfinal_importeegreso.toFixed(2))+"</th>";
                             html += "<th style='padding: 1px;'></th>";

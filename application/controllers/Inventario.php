@@ -278,4 +278,47 @@ class Inventario extends CI_Controller{
             //**************** fin contenido ***************
         }
     }
+    /*
+     * Inventario Fisico - valorado para Parque Escuela
+     */
+    function fvaloradope()
+    {
+        if($this->acceso(24)){
+            //**************** inicio contenido ***************
+            $data['rolusuario'] = $this->session_data['rol'];
+            $empresa_id = 1;
+            $data['page_title'] = "Inventario Fisico-Valorado";
+            $data['empresa'] = $this->Empresa_model->get_empresa($empresa_id);
+            
+            $this->load->model('Parametro_model');
+            $data['parametro'] = $this->Parametro_model->get_parametros();
+            $this->load->model('Moneda_model');
+            $data['moneda'] = $this->Moneda_model->get_moneda(2); //Obtener moneda extragera
+            $data['lamoneda'] = $this->Moneda_model->getalls_monedasact_asc();
+            
+            $data['_view'] = 'inventario/fvaloradope';
+            $this->load->view('layouts/main',$data);
+
+            //**************** fin contenido ***************
+        }
+			
+    }
+    /*
+     * muestra el inventario Fisico - Valorado
+     */
+    function mostrar_fvaloradope()
+    {
+        if($this->acceso(25)){
+            //**************** inicio contenido ***************
+            $parametro = $this->input->post("parametro");
+            $desde = $this->input->post('fecha_desde');
+            $hasta = $this->input->post('fecha_hasta');
+            if ($parametro=="" || $parametro==null)
+                $resultado = $this->Inventario_model->getinventario_fvaloradope($desde, $hasta);                
+            else
+                $resultado = $this->Inventario_model->get_inventario_fvaloradoparametrope($desde, $hasta, $parametro);
+            echo json_encode($resultado);            
+            //**************** fin contenido ***************
+        }
+    }
 }
