@@ -13,25 +13,14 @@
                     }).show();
                 })
             }(jQuery));
-        });         
-        $(document).ready(function () {
-            (function ($) {
-                $('#filtrar2').keyup(function () {
-                    var rex = new RegExp($(this).val(), 'i');
-                    $('.buscar2 tr').hide();
-                    $('.buscar2 tr').filter(function () {
-                        return rex.test($(this).text());
-                    }).show();
-                })
-            }(jQuery));
-        });   
-
+        });
 </script>   
 
 <input type="text" value="<?php echo base_url(); ?>" id="base_url" hidden>
 <input type="hidden" name="nombre_moneda" id="nombre_moneda" value="<?php echo $parametro[0]['moneda_descripcion']; ?>" />
 <input type="hidden" name="lamoneda_id" id="lamoneda_id" value="<?php echo $parametro[0]['moneda_id']; ?>" />
 <input type="hidden" name="lamoneda" id="lamoneda" value='<?php echo json_encode($lamoneda); ?>' />
+<input type="hidden" name="resinventario" id="resinventario" />
 
 <!----------------------------- fin script buscador --------------------------------------->
 <!------------------ ESTILO DE LAS TABLAS ----------------->
@@ -85,40 +74,36 @@
     
 </table>
 <div class="box-header no-print">
-            <h3 class="box-title"></h3>
-            <!--<div class="box-tools no-print">-->
-            <div class="col-md-2">
-                Desde: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_desde" value="<?php echo date("Y-m-d");?>" name="fecha_desde" required="true">
-            </div>
-            <div class="col-md-2">
-                Hasta: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_hasta" value="<?php echo date("Y-m-d");?>"  name="fecha_hasta" required="true">
-            </div>
-            <!--<button class="btn btn-success btn-sm" onclick="actualizar_inventario()" type="button"><span class="fa fa-cubes"></span> Actualizar</button>-->
-            <?php if($rolusuario[27-1]['rolusuario_asignado'] == 1){ ?>
-            <div class="col-md-2">&nbsp;
-                <button class="btn btn-primary btn-sm form-control" onclick="tabla_inventario()" type="button"><span class="fa fa-search"></span> Buscar</button>
-            </div>
-            <div class="col-md-2">&nbsp;
-                <button class="btn btn-success btn-sm form-control" onclick="imprimir_inventario()" type="button"><span class="fa fa-print"></span> Imprimir</button>
-            </div>
-            <!--<button class="btn btn-info btn-sm" onclick="tabla_inventario_existencia()" type="button"><span class="fa fa-list-ol" title="Ver Produtos con Existencia"></span> Con Existencia</button>-->
-            <?php } if($rolusuario[28-1]['rolusuario_asignado'] == 1){ ?>
-            <!--<button class="btn btn-facebook btn-sm" onclick="mostrar_duplicados()" type="button"><span class="fa fa-copy"></span> Prod. Duplicados</button>-->
+    <h3 class="box-title"></h3>
+    <!--<div class="box-tools no-print">-->
+    <div class="col-md-2">
+        Desde: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_desde" value="<?php echo date("Y-m-d");?>" name="fecha_desde" required="true">
+    </div>
+    <div class="col-md-2">
+        Hasta: <input type="date" class="btn btn-warning btn-sm form-control" id="fecha_hasta" value="<?php echo date("Y-m-d");?>"  name="fecha_hasta" required="true">
+    </div>
+    <!--<button class="btn btn-success btn-sm" onclick="actualizar_inventario()" type="button"><span class="fa fa-cubes"></span> Actualizar</button>-->
+    <?php if($rolusuario[27-1]['rolusuario_asignado'] == 1){ ?>
+    <div class="col-md-2">&nbsp;
+        <button class="btn btn-primary btn-sm form-control" onclick="tabla_inventario()" type="button"><span class="fa fa-search"></span> Buscar</button>
+    </div>
+    <div class="col-md-2">&nbsp;
+        <button class="btn btn-success btn-sm form-control" onclick="imprimir_fv()" type="button"><span class="fa fa-print"></span> Imprimir</button>
+    </div>
+    <!--<button class="btn btn-info btn-sm" onclick="tabla_inventario_existencia()" type="button"><span class="fa fa-list-ol" title="Ver Produtos con Existencia"></span> Con Existencia</button>-->
+    <?php } if($rolusuario[28-1]['rolusuario_asignado'] == 1){ ?>
+    <!--<button class="btn btn-facebook btn-sm" onclick="mostrar_duplicados()" type="button"><span class="fa fa-copy"></span> Prod. Duplicados</button>-->
 
-            <div class="col-md-2">&nbsp;
-            <button class="btn btn-danger btn-sm form-control" id="excel" onclick="generarexcel()"  type="button"><span class="fa fa-file-excel-o"></span> Exportar Excel</button>
-            </div>
-            <?php } ?>
-              
-            <!--</div>-->
+    <div class="col-md-2">&nbsp;
+    <button class="btn btn-danger btn-sm form-control" id="excel" onclick="generarexcel()"  type="button"><span class="fa fa-file-excel-o"></span> Exportar Excel</button>
+    </div>
+    <?php } ?>
 </div>
-
-
-
-
-
-
-
+<div id="lafecha" style="display: none">
+    <span class="text-bold">Desde: </span><span id="esdesde"></span>&nbsp;&nbsp;
+    <span class="text-bold">Hasta: </span><span id="eshasta"></span>
+    <span id="esparametro"></span>
+</div>
 <div class="row">
     <div class="col-md-12">
             <!--------------------- parametro de buscador --------------------->
