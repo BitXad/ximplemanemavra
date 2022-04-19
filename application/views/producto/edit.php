@@ -201,7 +201,7 @@
                             ?>
                         </div>
                     </div>
-                    <div class="col-md-2">  
+                    <div class="col-md-2" hidden>  
                         <label for="destino_id" class="control-label">Destino</label>
                         <div class="form-group">
                             <select name="destino_id" class="form-control" id="destino_id">
@@ -267,7 +267,7 @@
                             <input type="number" step="any" min="0" max="100" name="producto_comision" value="<?php echo ($this->input->post('producto_comision') ? $this->input->post('producto_comision') : $producto['producto_comision']); ?>" class="form-control" id="producto_comision"  onclick="this.select();"/>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" hidden>
                         <a href="#info1" class="btn btn-facebook btn-sm inf" title="Los factores se utilizan para describir productos con diferentes presentaciones."><fa class="fa fa-sitemap"></fa> Configurar Factores</a>
                         <div id="info1" class="oculto">
                             <div class="col-md-3">
@@ -458,7 +458,7 @@
                             <input type="hidden" name="producto_foto1" value="<?php echo ($this->input->post('producto_foto') ? $this->input->post('producto_foto') : $producto['producto_foto']); ?>" class="form-control" id="producto_foto1" />
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <label for="producto_caracteristicas" class="control-label">Características</label>
                         <div class="form-group">
                             <textarea rows="1" type="texarea" name="producto_caracteristicas" value="" class="form-control" id="producto_caracteristicas" onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);" ><?php echo ($this->input->post('producto_caracteristicas') ? $this->input->post('producto_caracteristicas') : $producto['producto_caracteristicas']); ?></textarea>
@@ -481,7 +481,7 @@
                     </div>
                     
                     <?php } ?>
-                    <div class="col-md-12">
+                    <div class="col-md-12" hidden>
                     <a href="#info2" class="btn btn-facebook btn-sm inf2" title="Envases retornables"><fa class="fa fa-exchange"></fa> Envases Retornables</a>
                         <div id="info2" class="oculto2">
                     <div class="col-md-2">

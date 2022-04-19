@@ -193,7 +193,7 @@ function tablaresultadosproducto(limite){
                         }
                         html += cantmin+"</td>";
 
-                        html += "<td>";
+                        /*html += "<td>";
                         var sinconenvase = "";
                         var nombreenvase = "";
                         var costoenvase  = "";
@@ -212,7 +212,7 @@ function tablaresultadosproducto(limite){
                         html += nombreenvase;
                         html += costoenvase;
                         html += precioenvase;
-                        html += "</td>";
+                        html += "</td>";*/
                         var codbarras = "";
                         if(!(registros[i]["producto_codigobarra"] == null)){
                             codbarras = registros[i]["producto_codigobarra"];
@@ -237,10 +237,10 @@ function tablaresultadosproducto(limite){
                         html += "<a class='btn btn-default btn-xs' title='Aviso' onclick='show_aviso("+registros[i]["miprod_id"]+")'><i class='fa fa-clock-o' aria-hidden='true'></i></a>";
                         html += "<a href='"+base_url+"imagen_producto/catalogoprod/"+registros[i]["miprod_id"]+"' class='btn btn-success btn-xs' title='Catálogo de Imagenes' ><span class='fa fa-image'></span></a>";
                         html += "<a class='btn btn-danger btn-xs' data-toggle='modal' data-target='#myModal"+i+"' title='Eliminar'><span class='fa fa-trash'></span></a>";
-                        html += "<a class='btn btn-facebook btn-xs' onclick='buscarclasificador("+registros[i]["miprod_id"]+")' title='Ver Clasificador'><span class='fa fa-list-ol'></span></a>";
-                        html += "<a href='"+base_url+"producto/productoasignado/"+registros[i]["miprod_id"]+"' class='btn btn-soundcloud btn-xs' title='Ver si esta asignado a subcategorias' target='_blank' ><span class='fa fa-list'></span></a>";
+                        //html += "<a class='btn btn-facebook btn-xs' onclick='buscarclasificador("+registros[i]["miprod_id"]+")' title='Ver Clasificador'><span class='fa fa-list-ol'></span></a>";
+                        //html += "<a href='"+base_url+"producto/productoasignado/"+registros[i]["miprod_id"]+"' class='btn btn-soundcloud btn-xs' title='Ver si esta asignado a subcategorias' target='_blank' ><span class='fa fa-list'></span></a>";
                         html += "<a class='btn btn-warning btn-xs' onclick='mostrarmodalcodigobarra("+registros[i]["miprod_id"]+", "+JSON.stringify(registros[i]["producto_nombre"])+", "+JSON.stringify(registros[i]["producto_codigobarra"])+")' title='Código de barras para impresión'><span class='fa fa-barcode'></span></a>";
-                        html += "<a class='btn btn-success btn-xs' onclick='mostrar_costos_producto("+registros[i]["miprod_id"]+")' title='Mostrar costos del producto'><i class='fa fa-money' aria-hidden='true'></i></a>";
+                        html += "<a class='btn btn-facebook btn-xs' onclick='mostrar_costos_producto("+registros[i]["miprod_id"]+")' title='Mostrar costos del producto'><i class='fa fa-money' aria-hidden='true'></i></a>";
                         html += "<!------------------------ INICIO modal para confirmar eliminación ------------------->";
                         html += "<div class='modal fade' id='myModal"+i+"' tabindex='-1' role='dialog' aria-labelledby='myModalLabel"+i+"'>";
                         html += "<div class='modal-dialog' role='document'>";
@@ -1523,7 +1523,7 @@ function cabecera_tabla() {
     chtml += "<th  role='columnheader' >#</th>";
     chtml += "<th  role='columnheader' >Nombre</th>";
     chtml += "<th  role='columnheader' >Categoria|<br>Presentación</th>";
-    chtml += "<th  role='columnheader' >Envase</th>";
+    //chtml += "<th  role='columnheader' >Envase</th>";
     chtml += "<th  role='columnheader' >Código|<br>Cód. Barra</th>";
     chtml += "<th  role='columnheader' >Exist.</th>";
     chtml += "<th  role='columnheader' >Precio</th>";

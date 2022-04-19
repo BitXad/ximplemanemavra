@@ -148,7 +148,7 @@
                     <div class="col-md-2">
                             <label for="producto_industria" class="control-label">Industria</label>
                             <div class="form-group">
-                                    <input type="text" name="producto_industria" value="<?php echo "BOLIVANA"; ?>" class="form-control" id="producto_industria"  onclick="this.select();" onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);"/>
+                                    <input type="text" name="producto_industria" value="<?php echo "BOLIVIANA"; ?>" class="form-control" id="producto_industria"  onclick="this.select();" onkeyup="var start = this.selectionStart; var end = this.selectionEnd; this.value = this.value.toUpperCase(); this.setSelectionRange(start, end);"/>
                             </div>
                     </div>
                     <div class="col-md-2">
@@ -191,7 +191,7 @@
                             <span id="parasubcat"></span>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" hidden>
                         <label for="destino_id" class="control-label">Destino</label>
                         <div class="form-group">
                             <select name="destino_id" class="form-control" id="destino_id">
@@ -255,7 +255,7 @@
                                     <input type="number" step="any" min="0" name="producto_tipocambio" value="1" class="form-control" id="producto_tipocambio" />
                             </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" hidden>
                         <a href="#info1" class="btn btn-facebook btn-sm inf" title="Los factores se utilizan para describir productos con diferentes presentaciones."><fa class="fa fa-sitemap"></fa> Configurar Factores</a>
                         <div id="info1" class="oculto">
                         <div class="col-md-3">
@@ -443,7 +443,7 @@
                             </div>
                     </div>
                     <?php } ?>
-                    <div class="col-md-12">
+                    <div class="col-md-12" hidden>
                     <a href="#info2" class="btn btn-facebook btn-sm inf2" title="Envases retornables"><fa class="fa fa-exchange"></fa> Envases Retornables</a>
                         <div id="info2" class="oculto2">
                     <div class="col-md-2">
