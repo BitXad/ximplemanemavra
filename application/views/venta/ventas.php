@@ -564,9 +564,9 @@ window.onkeydown = compruebaTecla;
        
        <button class="btn btn-success btn-xs" onclick="actualizar_inventario()"><span class="fa fa-cubes"></span> Inventario</button>
         <?php if($rolusuario[185-1]['rolusuario_asignado'] == 1){ ?>
-        <button type="button" id="boton_modal_promocion" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalpromocion" >
+        <!--<button type="button" id="boton_modal_promocion" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalpromocion" >
             <fa class="fa fa-cube"></fa> Promociones
-        </button>
+        </button>-->
         <?php } ?>
 <!--<span class="badge btn-primary">-->
         
@@ -635,7 +635,7 @@ window.onkeydown = compruebaTecla;
             <?php if($parametro[0]["parametro_modulorestaurante"]==0){ //1 es normal ?>
                 <?php if($rolusuario[13-1]['rolusuario_asignado'] == 1){ ?>
             <a href="#" data-toggle="modal" data-target="#modalpedidos" class="btn btn-facebook btn-xs" onclick="pedidos_pendientes()" title="Pedidos Pendientes"><span class="fa fa-cubes"></span><b> Pedidos</b></a> 
-            <a href="#" data-toggle="modal" data-target="#modalordenes" class="btn btn-facebook btn-xs" style="background-color: black" onclick="ordenes_pendientes()" title="Ordenes de Trabajo"><span class="fa fa-book"></span><b> OT's</b></a> 
+            <!--<a href="#" data-toggle="modal" data-target="#modalordenes" class="btn btn-facebook btn-xs" style="background-color: black" onclick="ordenes_pendientes()" title="Ordenes de Trabajo"><span class="fa fa-book"></span><b> OT's</b></a>-->
                 <?php }
                 } ?>
                     

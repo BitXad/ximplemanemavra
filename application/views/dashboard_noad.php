@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
     <script src="<?php echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript"></script>
-    <script src="<?php echo base_url('resources/js/caja.js'); ?>"></script>
+    <!--<script src="<?php //echo base_url('resources/js/caja.js'); ?>"></script>-->
     <script src="<?php echo base_url('resources/js/graficas.js'); ?>"></script>
     <script src="<?php echo base_url('resources/js/pedido_diario.js'); ?>"></script>
     <script src="<?php echo base_url('resources/js/highcharts.js'); ?>"></script>
@@ -17,6 +17,7 @@
     <input type="hidden" name="base_url" id="base_url" value="<?php echo base_url(); ?>" />  
     <input type="hidden" name="caja_id" id="caja_id" value="<?php echo $caja[0]['caja_id']; ?>" />
     <input type="hidden" name="estado_id" id="estado_id" value="<?php echo $caja[0]['estado_id']; ?>" />
+    <input type="hidden" name="user_id" id="user_id" value="<?= $usuario ?>" />
     <!-- Main content -->
     <style>
         #map{
