@@ -994,14 +994,6 @@ class Inventario_model extends CI_Model
                        d_produccionperdida.cantidad_perdida,
                        d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant,
                        d_ventacambioporte.cantidad_cambioporte, d_ventacambioporte.total_ventacambioporte
-                       
-                /*select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
-                       `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
-		       d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta,
-                       d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
-                       d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
-                       d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant,
-                       d_ventacambioporte.cantidad_cambioporte*/
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
                 left join (select

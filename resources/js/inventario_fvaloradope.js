@@ -61,7 +61,7 @@ function tabla_inventario(){
                             html2 += "<th>PROYECTOS</th>";
                             html2 += "<th>PARQUES</th>";
                             html2 += "<th>VENTA</th>";
-                            html2 += "<th>TRASPASO V. PARQUE ESCUELA</th>";
+                            html2 += "<th>TRASPASO V. PILI HUACHANA</th>";
                             html2 += "<th>MORTANDAD</th>";
                             html2 += "<th>CAMBIO PORTE</th>";
                             html2 += "<th>TOTAL</th>";
@@ -298,7 +298,7 @@ function generarexcel(){
                 row += 'PROYECTOS,';
                 row += 'PARQUES,';
                 row += 'VENTA,';
-                row += 'TRASPASO P. ESCUELA,';
+                row += 'TRASPASO V. PILI HUACHANA,';
                 row += 'MORTANDAD,';
                 row += 'CAMBIO PORTE,';
                 row += 'TOTAL,';
@@ -342,8 +342,9 @@ function generarexcel(){
             totalfinal_cambioporte += Number(inv[i]["cantidad_cambioporte"]);
             //total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
             total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])).toFixed(0);
+            total_egresomoney = Number(Number(inv[i]["total_ventamantenimiento"])+Number(inv[i]["total_ventaproyecto"])+Number(inv[i]["total_ventaparque"])+Number(inv[i]["total_ventavarios"])+Number(inv[i]["total_ventatraspaso"]));
             totalfinal_egresototal += Number(total_egreso);
-            totalfinal_importeegreso += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
+            totalfinal_importeegreso += Number(total_egresomoney);
             totalfinal_importetotalvalorado += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
             totalfinal_saldofisico += Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])));
             totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))*Number(inv[i]["producto_costo"]));
@@ -362,7 +363,7 @@ function generarexcel(){
             row += '"' +Number(Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0)+ '",';
             row += '"' +Number(inv[i]["cantidad_cambioporte"]).toFixed(0)+ '",';
             row += '"' +total_egreso+ '",';
-            row += '"' +Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+ '",';
+            row += '"' +Number(total_egresomoney).toFixed(2)+ '",';
             row += '"' +Number(inv[i]["producto_costo"])+ '",';
             row += '"' +Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+ '",';
             row += '"' +Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))+ '",';
