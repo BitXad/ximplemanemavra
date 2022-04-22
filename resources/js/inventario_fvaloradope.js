@@ -125,8 +125,9 @@ function tabla_inventario(){
                         totalfinal_cambioporte += Number(inv[i]["cantidad_cambioporte"]);
                         //total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])).toFixed(0);
                         total_egreso = Number(Number(inv[i]["cantidad_mantenimiento"])+Number(inv[i]["cantidad_proyecto"])+Number(inv[i]["cantidad_parque"])+Number(inv[i]["cantidad_venta"])+Number(inv[i]["cantidad_traspaso"])).toFixed(0);
+                        total_egresomoney = Number(Number(inv[i]["total_ventamantenimiento"])+Number(inv[i]["total_ventaproyecto"])+Number(inv[i]["total_ventaparque"])+Number(inv[i]["total_ventavarios"])+Number(inv[i]["total_ventatraspaso"]));
                         totalfinal_egresototal += Number(total_egreso);
-                        totalfinal_importeegreso += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
+                        totalfinal_importeegreso += Number(total_egresomoney);
                         totalfinal_importetotalvalorado += Number(Number(total_egreso)*Number(inv[i]["producto_costo"]));
                         totalfinal_saldofisico += Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])));
                         totalfinal_saldovalorado += Number(Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))*Number(inv[i]["producto_costo"]));
@@ -150,7 +151,7 @@ function tabla_inventario(){
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+ Number(inv[i]["cantidad_cambioporte"]).toFixed(0)+"</b></font></td>";
                         
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+total_egreso+"</b></font></td>";
-                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
+                        html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(total_egresomoney).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(inv[i]["producto_costo"])+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(total_egreso)*Number(inv[i]["producto_costo"])).toFixed(2)+"</b></font></td>";
                         html += "             	<td "+margen+" class='text-right'><font size='1'><b>"+Number(Number(producto_total)-Number(Number(total_egreso)+Number(inv[i]["cantidad_mortandad"])+Number(inv[i]["cantidad_perdida"])+Number(inv[i]["cantidad_cambioporte"])))+"</b></font></td>";

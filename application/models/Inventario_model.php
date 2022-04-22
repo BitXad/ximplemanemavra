@@ -610,10 +610,13 @@ class Inventario_model extends CI_Model
     {
         $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
-                       `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
-		       d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta,
-                       d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
-                       d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
+                       `d_ventam`.cantidad_mantenimiento, d_ventam.total_ventamantenimiento,
+                       d_ventap.cantidad_proyecto, d_ventap.total_ventaproyecto,
+		       d_ventaparque.cantidad_parque, d_ventaparque.total_ventaparque,
+                       d_ventaventas.cantidad_venta, d_ventaventas.total_ventavarios,
+                       d_ventatraspaso.cantidad_traspaso, d_ventatraspaso.total_ventatraspaso,
+                       d_ventamortandad.cantidad_mortandad, d_ventamortandad.total_ventamortandad,
+                       d_produccionperdida.cantidad_perdida,
                        d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
@@ -631,7 +634,8 @@ class Inventario_model extends CI_Model
                            	c.compra_fecha >= '".$desde."' and 
                			c.compra_fecha <= '".$hasta."'
                            group by dc.`producto_id`) as d_compradetalle on p.producto_id = d_compradetalle.producto_idcompra
-                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid
+                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid,
+                                  sum(d.detalleven_total) as total_ventamantenimiento
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -640,7 +644,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventam on p.producto_id = `d_ventam`.dv_prodid
-                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy
+                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy,
+                                  sum(d.detalleven_total) as total_ventaproyecto
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -649,7 +654,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventap on p.producto_id = d_ventap.dv_prodidproy
-                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque
+                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque,
+                                  sum(d.detalleven_total) as total_ventaparque
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -658,16 +664,23 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
-                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa
+                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa,
+                                  sum(d.detalleven_total) as total_ventavarios
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'VENTAS' and
+                           where not
+                                  (c.cliente_nombre = 'MANTENIMIENTO' or
+                                  c.cliente_nombre = 'PROYECTOS' or
+                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'PARQUE ESCUELA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaventas on p.producto_id = d_ventaventas.producto_idventa
-                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad
+                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad,
+                                  sum(d.detalleven_total) as total_ventamortandad
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -676,7 +689,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventamortandad on p.producto_id = d_ventamortandad.producto_idmortandad
-                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso
+                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso,
+                                  sum(d.detalleven_total) as total_ventatraspaso
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -717,10 +731,13 @@ class Inventario_model extends CI_Model
     {
         $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
-                       `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
-		       d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta,
-                       d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
-                       d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
+                       `d_ventam`.cantidad_mantenimiento, d_ventam.total_ventamantenimiento,
+                       d_ventap.cantidad_proyecto, d_ventap.total_ventaproyecto,
+		       d_ventaparque.cantidad_parque, d_ventaparque.total_ventaparque,
+                       d_ventaventas.cantidad_venta, d_ventaventas.total_ventavarios,
+                       d_ventatraspaso.cantidad_traspaso, d_ventatraspaso.total_ventatraspaso,
+                       d_ventamortandad.cantidad_mortandad, d_ventamortandad.total_ventamortandad,
+                       d_produccionperdida.cantidad_perdida,
                        d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
@@ -738,7 +755,8 @@ class Inventario_model extends CI_Model
                            	c.compra_fecha >= '".$desde."' and 
                			c.compra_fecha <= '".$hasta."'
                            group by dc.`producto_id`) as d_compradetalle on p.producto_id = d_compradetalle.producto_idcompra
-                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid
+                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid,
+                                  sum(d.detalleven_total) as total_ventamantenimiento
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -747,7 +765,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventam on p.producto_id = `d_ventam`.dv_prodid
-                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy
+                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy,
+                                  sum(d.detalleven_total) as total_ventaproyecto
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -756,7 +775,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventap on p.producto_id = d_ventap.dv_prodidproy
-                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque
+                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque,
+                                  sum(d.detalleven_total) as total_ventaparque
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -765,16 +785,23 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
-                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa
+                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa,
+                                  sum(d.detalleven_total) as total_ventavarios
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'VENTAS' and
+                           where not
+                                  (c.cliente_nombre = 'MANTENIMIENTO' or
+                                  c.cliente_nombre = 'PROYECTOS' or
+                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'PARQUE ESCUELA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaventas on p.producto_id = d_ventaventas.producto_idventa
-                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad
+                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad,
+                                  sum(d.detalleven_total) as total_ventamortandad
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -783,7 +810,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventamortandad on p.producto_id = d_ventamortandad.producto_idmortandad
-                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso
+                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso,
+                                  sum(d.detalleven_total) as total_ventatraspaso
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -827,12 +855,15 @@ class Inventario_model extends CI_Model
     {
         $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
-                       `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
-		       d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta,
-                       d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
-                       d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
+                       `d_ventam`.cantidad_mantenimiento, d_ventam.total_ventamantenimiento,
+                       d_ventap.cantidad_proyecto, d_ventap.total_ventaproyecto,
+		       d_ventaparque.cantidad_parque, d_ventaparque.total_ventaparque,
+                       d_ventaventas.cantidad_venta, d_ventaventas.total_ventavarios,
+                       d_ventatraspaso.cantidad_traspaso, d_ventatraspaso.total_ventatraspaso,
+                       d_ventamortandad.cantidad_mortandad, d_ventamortandad.total_ventamortandad,
+                       d_produccionperdida.cantidad_perdida,
                        d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant,
-                       d_ventacambioporte.cantidad_cambioporte
+                       d_ventacambioporte.cantidad_cambioporte, d_ventacambioporte.total_ventacambioporte
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
                 left join (select
@@ -849,7 +880,8 @@ class Inventario_model extends CI_Model
                            	c.compra_fecha >= '".$desde."' and 
                			c.compra_fecha <= '".$hasta."'
                            group by dc.`producto_id`) as d_compradetalle on p.producto_id = d_compradetalle.producto_idcompra
-                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid
+                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid,
+                                  sum(d.detalleven_total) as total_ventamantenimiento
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -858,7 +890,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventam on p.producto_id = `d_ventam`.dv_prodid
-                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy
+                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy,
+                                  sum(d.detalleven_total) as total_ventaproyecto
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -867,7 +900,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventap on p.producto_id = d_ventap.dv_prodidproy
-                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque
+                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque,
+                                  sum(d.detalleven_total) as total_ventaparque
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -876,16 +910,23 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
-                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa
+                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa,
+                                  sum(d.detalleven_total) as total_ventavarios
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'VENTAS' and
+                           where not
+                                  (c.cliente_nombre = 'MANTENIMIENTO' or
+                                  c.cliente_nombre = 'PROYECTOS' or
+                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaventas on p.producto_id = d_ventaventas.producto_idventa
-                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad
+                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad,
+                                  sum(d.detalleven_total) as total_ventamortandad
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -894,7 +935,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventamortandad on p.producto_id = d_ventamortandad.producto_idmortandad
-                left join (select sum(d.detalleven_cantidad) as cantidad_cambioporte, c.`cliente_nombre`, d.producto_id as producto_idcambioporte
+                left join (select sum(d.detalleven_cantidad) as cantidad_cambioporte, c.`cliente_nombre`, d.producto_id as producto_idcambioporte,
+                                  sum(d.detalleven_total) as total_ventacambioporte
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -903,12 +945,13 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventacambioporte on p.producto_id = d_ventacambioporte.producto_idcambioporte
-                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso
+                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso,
+                                  sum(d.detalleven_total) as total_ventatraspaso
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'PARQUE ESCUELA' and
+                           where c.cliente_nombre  = 'SALIDA EMAVRA' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventatraspaso on p.producto_id = d_ventatraspaso.producto_idtraspaso
@@ -942,12 +985,23 @@ class Inventario_model extends CI_Model
     {
         $inicio ='1900-01-01';
         $sql = "select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
+                       `d_ventam`.cantidad_mantenimiento, d_ventam.total_ventamantenimiento,
+                       d_ventap.cantidad_proyecto, d_ventap.total_ventaproyecto,
+		       d_ventaparque.cantidad_parque, d_ventaparque.total_ventaparque,
+                       d_ventaventas.cantidad_venta, d_ventaventas.total_ventavarios,
+                       d_ventatraspaso.cantidad_traspaso, d_ventatraspaso.total_ventatraspaso,
+                       d_ventamortandad.cantidad_mortandad, d_ventamortandad.total_ventamortandad,
+                       d_produccionperdida.cantidad_perdida,
+                       d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant,
+                       d_ventacambioporte.cantidad_cambioporte, d_ventacambioporte.total_ventacambioporte
+                       
+                /*select p.*,c.categoria_nombre, d_prod.cantidad, d_compradetalle.cantidad_compra,
                        `d_ventam`.cantidad_mantenimiento, d_ventap.cantidad_proyecto,
 		       d_ventaparque.cantidad_parque, d_ventaventas.cantidad_venta,
                        d_ventatraspaso.cantidad_traspaso as cantidad_traspaso,
                        d_ventamortandad.cantidad_mortandad, d_produccionperdida.cantidad_perdida,
                        d_compradetalleant.cantidad_compraant, d_ventadetalleant.cantidad_ventaant,
-                       d_ventacambioporte.cantidad_cambioporte
+                       d_ventacambioporte.cantidad_cambioporte*/
                 FROM inventario p
                 left join categoria_producto c on c.categoria_id = p.categoria_id
                 left join (select
@@ -964,7 +1018,8 @@ class Inventario_model extends CI_Model
                            	c.compra_fecha >= '".$desde."' and 
                			c.compra_fecha <= '".$hasta."'
                            group by dc.`producto_id`) as d_compradetalle on p.producto_id = d_compradetalle.producto_idcompra
-                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid
+                left join (select sum(d.detalleven_cantidad) as cantidad_mantenimiento, c.`cliente_nombre`, d.producto_id as dv_prodid,
+                                  sum(d.detalleven_total) as total_ventamantenimiento
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -973,7 +1028,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventam on p.producto_id = `d_ventam`.dv_prodid
-                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy
+                left join (select sum(d.detalleven_cantidad) as cantidad_proyecto, c.`cliente_nombre`, d.producto_id as dv_prodidproy,
+                                  sum(d.detalleven_total) as total_ventaproyecto
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -982,7 +1038,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventap on p.producto_id = d_ventap.dv_prodidproy
-                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque
+                left join (select sum(d.detalleven_cantidad) as cantidad_parque, c.`cliente_nombre`, d.producto_id as producto_idparque,
+                                  sum(d.detalleven_total) as total_ventaparque
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -991,16 +1048,23 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
-                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa
+                left join (select sum(d.detalleven_cantidad) as cantidad_venta, c.`cliente_nombre`, d.producto_id as producto_idventa,
+                                  sum(d.detalleven_total) as total_ventavarios
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'VENTAS' and
+                           where not
+                                  (c.cliente_nombre = 'MANTENIMIENTO' or
+                                  c.cliente_nombre = 'PROYECTOS' or
+                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaventas on p.producto_id = d_ventaventas.producto_idventa
-                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad
+                left join (select sum(d.detalleven_cantidad) as cantidad_mortandad, c.`cliente_nombre`, d.producto_id as producto_idmortandad,
+                                  sum(d.detalleven_total) as total_ventamortandad
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -1009,7 +1073,8 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventamortandad on p.producto_id = d_ventamortandad.producto_idmortandad
-                left join (select sum(d.detalleven_cantidad) as cantidad_cambioporte, c.`cliente_nombre`, d.producto_id as producto_idcambioporte
+                left join (select sum(d.detalleven_cantidad) as cantidad_cambioporte, c.`cliente_nombre`, d.producto_id as producto_idcambioporte,
+                                  sum(d.detalleven_total) as total_ventacambioporte
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
@@ -1018,12 +1083,13 @@ class Inventario_model extends CI_Model
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventacambioporte on p.producto_id = d_ventacambioporte.producto_idcambioporte
-                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso
+                left join (select sum(d.detalleven_cantidad) as cantidad_traspaso, c.`cliente_nombre`, d.producto_id as producto_idtraspaso,
+                                  sum(d.detalleven_total) as total_ventatraspaso
                            from `detalle_venta` d
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'PARQUE ESCUELA' and
+                           where c.cliente_nombre  = 'SALIDA EMAVRA' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventatraspaso on p.producto_id = d_ventatraspaso.producto_idtraspaso
