@@ -166,6 +166,15 @@ border-bottom : 1px solid #aaa;
                     }
                     ?>
                     <b>TELEFONOS: </b><?php echo $venta[0]['cliente_telefono'].$guion.$venta[0]['cliente_celular'].""; ?>
+                    <?php
+                        if($venta[0]['venta_numeromesa'] == "0"){
+                            echo "<br><b>COMUNA: </b>- ";
+                            echo "<b>DISTRITO: </b>-";
+                        }else{
+                            echo "<br><b>COMUNA: </b>".$venta[0]['venta_numeromesa']."&nbsp;&nbsp;&nbsp;";
+                            echo "<b>DISTRITO: </b>".$venta[0]['orden_id'];
+                        }
+                    ?>
                 <br>
             </center>                      
         </td>

@@ -130,7 +130,7 @@ border-bottom : 1px solid #aaa;
                     <?php if($parametro[0]["parametro_mostrarmoneda"] == 1){ ?>
                     T.C. <?php echo $moneda['moneda_tc']; ?></b></font> <br>
                     <?php } ?>
-                <!--<font size="1" face="arial"><b><?php echo $venta[0]['venta_fecha']." ".$venta[0]['venta_hora']; ?></b></font> <br>-->
+                <!--<font size="1" face="arial"><b><?php //echo $venta[0]['venta_fecha']." ".$venta[0]['venta_hora']; ?></b></font> <br>-->
             </center>
         </td>
         
@@ -156,7 +156,16 @@ border-bottom : 1px solid #aaa;
                     }
                     ?>
                     <br><b>TELEFONOS: </b><?php echo $venta[0]['cliente_telefono'].$guion.$venta[0]['cliente_celular'].""; ?>
-                    <?php } ?>
+                    <?php
+                    }
+                    if($venta[0]['venta_numeromesa'] == "0"){
+                        echo "<br><b>COMUNA: </b>- ";
+                        echo "<b>DISTRITO: </b>-";
+                    }else{
+                        echo "<br><b>COMUNA: </b>".$venta[0]['venta_numeromesa']."&nbsp;&nbsp;&nbsp;";
+                        echo "<b>DISTRITO: </b>".$venta[0]['orden_id'];
+                    }
+                    ?>
                 <br>
                 </small>
                 _______________________________________________

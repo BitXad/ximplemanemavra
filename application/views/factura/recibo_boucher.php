@@ -158,6 +158,15 @@ border-bottom : 1px solid #aaa;
                             <b>LUGAR Y FECHA: </b><?php echo $empresa[0]['empresa_departamento'].", ".$fecha_d_m_a; ?> <br>
                             <b>CODIGO: </b><?php echo $venta[0]['cliente_codigo']." ".$venta[0]['cliente_nit']; ?> <br>
                             <b>SEÑOR(ES): </b><?php echo $venta[0]['cliente_razon'].""; ?>
+                            <?php
+                                if($venta[0]['venta_numeromesa'] == "0"){
+                                    echo "<br><b>COMUNA: </b>- ";
+                                    echo "<b>DISTRITO: </b>-";
+                                }else{
+                                    echo "<br><b>COMUNA: </b>".$venta[0]['venta_numeromesa']."&nbsp;&nbsp;&nbsp;";
+                                    echo "<b>DISTRITO: </b>".$venta[0]['orden_id'];
+                                }
+                            ?>
                         <br>
                     </center>                      
                 </td>
