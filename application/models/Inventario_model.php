@@ -660,7 +660,7 @@ class Inventario_model extends CI_Model
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'SALIDA A PARQUES' and
+                           where c.cliente_nombre  = 'PARQUES' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
@@ -673,7 +673,7 @@ class Inventario_model extends CI_Model
                            where not
                                   (c.cliente_nombre = 'MANTENIMIENTO' or
                                   c.cliente_nombre = 'PROYECTOS' or
-                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
                                   c.cliente_nombre = 'PARQUE ESCUELA') and
                                 v.venta_fecha >= '".$desde."' and 
@@ -781,7 +781,7 @@ class Inventario_model extends CI_Model
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'SALIDA A PARQUES' and
+                           where c.cliente_nombre  = 'PARQUES' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
@@ -794,7 +794,7 @@ class Inventario_model extends CI_Model
                            where not
                                   (c.cliente_nombre = 'MANTENIMIENTO' or
                                   c.cliente_nombre = 'PROYECTOS' or
-                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
                                   c.cliente_nombre = 'PARQUE ESCUELA') and
                                 v.venta_fecha >= '".$desde."' and 
@@ -906,7 +906,7 @@ class Inventario_model extends CI_Model
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'SALIDA A PARQUES' and
+                           where c.cliente_nombre  = 'PARQUES' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
@@ -919,7 +919,7 @@ class Inventario_model extends CI_Model
                            where not
                                   (c.cliente_nombre = 'MANTENIMIENTO' or
                                   c.cliente_nombre = 'PROYECTOS' or
-                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
                                   c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 
@@ -1036,7 +1036,7 @@ class Inventario_model extends CI_Model
                            left join venta v on d.venta_id = v.venta_id
                            left join cliente c on v.cliente_id = c.cliente_id
                            left join producto pro on d.producto_id = `pro`.`producto_id`
-                           where c.cliente_nombre  = 'SALIDA A PARQUES' and
+                           where c.cliente_nombre  = 'PARQUES' and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
                            group by d.producto_id) as d_ventaparque on p.producto_id = d_ventaparque.producto_idparque
@@ -1049,7 +1049,7 @@ class Inventario_model extends CI_Model
                            where not
                                   (c.cliente_nombre = 'MANTENIMIENTO' or
                                   c.cliente_nombre = 'PROYECTOS' or
-                                  c.cliente_nombre = 'SALIDA A PARQUES' or
+                                  c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
                                   c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 

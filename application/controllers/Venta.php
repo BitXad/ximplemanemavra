@@ -1395,7 +1395,9 @@ function edit($venta_id)
         
         $this->Venta_model->ejecutar($sql);        
         
-        
+        $venta_glosa = $this->input->post('venta_glosa');
+        $la_comuna = $this->input->post('la_comuna');
+        $el_distrito = $this->input->post('el_distrito');
         $sql = "update venta set ".
                 "cliente_id = ".$cliente_id.
                 ",venta_fecha = '".$venta_fecha."'".
@@ -1406,6 +1408,9 @@ function edit($venta_id)
                 ",venta_cambio = ".$venta_cambio.                
                 ",tipotrans_id = ".$tipotrans_id.                
                 ",forma_id = ".$forma_id.                
+                ",venta_glosa = '".$venta_glosa."'".                
+                ",venta_numeromesa = '".$la_comuna."'".                
+                ",orden_id = '".$el_distrito."'".                
                 " where venta_id = ".$venta_id;       
         $this->Venta_model->ejecutar($sql);        
         

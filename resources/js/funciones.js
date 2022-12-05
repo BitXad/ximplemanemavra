@@ -3838,6 +3838,13 @@ function modificar_venta(cliente_id)
     var tipo_transaccion = document.getElementById('tipo_transaccion').value;
     var forma_pago = document.getElementById('forma_pago').value;
     var facturado = document.getElementById('facturado').value;
+    var venta_glosa = document.getElementById('venta_glosa').value;
+    var la_comuna = document.getElementById('la_comuna').value;
+    let el_distrito = 0;
+    if(la_comuna != 0){
+        el_distrito = document.getElementById('el_distrito').value;
+    }
+    
     
 
         $.ajax({url: controlador,
@@ -3848,7 +3855,8 @@ function modificar_venta(cliente_id)
             tipo_transaccion:tipo_transaccion, cuotas:cuotas, cuota_inicial:cuota_inicial, 
             venta_total:venta_total, credito_interes:credito_interes,
             facturado:facturado,venta_fecha:venta_fecha, tipo_transaccion:tipo_transaccion, forma_pago:forma_pago,
-            modalidad:modalidad, dia_pago:dia_pago, fecha_inicio: fecha_inicio},
+            modalidad:modalidad, dia_pago:dia_pago, fecha_inicio: fecha_inicio, venta_glosa:venta_glosa,
+            la_comuna:la_comuna, el_distrito:el_distrito},
             success:function(respuesta){
                 //window.opener.location.reload();
                 window.close();

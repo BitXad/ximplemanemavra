@@ -1,6 +1,7 @@
 <!----------------------------- script buscador --------------------------------------->
 <script src="<?php echo base_url('resources/js/jquery-2.2.3.min.js'); ?>" type="text/javascript"></script>
 <script src="<?php echo base_url('resources/js/funciones.js'); ?>"></script>
+<script src="<?php echo base_url('resources/js/funciones_modif.js'); ?>"></script>
 
 <script type="text/javascript">
         $(document).ready(function () {
@@ -779,7 +780,23 @@ window.onkeydown = compruebaTecla;
                                          </select>
                                         </center>
                                     </div>
-                                    
+                                    <div class="col-md-2 text-center" style="padding: 0;">
+                                        <h5 class="modal-title" id="myModalLabel"><b>COMUNA</b></h5>
+                                        <?php
+                                        $comuna = array("TUNARI", "V. HERMOSO", "A. CALATAYUD", "MOLLE", "ITOCTA", "A. ZAMUDIO");
+                                        ?>
+                                        <select id="la_comuna" name="la_comuna" class="btn btn-default btn-xs" onchange="mostrar_distritomodif()"  style="width: 120px;">
+                                            <option value="0">- COMUNA -</option>
+                                        <?php
+                                            foreach($comuna as $tipo){
+                                                $selected = ($tipo == $venta[0]['venta_numeromesa']) ? ' selected="selected"' : "";
+                                                echo '<option value="'.$tipo.'" '.$selected.'>'.$tipo.'</option>';
+                                        ?>
+                                                <!--<option value="<?php //echo $tipo; ?>"><?php //echo $tipo; ?></option>-->
+                                            <?php } ?>
+                                        </select>
+                                        <span id="distrito"></span>
+                                    </div>
                                     <?php 
                                             $ocultar = "none";
                                         if ($parametro[0]["parametro_modulorestaurante"]==1){    
