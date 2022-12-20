@@ -796,6 +796,7 @@ class Inventario_model extends CI_Model
                                   c.cliente_nombre = 'PROYECTOS' or
                                   c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'CAMBIO DE PORTE' or
                                   c.cliente_nombre = 'PARQUE ESCUELA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
@@ -921,6 +922,7 @@ class Inventario_model extends CI_Model
                                   c.cliente_nombre = 'PROYECTOS' or
                                   c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'CAMBIO DE PORTE' or
                                   c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
@@ -1051,6 +1053,7 @@ class Inventario_model extends CI_Model
                                   c.cliente_nombre = 'PROYECTOS' or
                                   c.cliente_nombre = 'PARQUES' or
                                   c.cliente_nombre = 'MORTANDAD' or
+                                  c.cliente_nombre = 'CAMBIO DE PORTE' or
                                   c.cliente_nombre = 'SALIDA EMAVRA') and
                                 v.venta_fecha >= '".$desde."' and 
                                 v.venta_fecha <= '".$hasta."'
