@@ -270,10 +270,12 @@ class Inventario extends CI_Controller{
             $parametro = $this->input->post("parametro");
             $desde = $this->input->post('fecha_desde');
             $hasta = $this->input->post('fecha_hasta');
-            if ($parametro=="" || $parametro==null)
-                $resultado = $this->Inventario_model->getinventario_fvalorado($desde, $hasta);                
-            else
+            if ($parametro=="" || $parametro==null){
+                $resultado = $this->Inventario_model->getinventario_fvalorado($desde, $hasta);
+            }
+            else{
                 $resultado = $this->Inventario_model->get_inventario_fvaloradoparametro($desde, $hasta, $parametro);
+            }
             echo json_encode($resultado);            
             //**************** fin contenido ***************
         }
@@ -313,10 +315,12 @@ class Inventario extends CI_Controller{
             $parametro = $this->input->post("parametro");
             $desde = $this->input->post('fecha_desde');
             $hasta = $this->input->post('fecha_hasta');
-            if ($parametro=="" || $parametro==null)
-                $resultado = $this->Inventario_model->getinventario_fvaloradope($desde, $hasta);                
-            else
+            if ($parametro=="" || $parametro==null){
+                $resultado = $this->Inventario_model->getinventario_fvaloradope($desde, $hasta);
+            }
+            else{
                 $resultado = $this->Inventario_model->get_inventario_fvaloradoparametrope($desde, $hasta, $parametro);
+            }
             echo json_encode($resultado);            
             //**************** fin contenido ***************
         }

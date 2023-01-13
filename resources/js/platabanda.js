@@ -992,7 +992,7 @@ function get_costos_produccion(costo_inicial, cantidad, costos,produccion,detpro
 function form_perdida(detproduccion_id, platabanda,produccion){
     let form = document.getElementById(`formulario-perdida-${detproduccion_id}`);
     let id = `formulario-perdida-${detproduccion_id}`
-    show_close_form(id);qq
+    show_close_form(id);
     var perdida_detalle = JSON.parse(document.getElementById('perdida_detalle').value);
     
     let html = `<div class="col-md-12 mb-2" style="border-radius: 15px;border: 2px solid #AEAEAE; ">
