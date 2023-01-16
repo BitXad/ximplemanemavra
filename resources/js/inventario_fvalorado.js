@@ -96,7 +96,7 @@ function tabla_inventario(){
                     var total_final = 0;
                     var existencia = 0;
                     var inicial = 0;
-                    var margen = " style='padding:0'";
+                    var margen = " style='padding:0; white-space: nowrap;'";
                     var categoria = "";
                     
                 for (var i = 0; i < tamanio ; i++){
